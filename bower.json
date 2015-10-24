@@ -1,0 +1,32 @@
+{
+  "name": "NEWS",
+  "description": "Trang tin tức siêu nhỏ",
+  "main": "",
+  "authors": [
+    "Kou Tsuneka <tsuneka.kou@gmail.com>"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "news",
+    "example",
+    "laravel"
+  ],
+  "homepage": "https://github.com/laravel-noobs/NEWS",
+  "moduleType": [
+    "node"
+  ],
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^2.1.4"
+  },
+  "resolutions": {
+    "jquery": "2.1.4"
+  }
+}
