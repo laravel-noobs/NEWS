@@ -7,3 +7,6 @@ Homestead.json
 .env
 _ide_helper.php
 composer.lock
+access.log
+error.log
+npm-debug.log
