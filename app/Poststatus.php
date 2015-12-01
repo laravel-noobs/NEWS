@@ -18,14 +18,14 @@ class PostStatus extends Model
      *
      * @var string
      */
-    protected $table = 'poststatus';
+    protected $table = 'post_status';
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = ['id', 'name', 'slug'];
+    protected $fillable = ['name', 'slug'];
 
     /**
      * The attributes excluded from the model's JSON form.

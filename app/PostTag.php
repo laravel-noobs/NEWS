@@ -18,14 +18,14 @@ class Post_Tag extends Model
      *
      * @var string
      */
-    protected $table = 'Post_Tag';
+    protected $table = 'post_tag';
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = ['post_id', 'tag_id'];
+    protected $fillable = [];
 
     /**
      * The attributes excluded from the model's JSON form.
