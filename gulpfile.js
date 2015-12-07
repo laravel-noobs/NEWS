@@ -12,10 +12,12 @@ var elixir = require('laravel-elixir');
  */
 
 var bower = './bower_components/';
+
 var assets = {
  'js' : './resources/assets/js/',
  'css': './resources/assets/css/',
- 'img': './resources/assets/images/'
+ 'img': './resources/assets/images/',
+ 'unify': './resources/assets/unify/'
 };
 
 var inspinia = {
@@ -52,4 +54,5 @@ elixir(function(mix){
      .copy(bower + 'font-awesome/fonts/**', 'public/fonts')
      .copy(inspinia.css + "animate.css", 'public/css')
      .copy(inspinia.img + 'patterns/**', 'public/css/patterns/**')
+     .copy(assets.unify+'**', 'public/unify')
 });
