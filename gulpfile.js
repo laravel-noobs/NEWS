@@ -53,6 +53,6 @@ elixir(function(mix){
  mix.copy(bower + 'bootstrap-sass/assets/fonts/bootstrap/**', 'public/fonts')
      .copy(bower + 'font-awesome/fonts/**', 'public/fonts')
      .copy(inspinia.css + "animate.css", 'public/css')
-     .copy(inspinia.img + 'patterns/**', 'public/css/patterns/**')
+     .copy(inspinia.img + 'patterns/**', 'public/css/patterns')
      .copy(assets.unify+'**', 'public/unify')
 });
