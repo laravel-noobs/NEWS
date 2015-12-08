@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="{{URL::asset('css/app.css')}}">
     <link rel="stylesheet" href="{{URL::asset('css/animate.css')}}">
     <link rel="stylesheet" href="{{URL::asset('css/style.css')}}">
-
+    @yield('header-style')
 </head>
 
 <body>
@@ -32,6 +32,6 @@
 <script src="{{URL::asset('js/plugins.js')}}"></script>
 <!-- Custom and plugin javascript -->
 <script src="{{URL::asset('js/app.js')}}"></script>
-
+@yield('footer-script')
 </body>
 </html>
