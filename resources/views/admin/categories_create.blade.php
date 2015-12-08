@@ -17,7 +17,7 @@
                     <input type="text" class="form-control input-sm m-b-xs" id="filter"
                            placeholder="Search in table">
 
-                    <table class="footable table table-stripped" data-page-size="8" data-filter=#filter>
+                    <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="8" data-filter=#filter>
                         <thead>
                         <tr>
                             <th>Rendering engine</th>
@@ -287,4 +287,12 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('footer-script')
+    <script>
+        $(document).ready(function(){
+            $('.footable').footable();
+        });
+    </script>
 @endsection

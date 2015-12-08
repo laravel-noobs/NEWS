@@ -10,6 +10,7 @@
 
     <link rel="stylesheet" href="{{URL::asset('css/app.css')}}">
     <link rel="stylesheet" href="{{URL::asset('css/animate.css')}}">
+    <link rel="stylesheet" href="{{URL::asset('css/plugins.css')}}">
     <link rel="stylesheet" href="{{URL::asset('css/style.css')}}">
     @yield('header-style')
     @yield('header-script')
