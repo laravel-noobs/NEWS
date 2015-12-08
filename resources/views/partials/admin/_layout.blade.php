@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="{{URL::asset('css/animate.css')}}">
     <link rel="stylesheet" href="{{URL::asset('css/style.css')}}">
     @yield('header-style')
+    @yield('header-script')
 </head>
 
 <body>
