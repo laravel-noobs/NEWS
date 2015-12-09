@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Category;
+use App\PostStatus;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Mockery\CountValidator\Exception;
 
 class CategoriesController extends Controller
 {
@@ -15,17 +18,8 @@ class CategoriesController extends Controller
      */
     public function index()
     {
-        return view('admin.categories_create');
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        $categories = Category::with('postsCount')->get();
+        return view('admin.category_create', ['categories' => $categories]);
     }
 
     /**
@@ -36,7 +30,19 @@ class CategoriesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'name' => 'required|min:4',
+            'slug' => 'unique:category,slug',
+            'description' => 'min:6|max:1000',
+            'parent_id' => 'exists:category,id'
+        ]);
+
+        $input = $request->all();
+
+        $cat = new Category($input);
+
+        if($cat->save())
+            return redirect()->action('CategoriesController@index');
     }
 
     /**

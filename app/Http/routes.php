@@ -20,3 +20,4 @@ Route::get('/admin', function () {
 });
 
 Route::get('/admin/chuyen-muc', 'CategoriesController@index');
+Route::post('/admin/chuyen-muc', 'CategoriesController@store');
