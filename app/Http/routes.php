@@ -18,3 +18,6 @@ Route::get('/', function () {
 Route::get('/admin', function () {
     return view('admin');
 });
+
+Route::get('/admin/chuyen-muc', 'CategoriesController@index');
+Route::post('/admin/chuyen-muc', 'CategoriesController@store');
