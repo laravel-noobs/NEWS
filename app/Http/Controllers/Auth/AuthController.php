@@ -38,6 +38,17 @@ class AuthController extends Controller
     public $redirectTo = '/';
 
     /**
+     * @var string
+     */
+    public $redirectPath = '/';
+
+    /**
+     * @var string
+     */
+    public $redirectAfterLogout = '/';
+
+
+    /**
      * Create a new authentication controller instance.
      *
      * @return void
