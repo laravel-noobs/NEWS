@@ -12,7 +12,6 @@ jQuery(document).ready(function($) {
 
   //open modal
   $main_nav.on('click', function(event) {
-
     if ($(event.target).is($main_nav)) {
       // on mobile open the submenu
       $(this).children('ul').toggleClass('is-visible');
@@ -21,6 +20,11 @@ jQuery(document).ready(function($) {
       $main_nav.children('ul').removeClass('is-visible');
       //show modal layer
       $form_modal.addClass('is-visible');
+      /*
+       * WARN
+       * Chưa kiểm tra responsive
+       */
+      $('body').css('overflow-y','hidden');
       //show the selected form
       ($(event.target).is('.cd-signup')) ? signup_selected() : login_selected();
     }
@@ -31,12 +35,22 @@ jQuery(document).ready(function($) {
   $('.cd-user-modal').on('click', function(event) {
     if ($(event.target).is($form_modal) || $(event.target).is('.cd-close-form')) {
       $form_modal.removeClass('is-visible');
+      /*
+       * WARN
+       * Chưa kiểm tra responsive
+       */
+      $('body').css('overflow-y','scroll');
     }
   });
   //close modal when clicking the esc keyboard button
   $(document).keyup(function(event) {
     if (event.which == '27') {
+      /*
+       * WARN
+       * Chưa kiểm tra responsive
+       */
       $form_modal.removeClass('is-visible');
+      $('body').css('overflow-y','scroll');
     }
   });
 
