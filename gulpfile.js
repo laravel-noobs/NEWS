@@ -29,7 +29,6 @@ var inspinia = {
 
 elixir(function(mix) {
     mix.sass('app.scss');
-    mix.sass();
     mix.sass([
         inspinia.sass + 'style.scss',
         'style.scss'

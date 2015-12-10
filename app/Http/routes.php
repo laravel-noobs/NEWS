@@ -21,3 +21,6 @@ Route::get('/admin', function () {
 
 Route::get('/admin/chuyen-muc', 'CategoriesController@index');
 Route::post('/admin/chuyen-muc', 'CategoriesController@store');
+
+Route::get('/dang-nhap', 'Auth\AuthController@getLogin');
+Route::post('/dang-nhap', 'Auth\AuthController@postLogin');

@@ -24,6 +24,20 @@ class AuthController extends Controller
     use AuthenticatesAndRegistersUsers, ThrottlesLogins;
 
     /**
+     * Đường dẫn chuyển hướng khi đăng nhập thất bại
+     *
+     * @var string
+     */
+    public $loginPath = '/dang-nhap';
+
+    /**
+     * Đường dẫn chuyển hướng khi đăng nhập thành công
+     *
+     * @var string
+     */
+    public $redirectTo = '/';
+
+    /**
      * Create a new authentication controller instance.
      *
      * @return void
