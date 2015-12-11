@@ -27,11 +27,20 @@ class Tag extends Model
      */
     protected $fillable = ['name', 'slug'];
 
+    public $timestamps = false;
     /**
      * The attributes excluded from the model's JSON form.
      *
      * @var array
      */
     protected $hidden = [];
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function posts()
+    {
+        return $this->belongsToMany('App\Post');
+    }
 
 }

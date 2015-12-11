@@ -27,7 +27,6 @@ class Category extends Model
      */
     protected $hidden = [];
 
-
     /**
      * The property define model uses timestamps or not
      *
@@ -61,6 +60,7 @@ class Category extends Model
      *
      * A category has many posts
      *
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function posts()

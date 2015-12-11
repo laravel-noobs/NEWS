@@ -32,6 +32,16 @@ class PostStatus extends Model
      *
      * @var array
      */
+    public $timestamps = false;
     protected $hidden = [];
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function posts()
+    {
+        return $this->hasMany('App\Post','status_id','id');
+    }
+
 
 }
