@@ -41,6 +41,9 @@ class CategoriesController extends Controller
 
         $cat = new Category($input);
 
+        if(isset($input['parent_id']) && !empty($input['parent_id']))
+            $cat->parent_id = $input['parent_id'];
+
         if($cat->save())
             return redirect()->action('CategoriesController@index');
     }
