@@ -4,6 +4,8 @@ NEW là project được lập nên nhằm mục đích tìm hiểu [Laravel Fra
  Thảo luận về project NEWS vui lòng tham gia nhóm facebook [NEWS Facebook Group](https://www.facebook.com/groups/1000070060031803/). Nếu nhóm facebook trong trạng thái ẩn vui lòng liên hệ [koutsuneka@facebook](https://www.facebook.com/messages/koutsuneka) hoặc [tsuneka.kou@gmail.com](mailto:tsuneka.kou@gmail.com?Subject=NEWS%20Group%20Invitation).
 ## Demo
  Live demo on shared host: [NEWS](http://news.meongu.net)
+ + [Admin](http://news.meongu.net/)
+ + [Đăng nhập](http://news.meongu.net/dang-nhap)
 ### Giấy phép
  NEWS là phần mềm mã nguồn mở được cấp phép theo [giấy phép MIT](http://opensource.org/licenses/MIT)
 ### Cài đặt phát triển (development)
