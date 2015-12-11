@@ -32,6 +32,16 @@ class Role extends Model
      *
      * @var array
      */
+
+    public $timestamps = false;
     protected $hidden = [];
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function users()
+    {
+        return $this->hasMany('App\User');
+    }
 
 }

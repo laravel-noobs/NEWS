@@ -20,10 +20,28 @@ class Category extends Model
      */
     protected $fillable = ['name', 'slug', 'description', 'parent_id'];
 
+    public $timestamps = false;
     /**
      * The attributes excluded from the model's JSON form.
      *
      * @var array
      */
     protected $hidden = [];
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function posts()
+    {
+        return $this->hasMany('App\Post','category_id','id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function categorys()
+    {
+        return $this->hasMany('App\Category');
+    }
+
 }
