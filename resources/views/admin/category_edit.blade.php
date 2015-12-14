@@ -7,7 +7,7 @@
                 <div class="ibox-content">
                     <h3>Thêm mới chuyên mục</h3>
                     <form method="POST" action="{{ action('CategoriesController@update', ['id' => $category->id ]) }}">
-                        {{ csrf_field() }}//bảo mật
+                        {{ csrf_field() }}
                         <div class="form-group {{ count($errors->get('name')) > 0 ? 'has-error' : '' }}">
                             <label class="">Tên</label>
                             <input type="text" id="name" name="name" placeholder="name" value="{{ old('name', $category->name) }}" class="form-control">

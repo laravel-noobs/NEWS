@@ -83,11 +83,13 @@ class CategoriesController extends Controller
     {
         $this->validate($request, [
             'name' => 'required|min:4',
-            'slug' => 'unique:category,slug',
+            'slug' => "unique:category,slug," . $id,
             'description' => 'min:6|max:1000',
             'parent_id' => 'exists:category,id'
         ]);
+
         $cat = Category::findOrFail($id);
+
         $input = $request->all();
         $cat->update($input);
         return redirect(action('CategoriesController@index'));
