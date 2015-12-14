@@ -11,7 +11,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Post_Tag extends Model
+class PostTag extends Model
 {
     /**
      * The database table used by the model.
@@ -26,6 +26,8 @@ class Post_Tag extends Model
      * @var array
      */
     protected $fillable = [];
+
+    public $timestamps = false;
 
     /**
      * The attributes excluded from the model's JSON form.
