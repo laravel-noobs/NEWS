@@ -56,7 +56,7 @@ class CategoriesController extends Controller
      */
     public function show($id)
     {
-        //
+
     }
 
     /**
@@ -67,7 +67,9 @@ class CategoriesController extends Controller
      */
     public function edit($id)
     {
-        //
+        $cat = Category::findOrFail($id);
+        $categories = Category::all();
+        return view('admin.category_edit', ['category' => $cat, 'categories' => $categories]);
     }
 
     /**
@@ -79,7 +81,16 @@ class CategoriesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            'name' => 'required|min:4',
+            'slug' => 'unique:category,slug',
+            'description' => 'min:6|max:1000',
+            'parent_id' => 'exists:category,id'
+        ]);
+        $cat = Category::findOrFail($id);
+        $input = $request->all();
+        $cat->update($input);
+        return redirect(action('CategoriesController@index'));
     }
 
     /**
@@ -90,6 +101,8 @@ class CategoriesController extends Controller
      */
     public function destroy($id)
     {
-        //
+        if(Category::destroy($id))
+            return redirect(action('CategoriesController@index'));
+        return redirect(action('CategoriesController@index'));
     }
 }
