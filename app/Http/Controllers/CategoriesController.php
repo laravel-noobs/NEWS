@@ -68,7 +68,7 @@ class CategoriesController extends Controller
     public function edit($id)
     {
         $cat = Category::findOrFail($id);
-        $categories = Category::all();
+        $categories = Category::where('id', '<>', $id)->get();
         return view('admin.category_edit', ['category' => $cat, 'categories' => $categories]);
     }
 
@@ -91,6 +91,8 @@ class CategoriesController extends Controller
         $cat = Category::findOrFail($id);
 
         $input = $request->all();
+
+        $cat->parent_id = empty($input['parent_id']) || $input['parent_id'] == $id ? null : $input['parent_id'];
         $cat->update($input);
         return redirect(action('CategoriesController@index'));
     }

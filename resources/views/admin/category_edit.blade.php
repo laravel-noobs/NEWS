@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="row">
-        <div class="col-sm-5">
+        <div class="col-sm-12">
             <div class="ibox ">
                 <div class="ibox-content">
                     <h3>Thêm mới chuyên mục</h3>
@@ -40,11 +40,9 @@
                             @endforeach
                         </div>
 
-
-
                         <div class="form-group {{ count($errors->get('description')) > 0 ? 'has-error' : '' }}">
                             <label>Mô tả</label>
-                            <textarea id="description" name="description" placeholder="" class="form-control">{{ old('description', $category->description) }}</textarea>
+                            <textarea id="description" name="description" placeholder="" class="form-control" rows="5" cols="50">{{ old('description', $category->description) }}</textarea>
                             <span class="help-block m-b-none">Chuỗi ký tự dùng để tạo đường dẫn thân thiện, thường chỉ bao gồm các ký tự từ aphabet không dấu, chữ số và dấu gạch ngang.</span>
                             @foreach($errors->get('description') as $err)
                                 <label class="error" for="description">{{ $err }}</label>
