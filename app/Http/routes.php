@@ -19,8 +19,11 @@ Route::get('/admin', function () {
     return view('admin');
 });
 
-Route::get('/admin/chuyen-muc', 'CategoriesController@index');
-Route::post('/admin/chuyen-muc', 'CategoriesController@store');
+Route::get('/admin/categories', 'CategoriesController@index');
+Route::post('/admin/categories', 'CategoriesController@store');
+Route::get('/admin/categories/{id}/delete', 'CategoriesController@destroy');
+Route::get('/admin/categories/{id}/edit', 'CategoriesController@edit');
+Route::post('/admin/categories/{id}/edit', 'CategoriesController@update');
 
 Route::get('/dang-nhap', 'Auth\AuthController@getLogin');
 Route::post('/dang-nhap', 'Auth\AuthController@postLogin');

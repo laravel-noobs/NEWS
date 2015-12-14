@@ -77,9 +77,9 @@
                                 <td>{{ $cat->postsCount }}</td>
                                 <td>
                                     <div class="btn-group pull-right">
-                                        <a href="#" target="_blank" class="btn-white btn btn-xs">Sửa</a>
+                                        <a href="{{ action('CategoriesController@edit', ['id' => $cat->id]) }}"  class="btn-white btn btn-xs">Sửa</a>
                                         <a href="#" target="_blank" class="btn-white btn btn-xs">Xem</a>
-                                        <a href="#" target="_blank" class="btn-white btn btn-xs">Xóa</a>
+                                        <a href="{{ action('CategoriesController@destroy', ['id' => $cat->id]) }}" class="btn-white btn btn-xs">Xóa</a>
                                     </div>
                                 </td>
                             </tr>
