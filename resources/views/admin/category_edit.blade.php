@@ -27,7 +27,7 @@
                         </div>
 
                         <div class="form-group {{ count($errors->get('parent_id')) > 0 ? 'has-error' : '' }}">
-                            <label>Phụ mẫu</label>
+                            <label>Chuyên mục mẹ</label>
                             <select type="text" id="parent_id" name="parent_id" placeholder="" class="form-control">
                                 <option value="">Không có</option>
                                 @foreach($categories as $cat)
@@ -43,7 +43,7 @@
                         <div class="form-group {{ count($errors->get('description')) > 0 ? 'has-error' : '' }}">
                             <label>Mô tả</label>
                             <textarea id="description" name="description" placeholder="" class="form-control" rows="5" cols="50">{{ old('description', $category->description) }}</textarea>
-                            <span class="help-block m-b-none">Chuỗi ký tự dùng để tạo đường dẫn thân thiện, thường chỉ bao gồm các ký tự từ aphabet không dấu, chữ số và dấu gạch ngang.</span>
+                            <span class="help-block m-b-none">Mô tả chuyên mục tùy thuộc vào themes mà có thể được hiển thị hay không.</span>
                             @foreach($errors->get('description') as $err)
                                 <label class="error" for="description">{{ $err }}</label>
                             @endforeach

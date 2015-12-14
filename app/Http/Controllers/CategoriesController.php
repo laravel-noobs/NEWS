@@ -81,9 +81,18 @@ class CategoriesController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $slug = $request->request->get('slug');
+        $name = $request->request->get('name');
+        if(empty($slug) && !empty($name))
+        {
+            $slug = str_slug($request->request->get('name'));
+            if(strlen($slug) >= 4)
+                $request->request->set('slug', $slug);
+        }
+
         $this->validate($request, [
             'name' => 'required|min:4',
-            'slug' => "unique:category,slug," . $id,
+            'slug' => 'required|min:4|unique:category,slug,' . $id,
             'description' => 'min:6|max:1000',
             'parent_id' => 'exists:category,id'
         ]);
