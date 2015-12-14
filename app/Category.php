@@ -94,5 +94,32 @@ class Category extends Model
         $related = $this->getRelation('postsCount');
         return ($related) ? (int) $related->aggregate : 0;
     }
+
+    /**
+     *
+     * Count number of sub-categories belongs to this category
+     *
+     * @return mixed
+     */
+    public function subCategoriesCount()
+    {
+        return $this->hasOne('App\Category', 'parent_id', 'id')
+            ->selectRaw('parent_id, count(*) as aggregate')
+            ->groupBy('parent_id');
+    }
+
+    /**
+     *
+     * subCategoriesCount attribute to count number of sub-categories belongs to this category
+     *
+     * @return int
+     */
+    public function getSubCategoriesCountAttribute()
+    {
+        if (!$this->relationLoaded('subCategoriesCount'))
+            $this->load('subCategoriesCount');
+        $related = $this->getRelation('subCategoriesCount');
+        return ($related) ? (int) $related->aggregate : 0;
+    }
 }
 

@@ -19,7 +19,7 @@ class CategoriesController extends Controller
     public function index()
     {
         $categories = Category::with('postsCount')->get();
-        return view('admin.category_create', ['categories' => $categories]);
+        return view('admin.category_index', ['categories' => $categories]);
     }
 
     /**
