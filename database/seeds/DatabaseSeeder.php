@@ -6,8 +6,6 @@ use App\Category;
 use App\Tag;
 use App\PostStatus;
 use App\User;
-use App\Post;
-
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -22,8 +20,8 @@ class DatabaseSeeder extends Seeder
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
         $this->call(CategoryTableSeeder::class);
-        $this->call(UserExampleTableSeeder::class);
         $this->call(RoleTableSeeder::class);
+        $this->call(UserExampleTableSeeder::class);
         $this->call(PostStatusTableSeeder::class);
         $this->call(TagExampleTableSeeder::class);
 
