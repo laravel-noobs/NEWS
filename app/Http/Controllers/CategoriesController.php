@@ -20,7 +20,7 @@ class CategoriesController extends Controller
      */
     public function index()
     {
-        $categories = Category::with('postsCount')->get();
+        $categories = Category::with('postsCount')->orderBy('id','desc')->get();
         return view('admin.category_index', ['categories' => $categories]);
     }
 
@@ -32,9 +32,18 @@ class CategoriesController extends Controller
      */
     public function store(Request $request)
     {
+        $slug = $request->request->get('slug');
+        $name = $request->request->get('name');
+        if(empty($slug) && !empty($name))
+        {
+            $slug = str_slug($request->request->get('name'));
+            if(strlen($slug) >= 4)
+                $request->request->set('slug', $slug);
+        }
+
         $this->validate($request, [
             'name' => 'required|min:4',
-            'slug' => 'unique:category,slug',
+            'slug' => 'required|min:4|unique:category,slug',
             'description' => 'min:6|max:1000',
             'parent_id' => 'exists:category,id'
         ]);
