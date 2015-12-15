@@ -431,7 +431,7 @@
             "source": {
                 "type": "git",
                 "url": "packages/flashmessage",
-                "reference": "320ba9a2cbb5755ae3863ce9d0a91911606680ef"
+                "reference": "b3ac31c979ce0049cb171a30d8fa2060f92a64f1"
             },
             "require": {
                 "illuminate/session": "5.1.*",
@@ -453,7 +453,7 @@
                     "email": "koutsuneka@gmail.com"
                 }
             ],
-            "time": "2015-12-15 05:48:23"
+            "time": "2015-12-15 08:37:52"
         },
         {
             "name": "laravel/framework",
