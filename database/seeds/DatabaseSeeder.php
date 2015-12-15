@@ -32,7 +32,7 @@ class DatabaseSeeder extends Seeder
         $posts = [];
 
         DB::table('post')->delete();
-        for($i = 0; $i < 20; $i++)
+        for($i = 0; $i < 50; $i++)
         {
             $post = factory('App\Post')->make([
                 'category_id' => $categories->random()->id,
@@ -74,12 +74,21 @@ class DatabaseSeeder extends Seeder
         DB::table('post_tag')->delete();
         for($i = 0; $i < 50; $i++)
         {
-            $post_tag = factory('App\PostTag')->make([
-                'tag_id' => $tag->random()->id,
-                'post_id' => $posts[random_int(0, count($posts)-1)]
-            ]);
-            $post_tag->save();
-            $post_tags[] = $post_tag->id;
+            $tag_id = $tag->random()->id;
+            $post_id = $posts[random_int(0, count($posts)-1)];
+            if(!isset($post_tags['_'.$post_id]) || !array_has($post_tags['_'.$post_id], $tag_id))
+            {
+                if(!isset($post_tags['_'.$post_id]))
+                    $post_tags['_'.$post_id] = [];
+                $post_tag = factory('App\PostTag')->make([
+                    'tag_id' => $tag_id,
+                    'post_id' => $post_id
+                ]);
+                $post_tags['_'.$post_id][] = $tag_id;
+                $post_tag->save();
+            }
+            else
+                $i--;
         }
         echo "Seeded: PostTag\n";
 
