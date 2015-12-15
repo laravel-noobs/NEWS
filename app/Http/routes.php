@@ -27,3 +27,5 @@ Route::post('/admin/categories/{id}/edit', 'CategoriesController@update');
 
 Route::get('/dang-nhap', 'Auth\AuthController@getLogin');
 Route::post('/dang-nhap', 'Auth\AuthController@postLogin');
+Route::get('/dang-ky', 'Auth\AuthController@getRegister');
+Route::post('/dang-nhap', 'Auth\AuthController@postRegister');

@@ -1,4 +1,4 @@
-@extends('partials.admin._layout')
+@extends('unify.partials._layout')
 
 @section('content')
     <div class="container-fluid">
