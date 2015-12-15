@@ -46,10 +46,10 @@
 
 <body class="header-fixed header-fixed-space-v2">
 <div class="wrapper">
-    @include('_unify._header')
+    @include('unify.partials._header')
     @yield('content')
-    @include('_unify._footer')
-    @include('_unify._form')
+    @include('unify.partials._footer')
+    @include('unify.partials._auth')
 <!-- JS Global Compulsory -->
 <script src="{{URL::asset('js/core.js')}}"></script>
 <script src="unify/plugins/jquery/jquery-migrate.min.js"></script>

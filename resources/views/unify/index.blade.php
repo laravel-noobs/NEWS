@@ -1,4 +1,4 @@
-@extends('_unify._layout')
+@extends('unify.partials._layout')
 
 @section('content')
 Hello World - Trang chủ frontend!

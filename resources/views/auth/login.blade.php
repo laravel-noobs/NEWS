@@ -1,4 +1,4 @@
-@extends('_unify._layout')
+@extends('unify.partials._layout')
 
 @section('content')
     <div class="container-fluid margin-top-20 margin-bottom-20">
