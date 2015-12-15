@@ -32,6 +32,11 @@
 <!-- Mainly scripts -->
 <script src="{{URL::asset('js/core.js')}}"></script>
 <script src="{{URL::asset('js/plugins.js')}}"></script>
+
+<script>
+    var flash_messages = JSON.parse('{!! \Flash::encode() !!}');
+</script>
+
 <!-- Custom and plugin javascript -->
 <script src="{{URL::asset('js/app.js')}}"></script>
 @yield('footer-script')
