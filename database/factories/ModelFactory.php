@@ -19,3 +19,20 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
         'remember_token' => str_random(10),
     ];
 });
+
+$factory->define(App\Tag::class, function (Faker\Generator $faker)
+{
+    $name = str_random(10);
+    return [
+      'name' => $name,
+        'slug' => str_slug($name)
+    ];
+});
+$factory->define(App\Comment::class, function (Faker\Generator $faker)
+{
+    return [
+        'content' => $faker->paragraph,
+        'user_id' =>factory(App\User::class)->create()->id,
+        'post_id' =>factory(App\Post::class)->create()->id,
+    ];
+});
