@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="row">
-        <div class="col-sm-5">
+        <div class="col-sm-4">
             <div class="ibox ">
                 <div class="ibox-content">
                     <h3>Thêm mới chuyên mục</h3>
@@ -51,7 +51,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-7">
+        <div class="col-sm-8">
             <div class="ibox">
                 <div class="ibox-content">
                     <span class="text-muted small pull-right">{{ count($categories) }} chuyên mục</span>
@@ -62,9 +62,9 @@
                         <thead>
                         <tr>
                             <th>Tên</th>
-                            <th>Slug</th>
+                            <th data-hide="phone">Slug</th>
                             <th data-hide="phone">Mô tả</th>
-                            <th>Bài viết</th>
+                            <th data-hide="phone">Bài viết</th>
                             <th data-sort-ignore="true"><span class="pull-right">Hành động</span></th>
                         </tr>
                         </thead>

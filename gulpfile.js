@@ -37,7 +37,8 @@ elixir(function(mix) {
 
 elixir(function(mix){
    mix.styles([
-       bower + 'footable/css/footable.core.css'
+       bower + 'footable/css/footable.core.css',
+       bower + 'toastr/toastr.css'
    ], 'public/css/plugins.css')
 });
 
@@ -48,13 +49,16 @@ elixir(function(mix) {
     ], 'public/js/core.js', './');
 
     mix.scripts([
-        inspinia.js + 'inspinia.js'
+        inspinia.js + 'inspinia.js',
+        inspinia.js + 'custom.js'
     ], 'public/js/app.js', './');
 
     mix.scripts([
         bower + 'metisMenu/dist/metisMenu.js',
         bower + 'pace/pace.js',
-        bower + 'slimscroll/jquery.slimscroll.js'
+        bower + 'slimscroll/jquery.slimscroll.js',
+        bower + 'footable/dist/footable.all.min.js',
+        bower + 'toastr/toastr.js'
     ], 'public/js/plugins.js', './');
 });
 

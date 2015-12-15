@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Mockery\CountValidator\Exception;
+use KouTsuneka\FlashMessage\Flash;
+use Illuminate\Database\QueryException;
 
 class CategoriesController extends Controller
 {
@@ -45,7 +47,11 @@ class CategoriesController extends Controller
             $cat->parent_id = $input['parent_id'];
 
         if($cat->save())
-            return redirect()->action('CategoriesController@index');
+            Flash::push("Thêm chuyên mục \\\"$cat->name\\\" thành công", 'Hệ thống');
+        else
+            Flash::push("Thêm chuyên mục thất bại", 'Hệ thống', "error");
+
+        return redirect()->action('CategoriesController@index');
     }
 
     /**
@@ -102,7 +108,10 @@ class CategoriesController extends Controller
         $input = $request->all();
 
         $cat->parent_id = empty($input['parent_id']) || $input['parent_id'] == $id ? null : $input['parent_id'];
-        $cat->update($input);
+        if($cat->update($input))
+            Flash::push("Sửa chuyên mục \\\"$cat->name\\\" thành công", 'Hệ thống');
+        else
+            Flash::push("Sửa chuyên mục thất bại", 'Hệ thống', "error");
         return redirect(action('CategoriesController@index'));
     }
 
@@ -114,8 +123,17 @@ class CategoriesController extends Controller
      */
     public function destroy($id)
     {
-        if(Category::destroy($id))
-            return redirect(action('CategoriesController@index'));
+        try
+        {
+            if(Category::destroy($id))
+                Flash::push("Xóa chuyên mục thành công", 'Hệ thống');
+            else
+                Flash::push("Xóa chuyên mục thất bại", 'Hệ thống', 'error');
+        }
+        catch(QueryException $ex)
+        {
+            Flash::push("Xóa chuyên mục thất bại", 'Hệ thống', 'error');
+        }
         return redirect(action('CategoriesController@index'));
     }
 }
