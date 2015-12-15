@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Mockery\CountValidator\Exception;
+use KouTsuneka\FlashMessage\FlashMessageFacade;
 
 class CategoriesController extends Controller
 {
@@ -45,7 +46,8 @@ class CategoriesController extends Controller
             $cat->parent_id = $input['parent_id'];
 
         if($cat->save())
-            return redirect()->action('CategoriesController@index');
+            \Flash::push('Thành công', "Thêm chuyên mục thành công");
+        return redirect()->action('CategoriesController@index');
     }
 
     /**

@@ -24,6 +24,9 @@
         @include('partials.admin._sidenav')
         <div class="wrapper wrapper-content animated fadeInRight">
             @yield('content')
+            @foreach(\Flash::get() as $fmsg)
+                <pre>{{ $fmsg->encode() }}</pre>
+            @endforeach
         </div>
         @include('partials.admin._footer')
     </div>
