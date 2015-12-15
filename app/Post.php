@@ -38,15 +38,15 @@ class Post extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function feeback()
+    public function feedbacks()
     {
-        return $this->hasMany('App\Feeback');
+        return $this->hasMany('App\Feedback');
     }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function Tags()
+    public function tags()
     {
         return $this->belongsToMany('App\Tag');
     }
@@ -54,9 +54,9 @@ class Post extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function poststatus()
+    public function postStatus()
     {
-        return $this->belongsTo('App\PostStatus','status_id','id');
+        return $this->belongsTo('App\PostStatus', 'status_id', 'id');
     }
 
     /**
@@ -72,7 +72,11 @@ class Post extends Model
      */
     public function category()
     {
-        return $this->belongsTo('App\Category','category_id','id');
+        return $this->belongsTo('App\Category', 'category_id', 'id');
     }
 
+    public function user()
+    {
+        return $this->belongsTo('App\User', 'user_id', 'id');
+    }
 }

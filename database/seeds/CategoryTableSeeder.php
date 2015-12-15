@@ -1,4 +1,5 @@
 <?php
+
 use Illuminate\Database\Seeder;
 
 class CategoryTableSeeder  extends Seeder

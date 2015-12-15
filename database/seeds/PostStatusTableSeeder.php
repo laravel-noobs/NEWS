@@ -14,14 +14,17 @@ class PostStatusTableSeeder extends Seeder
         DB::table('post_status')->delete();
         $post_status = [
             [
-                'name' => 'Pending',
-                'slug' => str_slug('Pending')
+                'name' => 'Đợi duyệt',
+                'slug' => str_slug('Đợi duyệt')
             ],
             [
-                'name' => 'Published',
-                'slug' => str_slug('Published')
+                'name' => 'Đã duyệt',
+                'slug' => str_slug('Đã duyệt')
             ],
-
+            [
+                'name' => 'Đã đăng',
+                'slug' => str_slug('Đã đăng')
+            ]
         ];
         DB::table('post_status')->insert($post_status);
     }
