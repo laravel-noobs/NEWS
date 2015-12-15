@@ -4,6 +4,8 @@ use Illuminate\Database\Seeder;
 
 class PostExampleTableSeeder extends Seeder
 {
+    public static $post_status;
+
     /**
      * Run the database seeds.
      *
@@ -17,7 +19,7 @@ class PostExampleTableSeeder extends Seeder
                 'title' => 'Lorem Ipsum',
                 'slug' => str_slug('Lorem Ipsum'),
                 'content' => "Lorem Ipsum is simply dummy text of the printing and typesetting industry",
-                'view' =>10
+                'view' => 10
             ]
         ];
         DB::table('post')->insert($post);

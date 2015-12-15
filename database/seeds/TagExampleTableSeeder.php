@@ -13,6 +13,6 @@ class TagExampleTableSeeder extends Seeder
     public function run()
     {
         DB::table('tag')->delete();
-        factory(Tag::class, 10)->create();
+        factory(Tag::class, 200)->create();
     }
 }

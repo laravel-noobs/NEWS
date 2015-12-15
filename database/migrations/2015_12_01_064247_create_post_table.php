@@ -18,6 +18,11 @@ class CreatePostTable extends Migration
             $table->string('slug')->unique();
             $table->text('content');
             $table->integer('view');
+            $table->unsignedInteger('user_id');
+            $table->foreign('user_id')
+                ->references('id')->on('user')
+                ->onDelete('restrict')
+                ->onUpdate('cascade');
             $table->unsignedSmallInteger('status_id');
             $table->foreign('status_id')
                 ->references('id')->on('post_status')

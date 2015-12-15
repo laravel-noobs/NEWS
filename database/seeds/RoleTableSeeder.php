@@ -17,6 +17,14 @@ class RoleTableSeeder extends Seeder
             [
                 'name'=> 'Admin',
                 'slug' => str_slug('Admin')
+            ],
+            [
+                'name'=> 'Biên tập viên',
+                'slug' => str_slug('Biên tập viên')
+            ],
+            [
+                'name'=> 'Cộng tác viên',
+                'slug' => str_slug('Cộng tác viên')
             ]
         ];
         DB::table('role')->insert($role);

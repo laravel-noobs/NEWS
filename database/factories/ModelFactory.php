@@ -13,26 +13,45 @@
 
 $factory->define(App\User::class, function (Faker\Generator $faker) {
     return [
-        'name' => $faker->name,
+        'name' => $faker->userName,
         'email' => $faker->email,
+        'first_name' => $faker->firstName,
+        'last_name' => $faker->lastName,
         'password' => bcrypt(str_random(10)),
         'remember_token' => str_random(10),
     ];
 });
 
-$factory->define(App\Tag::class, function (Faker\Generator $faker)
-{
+$factory->define(App\Comment::class, function (Faker\Generator $faker) {
+    return [
+        'content' => $faker->paragraph
+    ];
+});
+
+$factory->define(App\Tag::class, function (Faker\Generator $faker) {
     $name = str_random(10);
     return [
       'name' => $name,
         'slug' => str_slug($name)
     ];
 });
-$factory->define(App\Comment::class, function (Faker\Generator $faker)
-{
+
+$factory->define(App\Post::class, function (Faker\Generator $faker) {
+    return [
+        'title' => $faker->sentence(10),
+        'slug' => str_slug($faker->sentence(10)),
+        'content' => $faker->paragraph,
+        'view' => random_int(0, 500000)
+    ];
+});
+
+$factory->define(App\Feedback::class, function (Faker\Generator $faker) {
     return [
         'content' => $faker->paragraph,
-        'user_id' =>factory(App\User::class)->create()->id,
-        'post_id' =>factory(App\Post::class)->create()->id,
+        'checked' => random_int(0,1)
     ];
+});
+
+$factory->define(App\PostTag::class, function (Faker\Generator $faker) {
+    return [];
 });
