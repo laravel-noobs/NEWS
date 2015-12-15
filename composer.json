@@ -7,7 +7,7 @@
     "repositories": [
       {
         "type": "vcs",
-        "url": "packages/flashmessage"
+        "url": "https://github.com/laravel-noobs/flashmessage.git"
       }
     ],
     "require": {

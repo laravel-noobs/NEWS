@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "acf484110633ce8d7f92fb7b8987d2b0",
-    "content-hash": "bcb512f10ff5218ce33e05fa74525643",
+    "hash": "bd8f71d2e3d471949c721ea0aee75180",
+    "content-hash": "37b49e2d04c762ff3151bcbc16d10500",
     "packages": [
         {
             "name": "barryvdh/laravel-ide-helper",
@@ -430,8 +430,14 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "packages/flashmessage",
+                "url": "https://github.com/laravel-noobs/flashmessage.git",
                 "reference": "b3ac31c979ce0049cb171a30d8fa2060f92a64f1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel-noobs/flashmessage/zipball/b3ac31c979ce0049cb171a30d8fa2060f92a64f1",
+                "reference": "b3ac31c979ce0049cb171a30d8fa2060f92a64f1",
+                "shasum": ""
             },
             "require": {
                 "illuminate/session": "5.1.*",
@@ -453,6 +459,10 @@
                     "email": "koutsuneka@gmail.com"
                 }
             ],
+            "support": {
+                "source": "https://github.com/laravel-noobs/flashmessage/tree/master",
+                "issues": "https://github.com/laravel-noobs/flashmessage/issues"
+            },
             "time": "2015-12-15 08:37:52"
         },
         {
