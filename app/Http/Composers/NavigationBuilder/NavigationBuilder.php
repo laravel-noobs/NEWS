@@ -16,9 +16,9 @@ class NavigationBuilder
      * @var array
      */
     private $items = [
-        'home' => [
+        'admin' => [
             'text' => 'Bảng điều khiển',
-            'active' => true,
+            'active' => false,
             'icon_class' => 'fa fa-th-large',
             'order' => 1
         ],
@@ -26,6 +26,18 @@ class NavigationBuilder
             'text' => 'Người dùng',
             'active' => false,
             'icon_class' => 'fa fa-user',
+            'items' => [
+                'index' => [
+                    'text' => 'Tất cả',
+                    'active' => false,
+                    'order' => 1
+                ],
+                'create' => [
+                    'text' => 'Thêm mới',
+                    'active' => false,
+                    'order' => 1
+                ],
+            ],
             'order' => 2
         ],
         'posts' => [
@@ -33,37 +45,56 @@ class NavigationBuilder
             'active' => false,
             'icon_class' => 'fa fa-pencil',
             'items' => [
-                'new' => [
-                    'text' => 'Viết bài viết',
+                'index' => [
+                    'text' => 'Tất cả',
                     'active' => false,
                     'order' => 1
                 ],
-                'categories' => [
-                    'text' => 'Chuyên mục',
-                    'action' => 'Categories@index',
+                'create' => [
+                    'text' => 'Thêm mới',
                     'active' => false,
                     'order' => 2
+                ],
+                'categories' => [
+                    'text' => 'Chuyên mục',
+                    'action' => 'CategoriesController@index',
+                    'active' => false,
+                    'order' => 3
+                ],
+                'tags' => [
+                    'text' => 'Tags',
+                    'active' => false,
+                    'order' => 4
                 ]
             ],
             'order' => 3
-        ]
+        ],
+        'feedbacks' => [
+            'text' => 'Phản hồi',
+            'active' => false,
+            'icon_class' => 'fa fa-send-o',
+            'order' => 4
+        ],
     ];
+
 
     /**
      * @param $name
      * @param $text
-     * @param string $action
+     * @param bool|false $active
+     * @param null $action
      * @param int $order
      * @param string $icon_class
-     * @param array $items
+     * @param null $items
      * @return $this
      */
-    public function set($name, $text, $action = null, $order = 0, $icon_class = '', $items = null)
+    public function set($name, $text, $active = false, $action = null, $order = 0, $icon_class = '', $items = null)
     {
         $this->items[$name] = [
             'text' => $text,
             'icon_class' => $icon_class,
             'order' => $order,
+            'active' => $active,
             'items' => $items
         ];
         if($action != null)
@@ -80,13 +111,13 @@ class NavigationBuilder
      * @param string $action
      * @return $this
      */
-    public function set_sub($name, $sub_name, $text, $order = 0, $action = null)
+    public function set_sub($name, $sub_name, $text, $active = false, $order = 0, $action = null)
     {
-        if(array_key_exists($this->items, $name))
+        if(isset($this->items[$name]))
         {
             $this->items[$name]['items'][$sub_name] = [
                 'text' => $text,
-                'active' => false,
+                'active' => $active,
                 'order' => $order
             ];
             if($action != null)
