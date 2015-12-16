@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Category;
 use App\PostStatus;
+use App\Http\Composers\NavigationBuilder\Navigator;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -21,6 +22,7 @@ class CategoriesController extends Controller
     public function index()
     {
         $categories = Category::with('postsCount')->orderBy('id','desc')->get();
+        Navigator::activate('posts', 'categories');
         return view('admin.category_index', ['categories' => $categories]);
     }
 
@@ -84,6 +86,7 @@ class CategoriesController extends Controller
     {
         $cat = Category::findOrFail($id);
         $categories = Category::where('id', '<>', $id)->get();
+        Navigator::activate('posts', 'categories');
         return view('admin.category_edit', ['category' => $cat, 'categories' => $categories]);
     }
 
