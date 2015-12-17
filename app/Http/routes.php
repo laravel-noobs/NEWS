@@ -15,9 +15,7 @@ Route::get('/', function () {
     return view('unify.index');
 });
 
-Route::get('/admin', function () {
-    return view('admin');
-});
+Route::get('/admin', 'AdminController@index');
 
 Route::get('/admin/categories', 'CategoriesController@index');
 Route::post('/admin/categories', 'CategoriesController@store');
