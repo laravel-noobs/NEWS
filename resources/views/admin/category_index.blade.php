@@ -1,3 +1,10 @@
+<?php
+    app('navigator')
+            ->activate('posts', 'categories')
+            ->set_page_heading('Danh sách chuyên mục')
+            ->set_breadcrumb('admin', 'categories');
+?>
+
 @extends('partials.admin._layout')
 
 @section('content')
@@ -10,7 +17,7 @@
                         {{ csrf_field() }}
                         <div class="form-group {{ count($errors->get('name')) > 0 ? 'has-error' : '' }}">
                             <label class="">Tên</label>
-                            <input type="text" id="name" name="name" placeholder="name" value="{{ old('name', '') }}" class="form-control">
+                            <input type="text" id="name" name="name" placeholder="" value="{{ old('name', '') }}" class="form-control">
                             <span class="help-block m-b-none">Tên của chuyên mục được tạo sẽ dùng để hiển thị.</span>
                             @foreach($errors->get('name') as $err)
                                 <label class="error" for="name">{{ $err }}</label>
@@ -19,7 +26,7 @@
 
                         <div class="form-group {{ count($errors->get('slug')) > 0 ? 'has-error' : '' }}">
                             <label>Slug</label>
-                            <input type="text" id="slug" name="slug" placeholder="vui lòng nhập slug vào đây" value="{{ old('slug', '') }}" class="form-control">
+                            <input type="text" id="slug" name="slug" placeholder="" value="{{ old('slug', '') }}" class="form-control">
                             <span class="help-block m-b-none">Chuỗi ký tự dùng để tạo đường dẫn thân thiện, thường chỉ bao gồm các ký tự từ aphabet không dấu, chữ số và dấu gạch ngang.</span>
                             @foreach($errors->get('slug') as $err)
                                 <label class="error" for="slug">{{ $err }}</label>
@@ -27,14 +34,14 @@
                         </div>
 
                         <div class="form-group {{ count($errors->get('parent_id')) > 0 ? 'has-error' : '' }}">
-                            <label>Phụ mẫu</label>
+                            <label>Chuyên mục mẹ</label>
                             <select type="text" id="parent_id" name="parent_id" placeholder="" class="form-control">
                                 <option value="">Không có</option>
                                 @foreach($categories as $cat)
                                     <option value="{{ $cat->id }}">{{ $cat->name }}</option>
                                 @endforeach
                             </select>
-                            <span class="help-block m-b-none">Chuyên mục mới có thể là chuyên mục con một chuyên mục khác. Chọn chuyên mục phụ mẫu cho chuyên mục con sẽ được tạo.</span>
+                            <span class="help-block m-b-none">Chuyên mục mới có thể là chuyên mục con một chuyên mục khác. Chọn chuyên mục mẹ cho chuyên mục con sẽ được tạo.</span>
                             @foreach($errors->get('parent_id') as $err)
                                 <label class="error" for="{{ 'parent_id' }}">{{ $err }}</label>
                             @endforeach
@@ -72,7 +79,7 @@
                         <tr>
                             <th>Tên</th>
                             <th data-hide="all">Slug</th>
-                            <th data-hide="phone">Mô tả</th>
+                            <th data-hide="phone, tablet">Mô tả</th>
                             <th data-hide="phone">Bài viết</th>
                             <th data-sort-ignore="true"><span class="pull-right">Hành động</span></th>
                         </tr>

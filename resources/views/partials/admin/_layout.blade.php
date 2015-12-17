@@ -22,6 +22,7 @@
     @include('partials.admin._sidenav')
     <div id="page-wrapper" class="gray-bg">
         @include('partials.admin._topnav')
+        @include('partials.admin._breadcrumb')
         <div class="wrapper wrapper-content animated fadeInRight">
             @yield('content')
         </div>
