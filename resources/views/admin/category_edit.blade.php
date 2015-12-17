@@ -1,3 +1,10 @@
+<?php
+    app('navigator')
+            ->activate('posts', 'categories')
+            ->set_page_heading('Sửa thông tin chuyên mục')
+            ->set_breadcrumb('admin', 'categories', 'category_edit');
+?>
+
 @extends('partials.admin._layout')
 
 @section('content')
@@ -5,12 +12,12 @@
         <div class="col-sm-12">
             <div class="ibox ">
                 <div class="ibox-content">
-                    <h3>Thêm mới chuyên mục</h3>
+                    <h3>Sửa chuyên mục</h3>
                     <form method="POST" action="{{ action('CategoriesController@update', ['id' => $category->id ]) }}">
                         {{ csrf_field() }}
                         <div class="form-group {{ count($errors->get('name')) > 0 ? 'has-error' : '' }}">
                             <label class="">Tên</label>
-                            <input type="text" id="name" name="name" placeholder="name" value="{{ old('name', $category->name) }}" class="form-control">
+                            <input type="text" id="name" name="name" placeholder="" value="{{ old('name', $category->name) }}" class="form-control">
                             <span class="help-block m-b-none">Tên của chuyên mục được tạo sẽ dùng để hiển thị.</span>
                             @foreach($errors->get('name') as $err)
                                 <label class="error" for="name">{{ $err }}</label>
@@ -19,7 +26,7 @@
 
                         <div class="form-group {{ count($errors->get('slug')) > 0 ? 'has-error' : '' }}">
                             <label>Slug</label>
-                            <input type="text" id="slug" name="slug" placeholder="vui lòng nhập slug vào đây" value="{{ old('slug', $category->slug) }}" class="form-control">
+                            <input type="text" id="slug" name="slug" placeholder="" value="{{ old('slug', $category->slug) }}" class="form-control">
                             <span class="help-block m-b-none">Chuỗi ký tự dùng để tạo đường dẫn thân thiện, thường chỉ bao gồm các ký tự từ aphabet không dấu, chữ số và dấu gạch ngang.</span>
                             @foreach($errors->get('slug') as $err)
                                 <label class="error" for="slug">{{ $err }}</label>
@@ -34,7 +41,7 @@
                                     <option {{ $cat->id == $category->parent_id ?  'selected="selected"' : '' }} value="{{ $cat->id }}">{{ $cat->name }}</option>
                                 @endforeach
                             </select>
-                            <span class="help-block m-b-none">Chuyên mục mới có thể là chuyên mục con một chuyên mục khác. Chọn chuyên mục phụ mẫu cho chuyên mục con sẽ được tạo.</span>
+                            <span class="help-block m-b-none">Chuyên mục mới có thể là chuyên mục con một chuyên mục khác. Chọn chuyên mục mẹ cho chuyên mục con sẽ được tạo.</span>
                             @foreach($errors->get('parent_id') as $err)
                                 <label class="error" for="{{ 'parent_id' }}">{{ $err }}</label>
                             @endforeach

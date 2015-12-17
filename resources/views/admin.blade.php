@@ -1,5 +1,10 @@
-@extends('partials.admin._layout')
+<?php
+    app('navigator')
+            ->activate('admin')
+            ->set_page_heading('Bảng điều khiển');
+?>
 
+@extends('partials.admin._layout')
 @section('content')
     <h1>Hello World!</h1>
 @endsection

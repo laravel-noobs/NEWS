@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use App\Http\Composers\NavigationBuilder\NavigationBuilder;
+use Blade;
 
 class ViewComposerServiceProvider extends ServiceProvider
 {
@@ -15,6 +16,7 @@ class ViewComposerServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->composeNavigation();
+        $this->composeBreadcrumb();
     }
 
     /**
@@ -52,5 +54,13 @@ class ViewComposerServiceProvider extends ServiceProvider
     public function composeNavigation()
     {
         view()->composer('partials.admin._sidenav', 'App\Http\Composers\NavigationComposer@compose');
+    }
+
+    /**
+     * Xử lý thanh breadcrumb
+     */
+    public function composeBreadcrumb()
+    {
+        view()->composer('partials.admin._breadcrumb', 'App\Http\Composers\BreadcrumbComposer@compose');
     }
 }

@@ -22,7 +22,6 @@ class CategoriesController extends Controller
     public function index()
     {
         $categories = Category::with('postsCount')->orderBy('id','desc')->get();
-        Navigator::activate('posts', 'categories');
         return view('admin.category_index', ['categories' => $categories]);
     }
 
@@ -86,7 +85,6 @@ class CategoriesController extends Controller
     {
         $cat = Category::findOrFail($id);
         $categories = Category::where('id', '<>', $id)->get();
-        Navigator::activate('posts', 'categories');
         return view('admin.category_edit', ['category' => $cat, 'categories' => $categories]);
     }
 
