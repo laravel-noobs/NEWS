@@ -13,7 +13,7 @@ class CreateFeedbackTable extends Migration
     public function up()
     {
         Schema::create('feedback', function (Blueprint $table){
-            $table->integer('id');
+            $table->increments('id');
             $table->unsignedInteger('post_id');
             $table->foreign('post_id')
                 ->references('id')->on('post')

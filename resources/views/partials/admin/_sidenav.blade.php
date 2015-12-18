@@ -1,20 +1,23 @@
-<div class="row border-bottom">
-    <nav class="navbar navbar-static-top white-bg" role="navigation" style="margin-bottom: 0">
-        <div class="navbar-header">
-            <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
-            <form role="search" class="navbar-form-custom" method="post" action="#">
-                <div class="form-group">
-                    <input type="text" placeholder="Search for something..." class="form-control" name="top-search" id="top-search">
+<nav class="navbar-default navbar-static-side" role="navigation">
+    <div class="sidebar-collapse">
+        <ul class="nav metismenu" id="side-menu">
+            <li class="nav-header">
+                <div class="dropdown profile-element">
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                            <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold">David Williams</strong>
+                             </span> <span class="text-muted text-xs block">Art Director <b class="caret"></b></span> </span> </a>
+                    <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                        <li><a href="#">Logout</a></li>
+                    </ul>
                 </div>
-            </form>
-        </div>
-        <ul class="nav navbar-top-links navbar-right">
-            <li>
-                <a href="#">
-                    <i class="fa fa-sign-out"></i> Log out
-                </a>
+                <div class="logo-element">
+                    {{ $acronym }}
+                </div>
             </li>
+            @foreach($menu_items as $key => $val)
+                @include('partials.admin._sidenav_item', $val)
+            @endforeach
         </ul>
 
-    </nav>
-</div>
+    </div>
+</nav>

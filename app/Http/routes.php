@@ -12,12 +12,10 @@
 */
 
 Route::get('/', function () {
-    return view('index');
+    return view('unify.index');
 });
 
-Route::get('/admin', function () {
-    return view('admin');
-});
+Route::get('/admin', 'AdminController@index');
 
 Route::get('/admin/categories', 'CategoriesController@index');
 Route::post('/admin/categories', 'CategoriesController@store');
@@ -30,3 +28,5 @@ Route::post('admin/users', 'UsersController@index');
 
 Route::get('/dang-nhap', 'Auth\AuthController@getLogin');
 Route::post('/dang-nhap', 'Auth\AuthController@postLogin');
+Route::get('/dang-ky', 'Auth\AuthController@getRegister');
+Route::post('/dang-nhap', 'Auth\AuthController@postRegister');

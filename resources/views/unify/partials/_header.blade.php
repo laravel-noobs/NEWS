@@ -55,6 +55,6 @@
             </div><!--/end container-->
         </div>
         <!-- End Topbar blog -->
-        @include('_unify._navbar')
+        @include('unify.partials._navbar')
     </div>
     <!--=== End Header v8 ===-->

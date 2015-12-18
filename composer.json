@@ -4,11 +4,18 @@
     "keywords": ["framework", "laravel"],
     "license": "MIT",
     "type": "project",
+    "repositories": [
+      {
+        "type": "vcs",
+        "url": "https://github.com/laravel-noobs/flashmessage.git"
+      }
+    ],
     "require": {
         "php": ">=5.5.9",
         "laravel/framework": "5.1.*",
         "barryvdh/laravel-ide-helper": "v2.1.0",
-        "laravelcollective/html": "^5.1"
+        "laravelcollective/html": "^5.1",
+        "koutsuneka/flashmessage": "dev-master@dev"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
