@@ -23,8 +23,11 @@ Route::get('/admin/categories/{id}/delete', 'CategoriesController@destroy');
 Route::get('/admin/categories/{id}/edit', 'CategoriesController@edit');
 Route::post('/admin/categories/{id}/edit', 'CategoriesController@update');
 
+Route::get('/admin/users/{id}/delete', 'UsersController@delete');
 Route::get('admin/users', 'UsersController@index');
-Route::post('admin/users', 'UsersController@index');
+
+Route::get('/admin/users/{id}/edit', 'UsersController@edit');
+Route::post('/admin/users/{id}/edit', 'UsersController@update');
 
 Route::get('/dang-nhap', 'Auth\AuthController@getLogin');
 Route::post('/dang-nhap', 'Auth\AuthController@postLogin');
