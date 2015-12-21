@@ -431,12 +431,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel-noobs/flashmessage.git",
-                "reference": "b3ac31c979ce0049cb171a30d8fa2060f92a64f1"
+                "reference": "0fecf9403e2f06947889ac1bb3f7b9accd80a421"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel-noobs/flashmessage/zipball/b3ac31c979ce0049cb171a30d8fa2060f92a64f1",
-                "reference": "b3ac31c979ce0049cb171a30d8fa2060f92a64f1",
+                "url": "https://api.github.com/repos/laravel-noobs/flashmessage/zipball/0fecf9403e2f06947889ac1bb3f7b9accd80a421",
+                "reference": "0fecf9403e2f06947889ac1bb3f7b9accd80a421",
                 "shasum": ""
             },
             "require": {
@@ -463,7 +463,7 @@
                 "source": "https://github.com/laravel-noobs/flashmessage/tree/master",
                 "issues": "https://github.com/laravel-noobs/flashmessage/issues"
             },
-            "time": "2015-12-15 08:37:52"
+            "time": "2015-12-17 13:22:42"
         },
         {
             "name": "laravel/framework",
