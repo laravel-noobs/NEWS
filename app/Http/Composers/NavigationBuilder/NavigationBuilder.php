@@ -31,17 +31,14 @@ class NavigationBuilder
                 'index' => [
                     'text' => 'Tất cả',
                     'active' => false,
+                    'action' => 'UsersController@index',
                     'order' => 1
                 ],
                 'create' => [
                     'text' => 'Thêm mới',
                     'active' => false,
+                    'action' => 'UsersController@create',
                     'order' => 2
-                ],
-                'edit' => [
-                    'text' => 'Sửa',
-                    'active' => false,
-                    'order' => 3
                 ]
             ],
             'order' => 2
@@ -154,6 +151,7 @@ class NavigationBuilder
         $urls = [
             'admin' => URL::action('AdminController@index'),
             'users' => URL::action('UsersController@index'),
+            'user_edit' => URL::action('UsersController@edit'),
             'categories' => URL::action('CategoriesController@index'),
         ];
         foreach($urls as $key => $val)
