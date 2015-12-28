@@ -51,7 +51,7 @@ class NavigationBuilder
             'active' => false,
             'icon_class' => 'fa fa-pencil',
             'items' => [
-                'index' => [
+                    'index' => [
                     'text' => 'Tất cả',
                     'active' => false,
                     'order' => 1
