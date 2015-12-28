@@ -1,3 +1,10 @@
+<?php
+app('navigator')
+        ->activate('users', 'index')
+        ->set_page_heading('Danh sách người dùng')
+        ->set_breadcrumb('admin', 'users');
+?>
+
 @extends('partials.admin._layout')
 
 @section('content')
