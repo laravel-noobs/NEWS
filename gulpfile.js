@@ -69,4 +69,5 @@ elixir(function(mix){
      .copy(inspinia.css + "animate.css", 'public/css')
      .copy(inspinia.img + 'patterns/**', 'public/css/patterns')
      .copy(assets.unify+'**', 'public/unify')
+     .copy(inspinia.js + 'editor', 'public/js/editor')
 });

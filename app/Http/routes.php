@@ -23,6 +23,8 @@ Route::get('/admin/categories/{id}/delete', 'CategoriesController@destroy');
 Route::get('/admin/categories/{id}/edit', 'CategoriesController@edit');
 Route::post('/admin/categories/{id}/edit', 'CategoriesController@update');
 
+Route::get('/admin/posts','PostsController@index');
+Route::get('/admin/posts/create','PostsController@create');
 Route::get('/dang-nhap', 'Auth\AuthController@getLogin');
 Route::post('/dang-nhap', 'Auth\AuthController@postLogin');
 Route::get('/dang-ky', 'Auth\AuthController@getRegister');
