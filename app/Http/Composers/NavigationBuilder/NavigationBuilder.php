@@ -10,132 +10,23 @@ class NavigationBuilder
     private $acronym = 'NEWS';
 
     /**
+     * @var string
+     */
+    private $page_title = 'NEWS';
+
+    /**
      * @var bool
      */
     private $sort = false;
     /**
      * @var array
      */
-    private $items = [
-        'admin' => [
-            'text' => 'Bảng điều khiển',
-            'active' => false,
-            'icon_class' => 'fa fa-th-large',
-            'order' => 1
-        ],
-        'users' => [
-            'text' => 'Người dùng',
-            'active' => false,
-            'icon_class' => 'fa fa-user',
-            'items' => [
-                'index' => [
-                    'text' => 'Tất cả',
-                    'active' => false,
-                    'order' => 1
-                ],
-                'create' => [
-                    'text' => 'Thêm mới',
-                    'active' => false,
-                    'order' => 2
-                ],
-                'edit' => [
-                    'text' => 'Sửa',
-                    'active' => false,
-                    'order' => 3
-                ]
-            ],
-            'order' => 2
-        ],
-        'posts' => [
-            'text' => 'Bài viết',
-            'active' => false,
-            'icon_class' => 'fa fa-pencil',
-            'items' => [
-                    'index' => [
-                    'text' => 'Tất cả',
-                    'active' => false,
-                    'order' => 1
-                ],
-                'create' => [
-                    'text' => 'Thêm mới',
-                    'active' => false,
-                    'order' => 2
-                ],
-                'categories' => [
-                    'text' => 'Chuyên mục',
-                    'action' => 'CategoriesController@index',
-                    'active' => false,
-                    'order' => 3
-                ],
-                'tags' => [
-                    'text' => 'Tags',
-                    'active' => false,
-                    'order' => 4
-                ]
-            ],
-            'order' => 3
-        ],
-        'feedbacks' => [
-            'text' => 'Phản hồi',
-            'active' => false,
-            'icon_class' => 'fa fa-send-o',
-            'order' => 4
-        ],
-    ];
+    private $items = [];
 
     /**
      * @var array
      */
-    private $crumbs = [
-        'admin' => [
-            'text' => 'Bảng điều khiển',
-            'icon_class' => 'fa fa-th-large'
-        ],
-        'users' => [
-            'text' => 'Người dùng',
-            'icon_class' => 'fa fa-users',
-        ],
-        'user_create' => [
-            'text' => 'Tạo mới',
-            'icon_class' => 'fa fa-user-plus',
-        ],
-        'user_edit' => [
-            'text' => 'Sửa',
-            'icon_class' => 'fa fa-wrench',
-        ],
-        'posts' => [
-            'text' => 'Bài viết',
-            'icon_class' => 'fa fa-files-o',
-        ],
-        'post_create' => [
-            'text' => 'Tạo mới',
-            'icon_class' => 'fa fa-file-text-o',
-        ],
-        'post_edit' => [
-            'text' => 'Sửa',
-            'icon_class' => 'fa fa-edit',
-        ],
-        'feedbacks' => [
-            'text' => 'Phản hồi',
-            'icon_class' => 'fa fa-send',
-        ],
-        'tags' => [
-            'text' => 'Tags',
-            'icon_class' => 'fa fa-tags',
-        ],
-        'categories' => [
-            'text' => 'Chuyên mục',
-            'icon_class' => 'fa fa-archive'
-        ],
-        'category_edit' => [
-            'text' => 'Sửa',
-            'icon_class' => 'fa fa-wrench'
-        ],
-        'search_result' => [
-            'text' => 'Kết quả tìm kiếm',
-            'icon_class' => 'fa fa-search',
-        ],
-    ];
+    private $crumbs = [];
 
     /**
      * @var array
@@ -151,14 +42,8 @@ class NavigationBuilder
      *
      */
     function __construct() {
-        $urls = [
-            'admin' => URL::action('AdminController@index'),
-            'users' => URL::action('UsersController@index'),
-            'categories' => URL::action('CategoriesController@index'),
-        ];
-        foreach($urls as $key => $val)
-            if(isset($this->crumbs[$key]))
-                $this->crumbs[$key]['url'] = $val;
+        $this->items = array_merge($this->items, include('Templates/NavigationTemplate.php'));
+        $this->crumbs = array_merge($this->crumbs, include('Templates/CrumbsTemplate.php'));
     }
 
     /**
@@ -299,6 +184,16 @@ class NavigationBuilder
     {
         $this->sort = $value;
         return $this;
+    }
+
+    public function set_page_title($page_title)
+    {
+        $this->page_title = $page_title;
+    }
+
+    public function get_page_title()
+    {
+        return $this->page_title;
     }
 
     /**

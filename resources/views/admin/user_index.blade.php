@@ -2,7 +2,8 @@
 app('navigator')
         ->activate('users', 'index')
         ->set_page_heading('Danh sách người dùng')
-        ->set_breadcrumb('admin', 'users');
+        ->set_breadcrumb('admin', 'users')
+        ->set_page_title('Danh sách tất cả người dùng');
 ?>
 
 @extends('partials.admin._layout')

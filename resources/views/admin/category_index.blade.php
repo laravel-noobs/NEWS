@@ -2,7 +2,8 @@
     app('navigator')
             ->activate('posts', 'categories')
             ->set_page_heading('Danh sách chuyên mục')
-            ->set_breadcrumb('admin', 'categories');
+            ->set_breadcrumb('admin', 'categories')
+            ->set_page_title('Danh sách tất cả chuyên mục');
 ?>
 
 @extends('partials.admin._layout')
