@@ -17,6 +17,7 @@ class ViewComposerServiceProvider extends ServiceProvider
     {
         $this->composeNavigation();
         $this->composeBreadcrumb();
+        $this->composePageMeta();
     }
 
     /**
@@ -62,5 +63,13 @@ class ViewComposerServiceProvider extends ServiceProvider
     public function composeBreadcrumb()
     {
         view()->composer('partials.admin._breadcrumb', 'App\Http\Composers\BreadcrumbComposer@compose');
+    }
+
+    /**
+     * Xử lý metadata của trang
+     */
+    public function composePageMeta()
+    {
+        view()->composer('partials.admin._pagemeta', 'App\Http\Composers\PageMetaComposer@compose');
     }
 }

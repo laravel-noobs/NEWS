@@ -2,7 +2,8 @@
 app('navigator')
         ->activate('users', 'edit')
         ->set_page_heading('Sửa thông tin người dùng')
-        ->set_breadcrumb('admin', 'users', 'user_edit');
+        ->set_breadcrumb('admin', 'users', 'user_edit')
+        ->set_page_title('Sửa thông tin người dùng ' . $user->email);
 ?>
 
 @extends('partials.admin._layout')

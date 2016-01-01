@@ -1,7 +1,8 @@
 <?php
     app('navigator')
             ->activate('admin')
-            ->set_page_heading('Bảng điều khiển');
+            ->set_page_heading('Bảng điều khiển')
+            ->set_page_title('Bảng điều khiển');
 ?>
 
 @extends('partials.admin._layout')
