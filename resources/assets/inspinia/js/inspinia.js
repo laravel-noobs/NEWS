@@ -80,7 +80,8 @@ $(document).ready(function () {
     $('.navbar-minimalize').click(function () {
         $("body").toggleClass("mini-navbar");
         SmoothlyMenu();
-
+        if(typeof(Storage) !== "undefined")
+            localStorage.setItem("navbar-minimalize", $('body').hasClass('mini-navbar'));
     });
 
     // Tooltips demo
