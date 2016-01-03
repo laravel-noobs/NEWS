@@ -27,6 +27,14 @@ class PostTag extends Model
      */
     protected $fillable = [];
 
+    /**
+     * @var bool
+     */
+    public $incrementing = false;
+
+    /**
+     * @var bool
+     */
     public $timestamps = false;
 
     /**
