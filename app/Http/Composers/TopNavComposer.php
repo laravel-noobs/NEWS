@@ -8,14 +8,14 @@ class TopNavComposer
 {
     public function compose(View $view)
     {
-        $user = Auth::user() != null;
+        $user = Auth::user();
         $authenticated = $user != null;
         $view->with([
             'has_page_heading' => Navigator::has_page_heading(),
             'authenticated' => $authenticated,
         ]);
 
-        if($authenticated )
+        if($authenticated)
         {
             $view->with([
                 'user_email' => $user->email

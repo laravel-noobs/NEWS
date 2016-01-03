@@ -9,16 +9,10 @@
             </form>
         </div>
         <ul class="nav navbar-top-links navbar-right">
-            <li>
-                @if($authenticated)
-                <span>
-                    {{ $user_email }}
-                </span>
-                <a href="{{ URL::action('Auth\AuthController@getLogout') }}">
-                    <i class="fa fa-sign-out"></i> Log out
-                </a>
-                @endif
-            </li>
+            @if($authenticated)
+            <li><a> {{ $user_email }} </a></li>
+            <li><a href="{{ URL::action('Auth\AuthController@getLogout') }}"><i class="fa fa-sign-out"></i> Log out</a></li>
+            @endif
         </ul>
 
     </nav>
