@@ -18,6 +18,7 @@ class ViewComposerServiceProvider extends ServiceProvider
         $this->composeNavigation();
         $this->composeBreadcrumb();
         $this->composePageMeta();
+        $this->composeTopNav();
     }
 
     /**
@@ -71,5 +72,10 @@ class ViewComposerServiceProvider extends ServiceProvider
     public function composePageMeta()
     {
         view()->composer('partials.admin._pagemeta', 'App\Http\Composers\PageMetaComposer@compose');
+    }
+
+    public function composeTopNav()
+    {
+        view()->composer('partials.admin._topnav', 'App\Http\Composers\TopNavComposer@compose');
     }
 }
