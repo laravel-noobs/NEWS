@@ -165,6 +165,15 @@ class NavigationBuilder
         $this->page_heading = $page_heading;
         return $this;
     }
+
+    /**
+     * @return bool
+     */
+    public function has_page_heading()
+    {
+        return !empty($this->breadcrumb) || !empty($this->page_heading);
+    }
+
     /**
      * @return array
      */
@@ -186,11 +195,17 @@ class NavigationBuilder
         return $this;
     }
 
+    /**
+     * @param $page_title
+     */
     public function set_page_title($page_title)
     {
         $this->page_title = $page_title;
     }
 
+    /**
+     * @return string
+     */
     public function get_page_title()
     {
         return $this->page_title;
@@ -214,4 +229,6 @@ class NavigationBuilder
         }
         return $items;
     }
+
+
 }
