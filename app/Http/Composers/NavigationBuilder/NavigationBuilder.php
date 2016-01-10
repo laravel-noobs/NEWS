@@ -36,8 +36,13 @@ class NavigationBuilder
                 'create' => [
                     'text' => 'Thêm mới',
                     'active' => false,
-                    'order' => 1
+                    'order' => 2
                 ],
+                'edit' => [
+                    'text' => 'Sửa',
+                    'active' => false,
+                    'order' => 3
+                ]
             ],
             'order' => 2
         ],
@@ -46,7 +51,7 @@ class NavigationBuilder
             'active' => false,
             'icon_class' => 'fa fa-pencil',
             'items' => [
-                'index' => [
+                    'index' => [
                     'text' => 'Tất cả',
                     'active' => false,
                     'order' => 1
@@ -147,6 +152,8 @@ class NavigationBuilder
      */
     function __construct() {
         $urls = [
+            'admin' => URL::action('AdminController@index'),
+            'users' => URL::action('UsersController@index'),
             'categories' => URL::action('CategoriesController@index'),
         ];
         foreach($urls as $key => $val)
