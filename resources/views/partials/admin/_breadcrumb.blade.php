@@ -1,3 +1,4 @@
+@if($has_page_heading)
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
         <h2>{{ isset($page_heading)? $page_heading : '' }}</h2>
@@ -12,3 +13,4 @@
     <div class="col-lg-2">
     </div>
 </div>
+@endif

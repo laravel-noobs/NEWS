@@ -24,13 +24,6 @@ class AuthController extends Controller
     use AuthenticatesAndRegistersUsers, ThrottlesLogins;
 
     /**
-     * Đường dẫn chuyển hướng khi đăng nhập thất bại
-     *
-     * @var string
-     */
-    public $loginPath = '/dang-nhap';
-
-    /**
      * Đường dẫn chuyển hướng khi đăng nhập thành công
      *
      * @var string
@@ -55,7 +48,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest', ['except' => 'getLogout']);
+        $this->middleware('guest', ['except' => 'logout']);
     }
 
     /**

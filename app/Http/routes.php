@@ -34,4 +34,5 @@ Route::post('/admin/users','UsersController@store');
 Route::get('/dang-nhap', 'Auth\AuthController@getLogin');
 Route::post('/dang-nhap', 'Auth\AuthController@postLogin');
 Route::get('/dang-ky', 'Auth\AuthController@getRegister');
-Route::post('/dang-nhap', 'Auth\AuthController@postRegister');
+Route::post('/dang-ky', 'Auth\AuthController@postRegister');
+Route::get('/dang-xuat', 'Auth\AuthController@getLogout');
