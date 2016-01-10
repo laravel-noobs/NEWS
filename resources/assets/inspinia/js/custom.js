@@ -17,7 +17,12 @@ toastr.options = {
     "hideMethod": "fadeOut"
 }
 
-if(typeof(flash_messages) !== 'undefined')
-    if(flash_messages != null)
-    for(i = 0; i < flash_messages.length; i++)
-        toastr[flash_messages[i]['type']](flash_messages[i]['message'], flash_messages[i]['title'], flash_messages[i]['options']);
+var navbarMinimize = function(){
+    if(localStorage.getItem('navbar-minimalize') == 'true')
+        $('body').addClass('mini-navbar')
+    else
+        $('body').removeClass('mini-navbar')
+};
+
+
+

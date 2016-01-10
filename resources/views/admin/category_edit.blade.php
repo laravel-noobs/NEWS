@@ -2,7 +2,8 @@
     app('navigator')
             ->activate('posts', 'categories')
             ->set_page_heading('Sửa thông tin chuyên mục')
-            ->set_breadcrumb('admin', 'categories', 'category_edit');
+            ->set_breadcrumb('admin', 'categories', 'category_edit')
+            ->set_page_title('Sửa thông tin chuyên mục ' . $category->name);
 ?>
 
 @extends('partials.admin._layout')
