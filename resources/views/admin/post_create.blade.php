@@ -9,63 +9,181 @@ app('navigator')
 
 @section('content')
     <div class="row">
-        <div class="col-lg-12">
-            <div class="ibox float-e-margins">
-                <div class="ibox-title">
-                    <h5>Chức năng thêm bài viết mới <small>thêm bài viết mới trong hệ thống</small></h5>
-                    <div class="ibox-tools">
-                        <a class="collapse-link">
-                            <i class="fa fa-chevron-up"></i>
-                        </a>
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                            <i class="fa fa-wrench"></i>
-                        </a>
+        <form method="POST" action="{{ URL::action('PostsController@store') }}">
+            {{ csrf_field() }}
+            @if(count($errors) > 0)
+                {{ dd($errors) }}
+            @endif
+            <div class="col-lg-9">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>Chức năng thêm bài viết mới <small>thêm bài viết mới trong hệ thống</small></h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+
+                                <div class="col-sm-12"><input placeholder="Nhập tiêu đề tại đây" id="title" name="title" value="{{ old('title', '') }}" type="text" class="form-control"></div>
+                            </div>
+                            <div class="slug" style="display: none">
+                            <strong>Liên kết tĩnh: </strong>{{Request::root()}}/<span id="permalink" title="Đường dẫn tĩnh tạm thời. Ấn để sửa phần này."></span>
+                            <input placeholder="" id="slug" name="slug" value="{{ old('slug', '') }}" type="text" class="form-control" style="display: none">
+                            <button id="btn-editslug" onclick="editpermalink();" type="button" class="btn btn-default btn-xs">Sửa</button>
+                            <button id="btn-okslug" onclick="okpermalink();" type="button" class="btn btn-default btn-xs" style="display: none">Ok</button>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <div class="col-md-12 "><textarea name="content" id="content" rows="10" cols="80">{{ old('content', '') }}</textarea></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="ibox-content">
-                    <form method="POST" action=" " class="form-horizontal">
-                        <div class="form-group"><label class="col-sm-2 control-label">Tiêu đề</label>
-
-                            <div class="col-sm-10"><input type="text" class="form-control"></div>
+            </div>
+            <div class="col-lg-3">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>Đăng bài viết</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
                         </div>
-                        <div class="hr-line-dashed"></div>
-                        <div class="form-group"><label class="col-sm-2 control-label">Chuyên mục</label>
-
-                            <div class="col-sm-10"><select class="form-control m-b" name="account">
-                                    @foreach($category as $cat)
-                                    <option value="{{$cat ->id}}">{{$cat ->name}}</option>
-                                    @endforeach
-                                </select>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <div class='input-group date' id='datetimepicker1'>
+                                    <input id="published_at" name="published_at" type='text' class="form-control" />
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
                             </div>
-                         </div>
-                        <div class="hr-line-dashed"></div>
-                        <div class="form-group"><label class="col-sm-2 control-label">Thẻ</label>
-
-                            <div class="col-sm-10"><input type="text" class="form-control"></div>
-                        </div>
-                        <div class="hr-line-dashed"></div>
-                        <div class="form-group">
-                            <textarea name="editor" id="editor" rows="10" cols="80">
-
-                            </textarea>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-4 col-sm-offset-2">
-                                <button class="btn btn-white">Cancel</button>
-                                <button class="btn btn-primary" type="submit">Save changes</button>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <button class="btn btn-primary pull-right" type="submit">Save changes</button>
+                                </div>
                             </div>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
-        </div>
+            <div class="col-lg-3">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>Chuyên mục</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <select class="category form-control">
+                                        <option></option>
+                                        @foreach($category as $cat)
+                                            <option value="{{$cat ->id}}">{{$cat ->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>Thẻ của bài viết</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="form-horizontal">
+
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <select class="tags form-control" multiple="multiple">
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
     </div>
 
 @endsection
 
 @section('footer-script')
     <script src="{{URL::asset('js/editor/ckeditor.js')}}"></script>
-    <script>
-        CKEDITOR.replace( 'editor' );
+    <script type="text/javascript">
+        $(function () {
+            $('#datetimepicker1').datetimepicker({
+                format: 'HH:mm - dddd DD/MM/YYYY',
+                defaultDate: moment().format()
+            });
+        });
     </script>
+    <script>
+        $(".category").select2({
+            placeholder: "Chọn một chuyên mục",
+            allowClear: true
+        });
+        $(".tags").select2({
+            tags: true
+        })
+        var flag = true;
+        $('#title').on('change', function () {
+            var title = $('#title').val();
+            if(flag){
+                $.ajax({
+                    dataType: "json",
+                    url: '/admin/posts/getpermalink/' + title,
+                    success: function (data) {
+                        $('#permalink').text(data.permalink);
+                        $('#slug').val(data.permalink);
+                    }
+                })
+                $('.slug').show();
+                flag = false;
+            }
+        });
+        CKEDITOR.replace( 'content' );
+        function editpermalink() {
+            var text = $('#permalink').text();
+            $('#permalink').after().html('<input type="text" name="" id="tmplink" value="' + text + '" >');
+            $('#btn-editslug').hide();
+            $('#btn-okslug').show()
+        }
+        function okpermalink() {
+            var newlink = $('#tmplink').val();
+            $('#permalink').text(newlink);
+            $('#btn-okslug').hide()
+            $('#btn-editslug').show();
+            $('#slug').val(newlink);
+        }
+
+        $('button[type="submit"]').click(function(e)
+        {
+            $('#published_at').val($('#datetimepicker1').data("DateTimePicker").date().format('YYYY-mm-DD hh:mm:ss'));
+        })
+    </script>
+
 @endsection

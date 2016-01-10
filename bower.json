@@ -32,7 +32,9 @@
     "slimscroll": "^1.3.6",
     "footable": "^2.0.3",
     "toastr": "^2.1.2",
-    "moment": "^2.10.6"
+    "moment": "^2.10.6",
+    "select2": "^4.0.0",
+    "eonasdan-bootstrap-datetimepicker": "^4.17.37"
   },
   "resolutions": {
     "jquery": "2.1.4"

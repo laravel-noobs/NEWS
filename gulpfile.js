@@ -38,7 +38,9 @@ elixir(function(mix) {
 elixir(function(mix){
    mix.styles([
        bower + 'footable/css/footable.core.css',
-       bower + 'toastr/toastr.css'
+       bower + 'toastr/toastr.css',
+       bower + 'select2/dist/css/select2.css',
+       bower + 'eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css'
    ], 'public/css/plugins.css')
 });
 
@@ -54,11 +56,16 @@ elixir(function(mix) {
     ], 'public/js/app.js', './');
 
     mix.scripts([
+        bower + 'moment/moment.js',
+        bower + 'moment/locale/vi.js',
         bower + 'metisMenu/dist/metisMenu.js',
         bower + 'pace/pace.js',
         bower + 'slimscroll/jquery.slimscroll.js',
         bower + 'footable/dist/footable.all.min.js',
-        bower + 'toastr/toastr.js'
+        bower + 'toastr/toastr.js',
+        bower + 'select2/dist/js/select2.full.min.js',
+        bower + 'eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js'
+
     ], 'public/js/plugins.js', './');
 });
 

@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Auth;
 
 class PostsController extends Controller
 {
@@ -30,6 +31,8 @@ class PostsController extends Controller
      */
     public function create()
     {
+        $user = Auth::user();
+        dd($user);
         $cat = Category::all();
         return view('admin.post_create', ['category' => $cat]);
     }
@@ -42,7 +45,32 @@ class PostsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $slug = $request->request->get('slug');
+        $name = $request->request->get('name');
+        if(empty($slug) && !empty($name))
+        {
+            $slug = str_slug($request->request->get('name'));
+            if(strlen($slug) >= 4)
+                $request->request->set('slug', $slug);
+        }
+
+        $this->validate($request, [
+            'title' => 'required|min:4',
+            'slug' => 'required|min:4|unique:post,slug',
+            'content' => 'required|min:40|max:2000',
+            'published_at' => 'required'
+        ]);
+
+        $input = $request->all();
+
+        $post = new Post($input);
+
+        if($post->save())
+            Flash::push("Thêm bv  \\\"$post->title\\\" thành công", 'Hệ thống');
+        else
+            Flash::push("Thêm bv thất bại", 'Hệ thống', "error");
+
+        return redirect()->action('PostsController@index');
     }
 
     /**
@@ -88,5 +116,12 @@ class PostsController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function permalink($name)
+    {
+        $slug = str_slug($name);
+        $link = array('permalink'=> $slug);
+        return $link;
     }
 }
