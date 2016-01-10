@@ -28,6 +28,8 @@ Route::get('admin/users', 'UsersController@index');
 Route::get('/admin/users/{id}/edit', 'UsersController@edit');
 Route::get('admin/users/create', 'UsersController@create');
 Route::post('/admin/users/{id}/edit', 'UsersController@update');
+Route::get('/admin/users/create', 'UsersController@create');
+Route::post('/admin/users','UsersController@store');
 
 Route::get('/dang-nhap', 'Auth\AuthController@getLogin');
 Route::post('/dang-nhap', 'Auth\AuthController@postLogin');

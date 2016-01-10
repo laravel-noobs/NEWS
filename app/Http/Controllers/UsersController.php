@@ -44,15 +44,9 @@ class UsersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(array $data)
+    public function create()
     {
-        return User::create([
-            'first_name' => $data['first_name'],
-            'last_name' => $data['last_name'],
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => bcrypt($data['password']),
-        ]);
+        return view('admin/user_create');
     }
 
     /**
@@ -63,7 +57,22 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'name' => 'required|min:4',
+            'email' => 'required|email|unique:user,email',
+            'password' => 'min:6|max:60'
+        ]);
+
+        $input = $request->all();
+
+        $user = new User($input);
+
+        if($user->save())
+            Flash::push("Thêm user \\\"$user->name\\\" thành công", 'Hệ thống');
+        else
+            Flash::push("Thêm user thất bại", 'Hệ thống', "error");
+
+        return redirect()->action('UsersController@index');
     }
 
     /**
