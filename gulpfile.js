@@ -20,6 +20,7 @@ elixir(function(mix) {
     mix
         .sass([
             'core.scss',
+            inspinia.css + 'animate.css'
         ], 'public/css/core.css')
         .styles([
             bower + 'footable/css/footable.core.css',
