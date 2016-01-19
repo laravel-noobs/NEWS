@@ -10,6 +10,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Auth;
+use KouTsuneka\FlashMessage\Flash;
 
 class PostsController extends Controller
 {
@@ -31,8 +32,6 @@ class PostsController extends Controller
      */
     public function create()
     {
-        $user = Auth::user();
-        dd($user);
         $cat = Category::all();
         return view('admin.post_create', ['category' => $cat]);
     }
@@ -61,11 +60,16 @@ class PostsController extends Controller
             'published_at' => 'required'
         ]);
 
+
         $input = $request->all();
 
         $post = new Post($input);
+        $user = Auth::user();
+        if($user != null)
+            $post->user_id = $user->id;
+        $post->status_id = 1;
 
-        if($post->save())
+            if($post->save())
             Flash::push("Thêm bv  \\\"$post->title\\\" thành công", 'Hệ thống');
         else
             Flash::push("Thêm bv thất bại", 'Hệ thống', "error");

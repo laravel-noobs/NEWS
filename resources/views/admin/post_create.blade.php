@@ -11,9 +11,6 @@ app('navigator')
     <div class="row">
         <form method="POST" action="{{ URL::action('PostsController@store') }}">
             {{ csrf_field() }}
-            @if(count($errors) > 0)
-                {{ dd($errors) }}
-            @endif
             <div class="col-lg-9">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
@@ -91,7 +88,7 @@ app('navigator')
                         <div class="form-horizontal">
                             <div class="form-group">
                                 <div class="col-sm-12">
-                                    <select class="category form-control">
+                                    <select name="category_id" class="category form-control">
                                         <option></option>
                                         @foreach($category as $cat)
                                             <option value="{{$cat ->id}}">{{$cat ->name}}</option>

@@ -24,6 +24,10 @@ class PostStatusTableSeeder extends Seeder
             [
                 'name' => 'Đã đăng',
                 'slug' => str_slug('Đã đăng')
+            ],
+            [
+                'name' => 'Rác',
+                'slug' => str_slug('Rác')
             ]
         ];
         DB::table('post_status')->insert($post_status);
