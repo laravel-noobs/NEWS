@@ -14,18 +14,13 @@ var inspinia = {
  'css': './resources/assets/inspinia/css/',
  'sass': './resources/assets/inspinia/sass/',
  'img': './resources/assets/inspinia/img/'
-}
+};
 
 elixir(function(mix) {
     mix
         .sass([
             'core.scss',
-            inspinia.css + 'animate.css'
         ], 'public/css/core.css')
-}
-
-elixir(function(mix) {
-    mix
         .styles([
             bower + 'footable/css/footable.core.css',
             bower + 'toastr/toastr.css',
