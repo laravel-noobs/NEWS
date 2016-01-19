@@ -20,7 +20,7 @@
     <!-- CSS Global Compulsory -->
     <link rel="stylesheet" href="unify/plugins/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="unify/css/blog.style.css">
-    <link rel="stylesheet" href="{{URL::asset('css/app.css')}}">
+    
     <!-- CSS Header and Footer -->
     <link rel="stylesheet" href="unify/css/headers/header-v8.css">
     <link rel="stylesheet" href="unify/css/footers/footer-v8.css">

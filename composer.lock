@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e4bc97e6f0088e759148851c64830b6a",
-    "content-hash": "a958fd99cc5a539d0a09c770a7a7fc5a",
+    "hash": "794fc486c67e6bc51e5874cd8d371a40",
+    "content-hash": "69cab3fdc5728813c060530582229b8c",
     "packages": [
         {
             "name": "barryvdh/laravel-ide-helper",
@@ -404,8 +404,14 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "packages/navigation",
-                "reference": "6e2db646d74941ff1e7a38beb4caee759f6dffbf"
+                "url": "https://github.com/laravel-noobs/navigation.git",
+                "reference": "fd8e578a493586b243a4f7efc52182701428cbe5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel-noobs/navigation/zipball/fd8e578a493586b243a4f7efc52182701428cbe5",
+                "reference": "fd8e578a493586b243a4f7efc52182701428cbe5",
+                "shasum": ""
             },
             "require": {
                 "illuminate/support": "5.2.*",
@@ -427,7 +433,11 @@
                     "email": "koutsuneka@gmail.com"
                 }
             ],
-            "time": "2016-01-19 12:58:54"
+            "support": {
+                "source": "https://github.com/laravel-noobs/navigation/tree/master",
+                "issues": "https://github.com/laravel-noobs/navigation/issues"
+            },
+            "time": "2016-01-19 14:29:28"
         },
         {
             "name": "laravel/framework",

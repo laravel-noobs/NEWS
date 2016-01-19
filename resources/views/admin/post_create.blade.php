@@ -67,7 +67,7 @@ app('navigator')
                             <div class="hr-line-dashed"></div>
                             <div class="form-group">
                                 <div class="col-sm-12">
-                                    <button class="btn btn-primary pull-right" type="submit">Save changes</button>
+                                    <button class="btn btn-primary pull-right" type="submit">Lưu thay đổi</button>
                                 </div>
                             </div>
                         </div>
