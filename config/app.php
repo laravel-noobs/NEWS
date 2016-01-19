@@ -145,6 +145,7 @@ return [
         Illuminate\View\ViewServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
         KouTsuneka\FlashMessage\FlashMessageServiceProvider::class,
+        KouTsuneka\Navigation\NavigationServiceProvider::class,
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
         /*
          * Application Service Providers...

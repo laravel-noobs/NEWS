@@ -1,6 +1,6 @@
 <?php namespace App\Http\Composers;
 
-use App\Http\Composers\NavigationBuilder\Navigator;
+use KouTsuneka\Navigation\Navigator;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 

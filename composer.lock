@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "0b1ebc1a5f6dc95f3711f9f7f8cf42c2",
-    "content-hash": "ae0789cdd7768a45bea55dbcb90a4b47",
+    "hash": "e4bc97e6f0088e759148851c64830b6a",
+    "content-hash": "a958fd99cc5a539d0a09c770a7a7fc5a",
     "packages": [
         {
             "name": "barryvdh/laravel-ide-helper",
@@ -374,7 +374,7 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "packages/flashmessage",
+                "url": "https://github.com/laravel-noobs/flashmessage.git",
                 "reference": "de6b5657f20c66c12c6e18ab17791dd3bb02c826"
             },
             "require": {
@@ -398,6 +398,36 @@
                 }
             ],
             "time": "2016-01-19 10:57:19"
+        },
+        {
+            "name": "koutsuneka/navigation",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "packages/navigation",
+                "reference": "6e2db646d74941ff1e7a38beb4caee759f6dffbf"
+            },
+            "require": {
+                "illuminate/support": "5.2.*",
+                "illuminate/view": "5.2.*",
+                "php": ">=5.5.9"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "KouTsuneka\\Navigation\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kou Tsuneka",
+                    "email": "koutsuneka@gmail.com"
+                }
+            ],
+            "time": "2016-01-19 12:58:54"
         },
         {
             "name": "laravel/framework",
@@ -3315,7 +3345,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "koutsuneka/flashmessage": 20
+        "koutsuneka/flashmessage": 20,
+        "koutsuneka/navigation": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
