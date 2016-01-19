@@ -6,20 +6,19 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     @include('partials.admin._pagemeta')
-    <link rel="stylesheet" href="{{URL::asset('css/app.css')}}">
-    <link rel="stylesheet" href="{{URL::asset('css/animate.css')}}">
-    <link rel="stylesheet" href="{{URL::asset('css/plugins.css')}}">
-    <link rel="stylesheet" href="{{URL::asset('css/style.css')}}">
+    <link rel="stylesheet" href="{{ elixir('css/core.css') }}">
+    <link rel="stylesheet" href="{{ elixir('css/plugins.css')}}">
+    <link rel="stylesheet" href="{{ elixir('css/app.css')}}">
     @yield('header-style')
 
     <!-- Mainly scripts -->
-    <script src="{{URL::asset('js/core.js')}}"></script>
-    <script src="{{URL::asset('js/plugins.js')}}"></script>
+    <script src="{{ elixir('js/core.js') }}"></script>
+    <script src="{{ elixir('js/plugins.js') }}"></script>
     <script>
         var flash_messages = JSON.parse('{!! \Flash::encode() !!}');
     </script>
     <!-- Custom and plugin javascript -->
-    <script src="{{URL::asset('js/app.js')}}"></script>
+    <script src="{{ elixir('js/app.js') }}"></script>
     @yield('header-script')
 </head>
 
