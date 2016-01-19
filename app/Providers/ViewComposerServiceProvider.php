@@ -3,8 +3,6 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use App\Http\Composers\NavigationBuilder\NavigationBuilder;
-use Blade;
 
 class ViewComposerServiceProvider extends ServiceProvider
 {
@@ -28,27 +26,9 @@ class ViewComposerServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->registerNavigationBuilder();
-        $this->app->alias('navigator', 'App\Http\Composers\NavigationBuilder\NavigationBuilder');
+
     }
 
-    protected function registerNavigationBuilder()
-    {
-        $this->app->singleton('navigator', function($app)
-        {
-            return new NavigationBuilder();
-        });
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return array
-     */
-    public function provides()
-    {
-        return array('navigator', 'App\Http\Composers\NavigationBuilder\NavigationBuilder');
-    }
 
     /**
      * Xử lý thanh side navigation

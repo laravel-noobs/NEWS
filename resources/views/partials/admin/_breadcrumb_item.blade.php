@@ -1,9 +1,9 @@
 @if(empty($crumb['active']))
     <li>
-        @if(empty($crumb['url']))
+        @if(empty($crumb['action']))
             <span>{{  $crumb['text'] }}</span>
         @else
-            <a href="{{ $crumb['url'] }}">{{  $crumb['text'] }}</a>
+            <a href="{{ URL::action($crumb['action']) }}">{{  $crumb['text'] }}</a>
         @endif
     </li>
 @else

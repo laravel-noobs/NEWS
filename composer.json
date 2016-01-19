@@ -8,6 +8,10 @@
       {
         "type": "vcs",
         "url": "https://github.com/laravel-noobs/flashmessage.git"
+      },
+      {
+        "type": "vcs",
+        "url": "https://github.com/laravel-noobs/navigation.git"
       }
     ],
     "require": {
@@ -15,7 +19,8 @@
         "laravel/framework": "5.2.*",
         "barryvdh/laravel-ide-helper": "2.1.2",
         "laravelcollective/html": "^5.2",
-        "koutsuneka/flashmessage": "dev-master@dev"
+        "koutsuneka/flashmessage": "dev-master@dev",
+        "koutsuneka/navigation": "dev-master@dev"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
