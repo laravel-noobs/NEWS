@@ -44,15 +44,6 @@ class PostsController extends Controller
      */
     public function store(Request $request)
     {
-        $slug = $request->request->get('slug');
-        $name = $request->request->get('name');
-        if(empty($slug) && !empty($name))
-        {
-            $slug = str_slug($request->request->get('name'));
-            if(strlen($slug) >= 4)
-                $request->request->set('slug', $slug);
-        }
-
         $this->validate($request, [
             'title' => 'required|min:4',
             'slug' => 'required|min:4|unique:post,slug',
@@ -64,12 +55,11 @@ class PostsController extends Controller
         $input = $request->all();
 
         $post = new Post($input);
-        $user = Auth::user();
-        if($user != null)
-            $post->user_id = $user->id;
+
+        $post->user_id = Auth::user()->id;
         $post->status_id = 1;
 
-            if($post->save())
+        if($post->save())
             Flash::push("Thêm bv  \\\"$post->title\\\" thành công", 'Hệ thống');
         else
             Flash::push("Thêm bv thất bại", 'Hệ thống', "error");

@@ -26,15 +26,24 @@ app('navigator')
                     </div>
                     <div class="ibox-content">
                         <div class="form-horizontal">
-                            <div class="form-group">
-
-                                <div class="col-sm-12"><input placeholder="Nhập tiêu đề tại đây" id="title" name="title" value="{{ old('title', '') }}" type="text" class="form-control"></div>
+                            <div class="form-group {{ count($errors->get('title')) > 0 ? 'has-error' : '' }}">
+                                <div class="col-sm-12">
+                                    <input placeholder="Nhập tiêu đề tại đây" id="title" name="title" value="{{ old('title', '') }}" type="text" class="form-control">
+                                    @foreach($errors->get('title') as $err)
+                                        <label class="error" for="title">{{ $err }}</label>
+                                    @endforeach
+                                </div>
                             </div>
-                            <div class="slug" style="display: none">
-                            <strong>Liên kết tĩnh: </strong>{{Request::root()}}/<span id="permalink" title="Đường dẫn tĩnh tạm thời. Ấn để sửa phần này."></span>
-                            <input placeholder="" id="slug" name="slug" value="{{ old('slug', '') }}" type="text" class="form-control" style="display: none">
-                            <button id="btn-editslug" onclick="editpermalink();" type="button" class="btn btn-default btn-xs">Sửa</button>
-                            <button id="btn-okslug" onclick="okpermalink();" type="button" class="btn btn-default btn-xs" style="display: none">Ok</button>
+                            <div class="form-group slug {{ count($errors->get('slug')) > 0 ? 'has-error' : 'hidden' }}">
+                                <div class="col-md-12">
+                                    <strong>Liên kết tĩnh: </strong>{{ Request::root() }}/<span id="permalink" title="Đường dẫn tĩnh tạm thời. Ấn để sửa phần này.">{{ old('slug', '') }}</span>
+                                    <input placeholder="" id="slug" name="slug" value="{{ old('slug', '') }}" type="text" class="form-control" style="display: none">
+                                    <button id="btn-editslug" onclick="editpermalink();" type="button" class="btn btn-default btn-xs">Sửa</button>
+                                    <button id="btn-okslug" onclick="okpermalink();" type="button" class="btn btn-default btn-xs" style="display: none">Ok</button>
+                                    @foreach($errors->get('slug') as $err)
+                                        <label class="error" for="slug">{{ $err }}</label>
+                                    @endforeach
+                                </div>
                             </div>
                             <div class="hr-line-dashed"></div>
                             <div class="form-group">
@@ -158,7 +167,7 @@ app('navigator')
                         $('#slug').val(data.permalink);
                     }
                 })
-                $('.slug').show();
+                $('.slug').removeClass('hidden');
                 flag = false;
             }
         });
