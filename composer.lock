@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e4bc97e6f0088e759148851c64830b6a",
-    "content-hash": "a958fd99cc5a539d0a09c770a7a7fc5a",
+    "hash": "37ae5bfcbdf9121ee7838dfa7395fd9a",
+    "content-hash": "d6fd0793d99ec86738539d495218e0ed",
     "packages": [
         {
             "name": "barryvdh/laravel-ide-helper",
@@ -404,8 +404,8 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "packages/navigation",
-                "reference": "6e2db646d74941ff1e7a38beb4caee759f6dffbf"
+                "url": "https://github.com/laravel-noobs/navigation.git",
+                "reference": "fd8e578a493586b243a4f7efc52182701428cbe5"
             },
             "require": {
                 "illuminate/support": "5.2.*",
@@ -427,7 +427,7 @@
                     "email": "koutsuneka@gmail.com"
                 }
             ],
-            "time": "2016-01-19 12:58:54"
+            "time": "2016-01-19 14:29:28"
         },
         {
             "name": "laravel/framework",
@@ -2206,6 +2206,52 @@
                 "test"
             ],
             "time": "2015-05-11 14:41:42"
+        },
+        {
+            "name": "laravel/homestead",
+            "version": "v3.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel/homestead.git",
+                "reference": "e3b4a1903a2de46e085217a20e61465d18da7b63"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel/homestead/zipball/e3b4a1903a2de46e085217a20e61465d18da7b63",
+                "reference": "e3b4a1903a2de46e085217a20e61465d18da7b63",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5.9",
+                "symfony/console": "~2.3|~3.0",
+                "symfony/process": "~2.3|~3.0"
+            },
+            "bin": [
+                "homestead"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-php-7": "3.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Laravel\\Homestead\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Taylor Otwell",
+                    "email": "taylorotwell@gmail.com"
+                }
+            ],
+            "description": "A virtual machine for web artisans.",
+            "time": "2015-12-21 22:36:28"
         },
         {
             "name": "mockery/mockery",
