@@ -20,6 +20,8 @@ class CreateUserTable extends Migration
             $table->string('email')->unique();
             $table->string('first_name');
             $table->string('last_name');
+            $table->boolean('verified')->default(false);
+            $table->string('verify_token', 10)->nullable();
             $table->unsignedSmallInteger('role_id')->nullable();
             $table->foreign('role_id')
                 ->references('id')->on('role')
