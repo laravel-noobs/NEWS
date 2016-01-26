@@ -8,7 +8,12 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\User;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\View;
 use KouTsuneka\FlashMessage\Flash;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class UsersController extends Controller
 {
@@ -123,5 +128,48 @@ class UsersController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function getVerifyEmailByLink($verify_token)
+    {
+        return $this->verifyEmail($verify_token);
+    }
+
+    public function getVerifyEmail()
+    {
+        return view('unify.email_verify_prompt');
+    }
+
+    public function postVerifyEmail(Request $request)
+    {
+        return $this->verifyEmail($request->request->get('verify_token'));
+    }
+
+
+    private function verifyEmail($verify_token)
+    {
+
+        $validator = Validator::make(['verify_token' => $verify_token], [
+            'verify_token' => 'required|min:10|max:10'
+        ]);
+
+        if ($validator->fails()) {
+            return Redirect::back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $user = User::whereVerifyToken($verify_token)->first();
+
+        if($user == null)
+        {
+            $validator->errors()->add('verify_token', 'Mã xác thực không tồn tại');
+            return Redirect::action('UsersController@getVerifyEmail')
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $user->verifyEmail();
+        return view('unify.email_verified_welcome');
     }
 }

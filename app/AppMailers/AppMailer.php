@@ -48,7 +48,7 @@ class AppMailer
     public function send_email_confirmation_to(User $user)
     {
         $this->to = $user->email;
-        $this->view = 'emails.user_email_confirm';
+        $this->view = 'emails.user_email_verify';
         $this->data = [
             'name' => $user->name,
             'email' => $user->email,
