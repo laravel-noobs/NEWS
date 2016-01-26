@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\AppMailers\AppMailerFacade as AppMailer;
 use App\User;
 use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -63,7 +66,7 @@ class AuthController extends Controller
             'tos' => 'required',
             'first_name' => 'required|min:3|max:255',
             'last_name' => 'required|min:3|max:255',
-            'name' => 'required|max:255',
+            'name' => 'required|max:255|unique:user',
             'email' => 'required|email|max:255|unique:user',
             'password' => 'required|confirmed|min:6',
         ]);
@@ -83,6 +86,38 @@ class AuthController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
+            'verified' => 0,
+            'verify_token' => str_random(10)
         ]);
+    }
+
+    public function register(Request $request)
+    {
+        $validator = $this->validator($request->all());
+
+        if ($validator->fails()) {
+            $this->throwValidationException(
+                $request, $validator
+            );
+        }
+
+        $user = $this->create($request->all());
+
+        AppMailer::send_email_confirmation_to($user);
+
+        //Auth::guard($this->getGuard())->login();
+
+        return redirect($this->redirectPath());
+    }
+
+    public function showRegistrationForm()
+    {
+        if (property_exists($this, 'registerView')) {
+            return view($this->registerView);
+        }
+
+
+
+        return view('auth.register');
     }
 }

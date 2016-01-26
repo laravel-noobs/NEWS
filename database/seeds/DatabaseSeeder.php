@@ -26,7 +26,7 @@ class DatabaseSeeder extends Seeder
         $this->call(TagExampleTableSeeder::class);
 
         $users = User::all(['id']);
-        $post_status = PostStatus::all();
+        $post_status = PostStatus::all(['id']);
         $categories = Category::all(['id']);
         $tag = Tag::all(['id']);
         $posts = [];
@@ -37,7 +37,7 @@ class DatabaseSeeder extends Seeder
             $post = factory('App\Post')->make([
                 'category_id' => $categories->random()->id,
                 'user_id' => $users->random()->id,
-                'status_id' => $post_status->random()->id
+                'status_id' => $post_status[random_int(0, count($post_status)-1)]
             ]);
             $post->save();
             $posts[] = $post->id;

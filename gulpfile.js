@@ -62,6 +62,7 @@ elixir(function(mix){
         .copy(bower + 'footable/css/fonts/**', 'public/fonts')
         .copy(inspinia.img + 'patterns/**', 'public/css/patterns')
         .copy(assets.unify + '**', 'public/unify')
+        .copy(assets.img  + '**', 'public/images')
 });
 
 elixir(function (mix) {

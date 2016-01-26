@@ -21,6 +21,5 @@ class TopNavComposer
                 'user_email' => $user->email
             ]);
         }
-
     }
 }
