@@ -12,11 +12,14 @@
 */
 
 $factory->define(App\User::class, function (Faker\Generator $faker) {
+    $verified = rand(0, 1) ? true : false;
     return [
         'name' => $faker->userName,
         'email' => $faker->email,
         'first_name' => $faker->firstName,
         'last_name' => $faker->lastName,
+        'verified' => $verified,
+        'verify_token' => !$verified ? str_random(10) : null,
         'password' => bcrypt(str_random(10)),
         'remember_token' => str_random(10),
     ];

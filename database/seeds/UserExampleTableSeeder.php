@@ -23,22 +23,29 @@ class UserExampleTableSeeder extends Seeder
                 'email' => 'yahishima@gmail.com',
                 'first_name' => 'Kou',
                 'last_name' => 'Tsuneka',
+                'role_id' => $roles->first()->id,
+                'verified' => true,
                 'created_at' => Carbon::now()->timestamp,
                 'updated_at' => Carbon::now()->timestamp
             ],
             [
                 'name' => 'Administrator',
                 'password' => bcrypt('abc@123'),
-                'email' => 'administrator@gmail.com',
+                'email' => 'administrator@meongu.net',
                 'first_name' => 'Administrator',
                 'last_name' => 'System',
+                'role_id' => $roles->first()->id,
+                'verified' => true,
                 'created_at' => Carbon::now()->timestamp,
                 'updated_at' => Carbon::now()->timestamp
             ]
         ];
         DB::table('user')->insert($users);
-        factory('App\User', 20)->create([
-            'role_id' => $roles->random()->id
-        ]);
+        foreach($roles as $role)
+        {
+            factory('App\User', 5)->create([
+                'role_id' => $role->id
+            ]);
+        }
     }
 }

@@ -44,3 +44,7 @@ Route::post('/dang-nhap', 'Auth\AuthController@postLogin');
 Route::get('/dang-ky', 'Auth\AuthController@getRegister');
 Route::post('/dang-ky', 'Auth\AuthController@postRegister');
 Route::get('/dang-xuat', 'Auth\AuthController@getLogout');
+
+Route::get('/xac-nhan/{verify_token}', 'UsersController@getVerifyEmailByLink');
+Route::get('/xac-nhan/', 'UsersController@getVerifyEmail');
+Route::post('/xac-nhan/', 'UsersController@postVerifyEmail');

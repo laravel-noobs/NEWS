@@ -67,6 +67,7 @@ elixir(function(mix){
         .copy(inspinia.img + 'patterns/**', 'public/css/patterns')
         .copy(assets.unify + '**', 'public/unify')
         .copy(inspinia.js + 'editor', 'public/js/editor')
+        .copy(assets.img  + '**', 'public/images')
 });
 
 elixir(function (mix) {
