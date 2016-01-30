@@ -93,6 +93,7 @@ return [
         'posts' => [
             'text' => 'Bài viết',
             'icon_class' => 'fa fa-files-o',
+            'action' => 'PostsController@index'
         ],
         'post_create' => [
             'text' => 'Tạo mới',

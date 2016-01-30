@@ -36,7 +36,7 @@ Route::get('/admin/users/{id}/delete', 'UsersController@delete');
 Route::get('/admin/posts','PostsController@index');
 Route::get('/admin/posts/create','PostsController@create');
 
-Route::post('/admin/posts/','PostsController@store');
+Route::post('/admin/posts','PostsController@store');
 Route::get('/admin/posts/getpermalink/{name}','PostsController@permalink');
 
 Route::get('/dang-nhap', 'Auth\AuthController@getLogin');
@@ -46,5 +46,7 @@ Route::post('/dang-ky', 'Auth\AuthController@postRegister');
 Route::get('/dang-xuat', 'Auth\AuthController@getLogout');
 
 Route::get('/xac-nhan/{verify_token}', 'UsersController@getVerifyEmailByLink');
-Route::get('/xac-nhan/', 'UsersController@getVerifyEmail');
-Route::post('/xac-nhan/', 'UsersController@postVerifyEmail');
+Route::get('/xac-nhan', 'UsersController@getVerifyEmail');
+Route::post('/xac-nhan', 'UsersController@postVerifyEmail');
+
+Route::get('/admin/tags/search', 'TagsController@queryTags');

@@ -66,17 +66,22 @@ app('navigator')
                     <div class="ibox-content">
                         <div class="form-horizontal">
                             <div class="form-group">
-                                <div class='input-group date' id='datetimepicker1'>
-                                    <input id="published_at" name="published_at" type='text' class="form-control" />
-                                    <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
+                                <div class="col-md-12">
+                                    <div class='input-group date' id='datetimepicker1'>
+                                        <input id="published_at" name="published_at" type='text' class="form-control" />
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                             <div class="hr-line-dashed"></div>
                             <div class="form-group">
-                                <div class="col-sm-12">
-                                    <button class="btn btn-primary pull-right" type="submit">Lưu thay đổi</button>
+                                <div class="col-md-6">
+                                    <button class="btn btn-defaut" type="submit" value="draft">Nháp</button>
+                                </div>
+                                <div class="col-md-6">
+                                    <button class="btn btn-primary pull-right" type="submit" value="save">Lưu thay đổi</button>
                                 </div>
                             </div>
                         </div>
@@ -95,14 +100,26 @@ app('navigator')
                     </div>
                     <div class="ibox-content">
                         <div class="form-horizontal">
-                            <div class="form-group">
+                            <div class="form-group {{ count($errors->get('cat_name')) +  count($errors->get('cat_slug')) > 0  ? 'has-error' : '' }}">
                                 <div class="col-sm-12">
-                                    <select name="category_id" class="category form-control">
+                                    <select id="category_id" name="category_id" class="category form-control">
                                         <option></option>
                                         @foreach($category as $cat)
                                             <option value="{{$cat ->id}}">{{$cat ->name}}</option>
                                         @endforeach
+                                        @if(!empty(old('category_id', '')))
+                                            <option value="{{old('category_id')}}">{{old('category_id')}}</option>
+                                        @endif
                                     </select>
+                                    @foreach($errors->get('category_id') as $err)
+                                        <label class="error" for="category_id">{{ $err }}</label>
+                                    @endforeach
+                                    @foreach($errors->get('cat_name') as $err)
+                                        <label class="error" for="category_id">{{ $err }}</label>
+                                    @endforeach
+                                    @foreach($errors->get('cat_slug') as $err)
+                                        <label class="error" for="category_id">{{ $err }}</label>
+                                    @endforeach
                                 </div>
                             </div>
                         </div>
@@ -121,11 +138,17 @@ app('navigator')
                     </div>
                     <div class="ibox-content">
                         <div class="form-horizontal">
-
                             <div class="form-group">
                                 <div class="col-sm-12">
-                                    <select class="tags form-control" multiple="multiple">
+                                    <select name="tags[]" id="tags" class="tags form-control" multiple="multiple">
                                     </select>
+                                    @foreach($errors->toArray() as $k => $v)
+                                        @if(str_contains($k, 'new_tags'))
+                                            @foreach($v as $err)
+                                                <label class="error" for="tags[]">{{ $err }}</label>
+                                            @endforeach
+                                        @endif
+                                    @endforeach
                                 </div>
                             </div>
                         </div>
@@ -150,8 +173,9 @@ app('navigator')
     <script>
         $(".category").select2({
             placeholder: "Chọn một chuyên mục",
-            allowClear: true
+            tags: true
         });
+        $(".category").trigger("change");
         $(".tags").select2({
             tags: true
         })
@@ -190,6 +214,44 @@ app('navigator')
         {
             $('#published_at').val($('#datetimepicker1').data("DateTimePicker").date().format('YYYY-mm-DD hh:mm:ss'));
         })
+
+        $("#tags").select2({
+            tags: true,
+            ajax: {
+                url: '{{ URL::action('TagsController@queryTags') }}',
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        query: params.term
+                    };
+                },
+                processResults: function (data, params) {
+                    $.map(data, function (data) {
+                        data.id = data.id;
+                        data.text = data.name;
+                    });
+                    return {
+                        results: data
+                    }
+                },
+                cache: true
+            },
+            escapeMarkup: function (markup) { return markup; },
+            minimumInputLength: 3,
+            templateResult: function (item) {
+                if (item.loading) return item.text;
+                markup = '<div><span>' + item.text + '</span></div>';
+                return markup;
+            },
+            templateSelection: function (item) {
+                return '<option data-id="' +
+                        item.Id + '" data-imageUrl="' +
+                        item.Name + '" style="display: inline" value="' +
+                        item.id + '" selected="selected">' +
+                        item.text + '</option>';
+            }
+        });
     </script>
 
 @endsection
