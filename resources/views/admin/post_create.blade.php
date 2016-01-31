@@ -100,24 +100,35 @@ app('navigator')
                     </div>
                     <div class="ibox-content">
                         <div class="form-horizontal">
-                            <div class="form-group {{ count($errors->get('cat_name')) +  count($errors->get('cat_slug')) > 0  ? 'has-error' : '' }}">
+                            <div class="form-group {{ count($errors->get('category_id')) + count($errors->get('cat_name')) +  count($errors->get('cat_slug')) > 0  ? 'has-error' : '' }}">
                                 <div class="col-sm-12">
                                     <select id="category_id" name="category_id" class="category form-control">
                                         <option></option>
-                                        @foreach($category as $cat)
-                                            <option value="{{$cat ->id}}">{{$cat ->name}}</option>
-                                        @endforeach
-                                        @if(!empty(old('category_id', '')))
-                                            <option value="{{old('category_id')}}">{{old('category_id')}}</option>
+                                        @if(!empty(old('category_id')))
+                                            @foreach($category as $cat)
+                                                @if(old('category_id') == $cat['id'])
+                                                    <option value="{{ old('category_id') }}" selected="selected">{{ $cat['name'] }}</option>
+                                                @else
+                                                    <option value="{{ $cat['id'] }}">{{ $cat['name'] }}</option>
+                                                @endif
+                                            @endforeach
+                                        @else
+                                            @if(!empty(old('category_name')))
+                                                <option value="{{ old('category_name') }}" selected="selected" data-select2-tag="true">{{ old('category_name') }}</option>
+                                            @endif
+                                            @foreach($category as $cat)
+                                                <option value="{{ $cat['id'] }}">{{ $cat['name'] }}</option>
+                                            @endforeach
                                         @endif
+
                                     </select>
                                     @foreach($errors->get('category_id') as $err)
                                         <label class="error" for="category_id">{{ $err }}</label>
                                     @endforeach
-                                    @foreach($errors->get('cat_name') as $err)
+                                    @foreach($errors->get('category_name') as $err)
                                         <label class="error" for="category_id">{{ $err }}</label>
                                     @endforeach
-                                    @foreach($errors->get('cat_slug') as $err)
+                                    @foreach($errors->get('category_slug') as $err)
                                         <label class="error" for="category_id">{{ $err }}</label>
                                     @endforeach
                                 </div>
@@ -141,6 +152,12 @@ app('navigator')
                             <div class="form-group">
                                 <div class="col-sm-12">
                                     <select name="tags[]" id="tags" class="tags form-control" multiple="multiple">
+                                        @foreach(old('new_tags', []) as $tag)
+                                            <option value="{{ $tag['name'] }}" data-select2-tag="true" selected="selected">{{ $tag['name'] }}</option>
+                                        @endforeach
+                                        @foreach(old('existed_tags', []) as $tag)
+                                            <option value="{{ $tag['id'] }}" selected="selected">{{ $tag['name'] }}</option>
+                                        @endforeach
                                     </select>
                                     @foreach($errors->toArray() as $k => $v)
                                         @if(str_contains($k, 'new_tags'))
@@ -213,6 +230,12 @@ app('navigator')
         $('button[type="submit"]').click(function(e)
         {
             $('#published_at').val($('#datetimepicker1').data("DateTimePicker").date().format('YYYY-mm-DD hh:mm:ss'));
+            $('#tags option[data-select2-tag="true"]').each(function(){
+                $(this).val('*-' + $(this).text());
+            }); // manually set value to non existed tags
+            $('.category option[data-select2-tag="true"]').each(function(){
+                $(this).val('*-' + $(this).text());
+            }); // manually set value to non existed tags
         })
 
         $("#tags").select2({
@@ -245,11 +268,10 @@ app('navigator')
                 return markup;
             },
             templateSelection: function (item) {
-                return '<option data-id="' +
-                        item.Id + '" data-imageUrl="' +
-                        item.Name + '" style="display: inline" value="' +
-                        item.id + '" selected="selected">' +
-                        item.text + '</option>';
+                if(item.element.dataset.select2Tag == "true")
+                    return '<option style="display: inline" value="0" selected="selected">' + item.text + '</option>'; // seem not to work, before submit hack
+                else
+                    return '<option style="display: inline" value="' + item.id + '" selected="selected">' + item.text + '</option>';
             }
         });
     </script>

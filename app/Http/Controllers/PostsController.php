@@ -52,48 +52,57 @@ class PostsController extends Controller
 
         $cat_id = $input['category_id'];
         $cat = [];
-        if(Category::find($cat_id) == null)
+        if(strrpos($cat_id, '*-', -strlen($cat_id)) !== FALSE)
         {
             $input['category_id'] = null;
+            $cat_id = substr($cat_id, 2);
             $cat = [
-                'cat_name' => $cat_id,
-                'cat_slug' => str_slug($cat_id)
+                'category_name' => $cat_id,
+                'category_slug' => str_slug($cat_id)
             ];
         }
 
         $tags = [];
         $new_tags = [];
-
-        foreach($input['tags'] as $tag_id)
+        if(isset($input['tags']))
         {
-            $tag = Tag::findOrNew($tag_id, ['id']);
-            if($tag->id == null)
+            foreach($input['tags'] as $tag_id)
             {
-                $tag_slug = str_slug($tag_id);
-                array_push($new_tags, ['name' => $tag_id, 'slug' => $tag_slug]);
+
+                if(strrpos($tag_id, '*-', -strlen($tag_id)) !== FALSE)
+                {
+                    $tag_id = substr($tag_id, 2);
+                    $tag_slug = str_slug($tag_id);
+                    array_push($new_tags, ['name' => $tag_id, 'slug' => $tag_slug]);
+                }
+                else
+                {
+                    $tag = Tag::find($tag_id, ['id', 'name']);
+                    if($tag != null)
+                        array_push($tags, $tag);
+                }
             }
-            else
-                array_push($tags, $tag->id);
         }
 
-        $input = array_merge($input, $cat, ['new_tags' => $new_tags ]);
+        $input = array_merge($input, $cat, ['new_tags' => $new_tags ], ['existed_tags' => $tags]);
 
         $validator = Validator::make($input, [
             'title' => 'required|min:4',
             'slug' => 'required|min:4|unique:post,slug',
             'content' => 'required|min:40|max:2000',
             'published_at' => 'required',
+            'category_id' => 'exists:category,id',
             'new_tags.*.name' => 'required|min:4',
             'new_tags.*.slug'=> 'required|min:4|unique:tag,slug',
-            'cat_name' => 'required_if:category_id,null|min:4',
-            'cat_slug' => 'required_if:category_id,null|min:4|unique:category,slug',
+            'category_name' => 'required_without:category_id|min:4',
+            'category_slug' => 'required_without:category_id|min:4|unique:category,slug',
         ]);
 
         if($validator->fails())
         {
             return Redirect::back()
                 ->withErrors($validator)
-                ->withInput();
+                ->withInput($input);
         }
 
         $result = false;
@@ -101,14 +110,14 @@ class PostsController extends Controller
         try
         {
             if($input['category_id'] == null)
-                $cat_id = Category::create(['name' => $input['cat_name'], 'slug' => $input['cat_slug']])->id;
+                $cat_id = Category::create(['name' => $input['category_name'], 'slug' => $input['category_slug']])->id;
 
             $post = new Post($input);
 
             foreach($new_tags as $tag)
             {
                 $t = Tag::create($tag);
-                array_push($tags, $t->id);
+                array_push($tags, $t);
             }
 
             $post->user_id = 1;//Auth::user()->id; // user_id = 1 for temporary development
@@ -116,7 +125,11 @@ class PostsController extends Controller
             $post->category_id = $cat_id;
             if($post->save())
             {
-                $post->tags()->attach($tags);
+                $tags_id = [];
+                foreach($tags as $t)
+                    array_push($tags_id, $t->id);
+
+                $post->tags()->attach($tags_id);
                 DB::commit();
                 $result = true;
             }
