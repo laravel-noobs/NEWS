@@ -10,6 +10,11 @@ use App\Tag;
 
 class TagsController extends Controller
 {
+    public function index(Request $request)
+    {
+        $tags = Tag::with(['postsCount'])->orderBy('id', 'desc')->get();
+        return view('admin.tag_index', compact('tags'));
+    }
     /**
      * @param string $term
      */
@@ -20,5 +25,20 @@ class TagsController extends Controller
             return null;
         $tag = Tag::where('name', 'LIKE', '%' . $term . '%')->get(['id', 'name']);
         return $tag;
+    }
+
+    public function store(Request $request)
+    {
+
+    }
+
+    public function edit(Request $request)
+    {
+
+    }
+
+    public function destroy(Request $request)
+    {
+
     }
 }

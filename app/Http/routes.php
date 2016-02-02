@@ -35,7 +35,6 @@ Route::get('/admin/users/{id}/delete', 'UsersController@delete');
 
 Route::get('/admin/posts','PostsController@index');
 Route::get('/admin/posts/create','PostsController@create');
-
 Route::post('/admin/posts','PostsController@store');
 Route::get('/admin/posts/getpermalink/{name}','PostsController@permalink');
 
@@ -50,3 +49,8 @@ Route::get('/xac-nhan', 'UsersController@getVerifyEmail');
 Route::post('/xac-nhan', 'UsersController@postVerifyEmail');
 
 Route::get('/admin/tags/search', 'TagsController@queryTags');
+Route::get('/admin/tags', 'TagsController@index');
+Route::post('/admin/tags', 'TagsController@store');
+Route::get('/admin/tags/{id}/edit', 'TagsController@edit');
+Route::post('/admin/tags/{id}/edit', 'TagsController@update');
+Route::get('/admin/tags/{id}/delete', 'TagsController@destroy');
