@@ -43,9 +43,9 @@ app('navigator')
                             <tr>
                                 <td>{{ $post->title }}</td>
                                 <td>{{ $post->user->name }}</td>
-                                <td>{{ $post->category == null ? "" : $post->category->name }}</td>
+                                <td>{{ $post->category != null ? $post->category->name : '' }}</td>
                                 <td>{{ $post->published_at }}</td>
-                                <td>{{ $post->poststatus->name }}</td>
+                                <td>{{ $post->postStatus->name }}</td>
                                 <td>{{ $post->view }}</td>
                                 <td>
                                     <div class="btn-group pull-right">

@@ -67,8 +67,9 @@ app('navigator')
                         <div class="form-horizontal">
                             <div class="form-group">
                                 <div class="col-md-12">
-                                    <div class="input-group date" id="datetimepicker1">
-                                        <input id="published_at" name="published_at" type='text' class="form-control" />
+                                    <div class="input-group date">
+                                        <input id="published_at" type="hidden" name="published_at" />
+                                        <input id="datetimepicker_published_at" type='text' class="form-control" />
                                         <span class="input-group-addon">
                                             <span class="glyphicon glyphicon-calendar"></span>
                                         </span>
@@ -193,9 +194,9 @@ app('navigator')
     <script src="{{URL::asset('js/editor/ckeditor.js')}}"></script>
     <script type="text/javascript">
         $(function () {
-            $('#datetimepicker1').datetimepicker({
+            $('#datetimepicker_published_at').datetimepicker({
                 format: 'HH:mm - dddd DD/MM/YYYY',
-                defaultDate: moment().format()
+                defaultDate: moment.utc().format()
             });
         });
     </script>
@@ -241,7 +242,7 @@ app('navigator')
 
         $('button[type="submit"]').click(function(e)
         {
-            $('#published_at').val($('#datetimepicker1').data("DateTimePicker").date().format('YYYY-mm-DD hh:mm:ss'));
+            $('#published_at').val($('#datetimepicker_published_at').data("DateTimePicker").date().utc().format('YYYY-mm-DD hh:mm:ss '));
             $('#tags option[data-select2-tag="true"]').each(function(){
                 $(this).val('*-' + $(this).text());
             }); // manually set value to non existed tags
