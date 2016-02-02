@@ -67,12 +67,25 @@ app('navigator')
                         <div class="form-horizontal">
                             <div class="form-group">
                                 <div class="col-md-12">
-                                    <div class='input-group date' id='datetimepicker1'>
+                                    <div class="input-group date" id="datetimepicker1">
                                         <input id="published_at" name="published_at" type='text' class="form-control" />
                                         <span class="input-group-addon">
                                             <span class="glyphicon glyphicon-calendar"></span>
                                         </span>
                                     </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <select id="status_id" name="status_id" class="form-control">
+                                        @foreach($post_status as $status)
+                                            @if(old('status_id') == $status['id'] || ($status['id'] == $post_status_default_id && old('status_id') == null))
+                                                <option selected="selected" value="{{ $status['name'] }}">{{ $status['name'] }}</option>
+                                            @else
+                                                <option value="{{ $status['id'] }}">{{ $status['name'] }}</option>
+                                            @endif
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                             <div class="hr-line-dashed"></div>
@@ -105,7 +118,7 @@ app('navigator')
                                     <select id="category_id" name="category_id" class="category form-control">
                                         <option></option>
                                         @if(!empty(old('category_id')))
-                                            @foreach($category as $cat)
+                                            @foreach($categories as $cat)
                                                 @if(old('category_id') == $cat['id'])
                                                     <option value="{{ old('category_id') }}" selected="selected">{{ $cat['name'] }}</option>
                                                 @else
@@ -116,11 +129,10 @@ app('navigator')
                                             @if(!empty(old('category_name')))
                                                 <option value="{{ old('category_name') }}" selected="selected" data-select2-tag="true">{{ old('category_name') }}</option>
                                             @endif
-                                            @foreach($category as $cat)
+                                            @foreach($categories as $cat)
                                                 <option value="{{ $cat['id'] }}">{{ $cat['name'] }}</option>
                                             @endforeach
                                         @endif
-
                                     </select>
                                     @foreach($errors->get('category_id') as $err)
                                         <label class="error" for="category_id">{{ $err }}</label>

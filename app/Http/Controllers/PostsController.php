@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Category;
 use App\Post;
+use App\PostStatus;
 use App\Tag;
 use Illuminate\Http\Request;
 
@@ -36,8 +37,10 @@ class PostsController extends Controller
      */
     public function create()
     {
-        $cat = Category::all();
-        return view('admin.post_create', ['category' => $cat]);
+        $categories = Category::all(['id', 'name']);
+        $post_status = PostStatus::all(['id', 'name']);
+        $post_status_default_id = 2;
+        return view('admin.post_create', ['categories' => $categories, 'post_status' => $post_status, 'post_status_default_id' => $post_status_default_id]);
     }
 
     /**
@@ -68,7 +71,6 @@ class PostsController extends Controller
         {
             foreach($input['tags'] as $tag_id)
             {
-
                 if(strrpos($tag_id, '*-', -strlen($tag_id)) !== FALSE)
                 {
                     $tag_id = substr($tag_id, 2);
@@ -91,6 +93,7 @@ class PostsController extends Controller
             'slug' => 'required|min:4|unique:post,slug',
             'content' => 'required|min:40|max:2000',
             'published_at' => 'required',
+            'status_id' => 'required|exists:post_status,id',
             'category_id' => 'exists:category,id',
             'new_tags.*.name' => 'required|min:4',
             'new_tags.*.slug'=> 'required|min:4|unique:tag,slug',
