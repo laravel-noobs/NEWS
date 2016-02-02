@@ -35,6 +35,8 @@ class Post extends Model
      */
     protected $hidden = [];
 
+    protected $dates = ['published_at'];
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */

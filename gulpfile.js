@@ -14,7 +14,7 @@ var inspinia = {
  'css': './resources/assets/inspinia/css/',
  'sass': './resources/assets/inspinia/sass/',
  'img': './resources/assets/inspinia/img/'
-}
+};
 
 elixir(function(mix) {
     mix
@@ -22,16 +22,16 @@ elixir(function(mix) {
             'core.scss',
             inspinia.css + 'animate.css'
         ], 'public/css/core.css')
-
         .styles([
             bower + 'footable/css/footable.core.css',
-            bower + 'toastr/toastr.css'
+            bower + 'toastr/toastr.css',
+            bower + 'select2/dist/css/select2.css',
+            bower + 'eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css'
         ], 'public/css/plugins.css')
-
         .sass([
             inspinia.sass + 'style.scss',
             'style.scss'
-        ], 'public/css/app.css');
+        ], 'public/css/app.css')
 });
 
 elixir(function(mix) {
@@ -42,12 +42,16 @@ elixir(function(mix) {
         ], 'public/js/core.js')
 
         .scripts([
+            bower + 'moment/moment.js',
+            bower + 'moment/locale/vi.js',
             bower + 'metisMenu/dist/metisMenu.js',
             bower + 'pace/pace.js',
             bower + 'slimscroll/jquery.slimscroll.js',
             bower + 'footable/dist/footable.all.min.js',
-            bower + 'toastr/toastr.js'
-        ], 'public/js/plugins.js', './')
+            bower + 'toastr/toastr.js',
+            bower + 'select2/dist/js/select2.full.min.js',
+            bower + 'eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js'
+        ], 'public/js/plugins.js')
 
         .scripts([
             inspinia.js + 'inspinia.js',
@@ -62,6 +66,7 @@ elixir(function(mix){
         .copy(bower + 'footable/css/fonts/**', 'public/fonts')
         .copy(inspinia.img + 'patterns/**', 'public/css/patterns')
         .copy(assets.unify + '**', 'public/unify')
+        .copy(inspinia.js + 'editor', 'public/js/editor')
         .copy(assets.img  + '**', 'public/images')
 });
 

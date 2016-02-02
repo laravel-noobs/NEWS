@@ -47,6 +47,7 @@
     @yield('content')
     @include('unify.partials._footer')
     @include('unify.partials._auth')
+</div>
 <!-- JS Global Compulsory -->
 <script src="{{URL::asset('js/core.js')}}"></script>
 <script src="/unify/plugins/jquery/jquery-migrate.min.js"></script>

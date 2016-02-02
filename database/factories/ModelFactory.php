@@ -32,9 +32,9 @@ $factory->define(App\Comment::class, function (Faker\Generator $faker) {
 });
 
 $factory->define(App\Tag::class, function (Faker\Generator $faker) {
-    $name = str_random(10);
+    $name = $faker->words(2, true);
     return [
-      'name' => $name,
+        'name' => $name,
         'slug' => str_slug($name)
     ];
 });

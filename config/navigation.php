@@ -1,5 +1,7 @@
 <?php
 return [
+    'acronym' => 'NEWS',
+    'page_title' => 'NEWS',
     'navigation' => [
         'admin' => [
             'text' => 'Bảng điều khiển',
@@ -34,11 +36,13 @@ return [
             'items' => [
                 'index' => [
                     'text' => 'Tất cả',
+                    'action' => 'PostsController@index',
                     'active' => false,
                     'order' => 1
                 ],
                 'create' => [
                     'text' => 'Thêm mới',
+                    'action' => 'PostsController@create',
                     'active' => false,
                     'order' => 2
                 ],
@@ -89,6 +93,7 @@ return [
         'posts' => [
             'text' => 'Bài viết',
             'icon_class' => 'fa fa-files-o',
+            'action' => 'PostsController@index'
         ],
         'post_create' => [
             'text' => 'Tạo mới',

@@ -17,17 +17,27 @@ Route::get('/', function () {
 
 Route::get('/admin', 'AdminController@index');
 
+Route::get('/dang-nhap', 'Auth\AuthController@getLogin');
+Route::post('/dang-nhap', 'Auth\AuthController@postLogin');
+Route::get('/dang-ky', 'Auth\AuthController@getRegister');
+Route::post('/dang-nhap', 'Auth\AuthController@postRegister');
+
 Route::get('/admin/categories', 'CategoriesController@index');
 Route::post('/admin/categories', 'CategoriesController@store');
 Route::get('/admin/categories/{id}/delete', 'CategoriesController@destroy');
 Route::get('/admin/categories/{id}/edit', 'CategoriesController@edit');
 Route::post('/admin/categories/{id}/edit', 'CategoriesController@update');
 
-Route::get('/admin/users/{id}/delete', 'UsersController@delete');
 Route::get('admin/users', 'UsersController@index');
-
 Route::get('/admin/users/{id}/edit', 'UsersController@edit');
 Route::post('/admin/users/{id}/edit', 'UsersController@update');
+Route::get('/admin/users/{id}/delete', 'UsersController@delete');
+
+Route::get('/admin/posts','PostsController@index');
+Route::get('/admin/posts/create','PostsController@create');
+
+Route::post('/admin/posts','PostsController@store');
+Route::get('/admin/posts/getpermalink/{name}','PostsController@permalink');
 
 Route::get('/dang-nhap', 'Auth\AuthController@getLogin');
 Route::post('/dang-nhap', 'Auth\AuthController@postLogin');
@@ -36,5 +46,7 @@ Route::post('/dang-ky', 'Auth\AuthController@postRegister');
 Route::get('/dang-xuat', 'Auth\AuthController@getLogout');
 
 Route::get('/xac-nhan/{verify_token}', 'UsersController@getVerifyEmailByLink');
-Route::get('/xac-nhan/', 'UsersController@getVerifyEmail');
-Route::post('/xac-nhan/', 'UsersController@postVerifyEmail');
+Route::get('/xac-nhan', 'UsersController@getVerifyEmail');
+Route::post('/xac-nhan', 'UsersController@postVerifyEmail');
+
+Route::get('/admin/tags/search', 'TagsController@queryTags');

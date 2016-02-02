@@ -1,3 +1,5 @@
+moment.locale('vi');
+
 toastr.options = {
     "closeButton": true,
     "debug": false,
