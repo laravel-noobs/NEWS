@@ -1,9 +1,9 @@
 <?php
 app('navigator')
         ->activate('posts', 'tags')
-        ->set_page_heading('Danh sách tag')
-        ->set_breadcrumb('admin', 'tags')
-        ->set_page_title('Danh sách tất cả tag');
+        ->set_page_heading('Sửa thông tin tag')
+        ->set_breadcrumb('admin', 'tags', 'tag_edit')
+        ->set_page_title('Sửa thông tin tag' . $tag->name);
 ?>
 
 @extends('partials.admin._layout')
@@ -14,11 +14,11 @@ app('navigator')
             <div class="ibox ">
                 <div class="ibox-content">
                     <h3>Thêm mới tag</h3>
-                    <form method="POST" action="{{ URL::action('TagsController@store') }}">
+                    <form method="POST" action="{{ URL::action('TagsController@update', ['id' => $tag->id]) }}">
                         {{ csrf_field() }}
                         <div class="form-group {{ count($errors->get('name')) > 0 ? 'has-error' : '' }}">
                             <label class="">Tên</label>
-                            <input type="text" id="name" name="name" placeholder="" value="{{ old('name', '') }}" class="form-control">
+                            <input type="text" id="name" name="name" placeholder="" value="{{ old('name', $tag->name) }}" class="form-control">
                             <span class="help-block m-b-none">Tên của tag được tạo sẽ dùng để hiển thị.</span>
                             @foreach($errors->get('name') as $err)
                                 <label class="error" for="name">{{ $err }}</label>
@@ -27,7 +27,7 @@ app('navigator')
 
                         <div class="form-group {{ count($errors->get('slug')) > 0 ? 'has-error' : '' }}">
                             <label>Slug</label>
-                            <input type="text" id="slug" name="slug" placeholder="" value="{{ old('slug', '') }}" class="form-control">
+                            <input type="text" id="slug" name="slug" placeholder="" value="{{ old('slug', $tag->slug) }}" class="form-control">
                             <span class="help-block m-b-none">Chuỗi ký tự dùng để tạo đường dẫn thân thiện, thường chỉ bao gồm các ký tự từ aphabet không dấu, chữ số và dấu gạch ngang.</span>
                             @foreach($errors->get('slug') as $err)
                                 <label class="error" for="slug">{{ $err }}</label>
@@ -47,8 +47,9 @@ app('navigator')
                         <div class="hr-line-dashed"></div>
                         <div class="form-group">
                             <div>
-                                <input class="btn btn-primary" type="submit" value="Thêm mới">
-                                <a href="{{ URL::action('TagsController@index') }}" class="btn btn-white"> Hủy</a>
+                                <input class="btn btn-primary" type="submit" value="Lưu thay đổi">
+                                <a data-toggle="modal" href="#modal-delete-prompt" data-tag_name="{{ $tag->name }}" data-tag_id="{{ $tag->id }}" class="btn btn-danger">Xóa</a>
+                                <a href="{{ URL::action('TagsController@index') }}" class="btn btn-white">Hủy</a>
                             </div>
                         </div>
                     </form>
@@ -58,29 +59,33 @@ app('navigator')
         <div class="col-sm-8">
             <div class="ibox">
                 <div class="ibox-content">
-                    <span class="text-muted small pull-right">Tổng cộng {{ $tags->total() }} tags</span>
-                    <h2>Danh sách</h2>
-                    <table class="footable table table-stripped toggle-arrow-tiny" data-page-navigation=".footable-pagination" data-page-size="20" data-filter=#filter>
+                    <span class="text-muted small pull-right">Tổng cộng {{$tag->postsCount }} bài viết</span>
+                    <h2>Danh sách bài viết có tag này</h2>
+                    @if($tag->postsCount > 0)
+                    <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="8">
                         <thead>
                         <tr>
-                            <th data-sort-ignore="true">Tên</th>
-                            <th data-sort-ignore="true">Slug</th>
-                            <th data-sort-ignore="true">Bài viết</th>
-                            <th data-sort-ignore="true"><span class="pull-right">Hành động</span></th>
+                            <th data-toggle="true">Tiêu đề</th>
+                            <th data-hide="all">Tác giả</th>
+                            <th>Chuyên mục</th>
+                            <th data-hide="all">Ngày đăng</th>
+                            <th>Tình trạng</th>
+                            <th>Lượt xem</th>
+                            <th data-sort-ignore="true">Hành động</th>
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($tags as $tag)
+                        @foreach($tag->posts as $post)
                             <tr>
-                                <td>{{ $tag->name }}</td>
-                                <td>{{ $tag->slug }}</td>
-                                <td>{{ $tag->postsCount }}</td>
+                                <td><a href="{{ URL::action('PostsController@show', ['id'=>$post->id]) }}">{{ $post->title }}</a></td>
+                                <td>{{ $post->user->name }}</td>
+                                <td>{{ $post->category != null ? $post->category->name : '' }}</td>
+                                <td>{{ $post->published_at }}</td>
+                                <td>{{ $post->postStatus->name }}</td>
+                                <td>{{ $post->view }}</td>
                                 <td>
                                     <div class="btn-group pull-right">
-                                        <a href="{{ action('TagsController@edit', ['id' => $tag->id]) }}"  class="btn-white btn btn-xs">Sửa</a>
-                                        <a href="#" target="_blank" class="btn-white btn btn-xs">Xem</a>
-                                        {{-- <a href="{{ action('TagsController@destroy', ['id' => $tag->id]) }}" class="btn-white btn btn-xs">Xóa</a> --}}
-                                        <a data-toggle="modal" href="#modal-delete-prompt" data-tag_name="{{ $tag->name }}" data-tag_id="{{ $tag->id }}" class="btn-white btn btn-xs">Xóa</a>
+                                        <a href="{{ URL::action('PostsController@edit', ['id'=>$post->id]) }}"  class="btn-white btn btn-xs">Sửa</a>
                                     </div>
                                 </td>
                             </tr>
@@ -89,13 +94,15 @@ app('navigator')
                         <tfoot>
                         <tr>
                             <td colspan="5">
-                                <div class="pull-right">{!! $tags->links() !!}</div>
+                                <ul class="pagination pull-right"></ul>
                             </td>
                         </tr>
                         </tfoot>
                     </table>
+                    @else
+                        <span>Rất tiếc, không có bài viết nào.</span>
+                    @endif
                 </div>
-
             </div>
         </div>
     </div>

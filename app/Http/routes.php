@@ -36,6 +36,8 @@ Route::get('/admin/users/{id}/delete', 'UsersController@delete');
 Route::get('/admin/posts','PostsController@index');
 Route::get('/admin/posts/create','PostsController@create');
 Route::post('/admin/posts','PostsController@store');
+Route::get('/admin/posts/{id}/edit', 'PostsController@edit');
+Route::get('/admin/posts/{id}/show', 'PostsController@show');
 Route::get('/admin/posts/getpermalink/{name}','PostsController@permalink');
 
 Route::get('/dang-nhap', 'Auth\AuthController@getLogin');
@@ -53,4 +55,4 @@ Route::get('/admin/tags', 'TagsController@index');
 Route::post('/admin/tags', 'TagsController@store');
 Route::get('/admin/tags/{id}/edit', 'TagsController@edit');
 Route::post('/admin/tags/{id}/edit', 'TagsController@update');
-Route::get('/admin/tags/{id}/delete', 'TagsController@destroy');
+Route::post('/admin/tags/delete', 'TagsController@destroy');
