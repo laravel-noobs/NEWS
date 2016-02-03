@@ -12,7 +12,7 @@ class TagsController extends Controller
 {
     public function index(Request $request)
     {
-        $tags = Tag::with(['postsCount'])->orderBy('id', 'desc')->get();
+        $tags = Tag::with(['postsCount'])->orderBy('id', 'desc')->paginate(20);
         return view('admin.tag_index', compact('tags'));
     }
     /**

@@ -58,16 +58,16 @@ app('navigator')
         <div class="col-sm-8">
             <div class="ibox">
                 <div class="ibox-content">
-                    <span class="text-muted small pull-right">{{ count([]) }} chuyên mục</span>
+                    <span class="text-muted small pull-right">Tổng cộng {{ $tags->total() }} tags</span>
                     <h2>Danh sách</h2>
                     <input type="text" class="form-control input-sm m-b-xs" id="filter"
                            placeholder="Tìm kiếm">
-                    <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="15" data-filter=#filter>
+                    <table class="footable table table-stripped toggle-arrow-tiny" data-page-navigation=".footable-pagination" data-page-size="20" data-filter=#filter>
                         <thead>
                         <tr>
-                            <th>Tên</th>
-                            <th>Slug</th>
-                            <th>Bài viết</th>
+                            <th data-sort-ignore="true">Tên</th>
+                            <th data-sort-ignore="true">Slug</th>
+                            <th data-sort-ignore="true">Bài viết</th>
                             <th data-sort-ignore="true"><span class="pull-right">Hành động</span></th>
                         </tr>
                         </thead>
@@ -90,7 +90,7 @@ app('navigator')
                         <tfoot>
                         <tr>
                             <td colspan="5">
-                                <ul class="pagination pull-right"></ul>
+                                <div class="pull-right">{!! $tags->links() !!}</div>
                             </td>
                         </tr>
                         </tfoot>
