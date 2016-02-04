@@ -3,7 +3,7 @@ app('navigator')
         ->activate('posts', 'tags')
         ->set_page_heading('Sửa thông tin tag')
         ->set_breadcrumb('admin', 'tags', 'tag_edit')
-        ->set_page_title('Sửa thông tin tag' . $tag->name);
+        ->set_page_title('Sửa thông tin tag ' . $tag->name);
 ?>
 
 @extends('partials.admin._layout')
@@ -33,17 +33,6 @@ app('navigator')
                                 <label class="error" for="slug">{{ $err }}</label>
                             @endforeach
                         </div>
-
-                        {{--
-                        <div class="form-group {{ count($errors->get('description')) > 0 ? 'has-error' : '' }}">
-                            <label>Mô tả</label>
-                            <textarea id="description" name="description" placeholder="" class="form-control" rows="5" cols="50">{{ old('description', '') }}</textarea>
-                            <span class="help-block m-b-none">Mô tả tag tùy thuộc vào themes mà có thể được hiển thị hay không.</span>
-                            @foreach($errors->get('description') as $err)
-                                <label class="error" for="description">{{ $err }}</label>
-                            @endforeach
-                        </div>
-                        --}}
                         <div class="hr-line-dashed"></div>
                         <div class="form-group">
                             <div>
@@ -137,7 +126,7 @@ app('navigator')
         $(document).ready(function(){
             $('.footable').footable();
         });
-        //triggered when modal is about to be shown
+
         $('#modal-delete-prompt').on('show.bs.modal', function(e) {
             tag_id = $(e.relatedTarget).data('tag_id');
             tag_name = $(e.relatedTarget).data('tag_name');
