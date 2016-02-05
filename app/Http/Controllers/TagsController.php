@@ -90,7 +90,7 @@ class TagsController extends Controller
         ]);
 
         $input = $request->input();
-        if($tag->save($input))
+        if($tag->update($input))
             Flash::push("Sửa thông tin thẻ \\\"$tag->name\\\" thành công", 'Hệ thống');
         else
             Flash::push("Sửa thông tin thẻ \\\"$tag->name\\\" thất bại", 'Hệ thống', "error");
