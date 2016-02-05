@@ -27,7 +27,8 @@ elixir(function(mix) {
             bower + 'toastr/toastr.css',
             bower + 'select2/dist/css/select2.css',
             bower + 'eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css',
-            bower + 'jqcloud2/dist/jqcloud.css'
+            bower + 'jqcloud2/dist/jqcloud.css',
+            bower + 'icheck/skins/square/green.css'
         ], 'public/css/plugins.css')
         .sass([
             inspinia.sass + 'style.scss',
@@ -52,7 +53,8 @@ elixir(function(mix) {
             bower + 'toastr/toastr.js',
             bower + 'select2/dist/js/select2.full.min.js',
             bower + 'eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
-            bower + 'jqcloud2/dist/jqcloud.js'
+            bower + 'jqcloud2/dist/jqcloud.js',
+            bower + 'icheck/icheck.js'
         ], 'public/js/plugins.js')
 
         .scripts([
@@ -70,6 +72,8 @@ elixir(function(mix){
         .copy(assets.unify + '**', 'public/unify')
         .copy(inspinia.js + 'editor', 'public/js/editor')
         .copy(assets.img  + '**', 'public/images')
+        .copy(bower + 'icheck/skins/square/green.png', 'public/css/icheck')
+        .copy(bower + 'icheck/skins/square/green@2x.png', 'public/css/icheck')
 });
 
 elixir(function (mix) {

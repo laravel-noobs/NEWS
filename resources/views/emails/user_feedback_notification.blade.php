@@ -1,7 +1,7 @@
 @extends('emails.templates.simple_email')
 
 @section('simple_email_title')
-    <span>Xác thực email đăng ký</span>
+    <span>Cảm ơn phản hồi</span>
 @endsection
 
 @section('simple_email_banner')
@@ -21,22 +21,31 @@
     <p>Chào {{ $first_name }} {{ $last_name }},</p>
 
     <p>
-        Bạn đã đăng ký tài khoản có tên "{{ $name }}" sử dụng email này và  tài khoản đó chưa được chứng thực.<br/>
-        Vui lòng xác thực địa chỉ email bằng cách click chuột vào đường dẫn sau:<br/>
-        <a href="{{ url(action('UsersController@getVerifyEmailByLink', ['verify_token' => $verify_token])) }}">{{ url(action('UsersController@getVerifyEmailByLink', ['verify_token' => $verify_token])) }}</a>
+        Bạn gửi một phản hồi tại bài viết <a href="{{ URL::action('PostsController@show', ['id' => $feedback->post->id]) }}">{{ $feedback->post->title }}</a>.<br/>
+        Quản trị viên {{ $staff->first_name }} {{ $staff->last_name }} đã tiếp nhận và đọc phản hồi của bạn.<br/>
     </p>
-    {{--
+
+    <h5>Nội dung phản hồi của bạn</h5>
     <p>
-        Nếu bạn không thực hiện việc đăng ký này, vui lòng click vào đường dẫn sau để thực hiện xóa tài khoản:<br/>
-        <a href="#">Xóa tài khoản "{{ $name }}"</a>
+        {{ $feedback->content }}
     </p>
-    --}}
+
+    @if(!empty($staff_message))
+    <h5>Trả lời của quản trị viên {{ $staff->first_name }} {{ $staff->last_name }}:</h5>
     <p>
+        {{ $staff_message }}
+    </p>
+    @endif
+
+    <br/>
+    <p>
+        Vui lòng không trả lời (reply) thư này, hệ thống không theo dõi hộp thư này.
         Nếu bạn cần hỗ trợ vui lòng liên hệ chúng tôi hoặc truy cập FAQ tại NEWS.
     </p>
 
+    <br/>
     <p>
-        Cảm ơn bạn,
+        Cảm ơn bạn đã hỗ trợ,
         NEWS
     </p>
 @endsection

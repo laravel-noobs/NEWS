@@ -116,8 +116,6 @@ class AuthController extends Controller
             return view($this->registerView);
         }
 
-
-
         return view('auth.register');
     }
 }

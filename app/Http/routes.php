@@ -56,3 +56,7 @@ Route::post('/admin/tags', 'TagsController@store');
 Route::get('/admin/tags/{id}/edit', 'TagsController@edit');
 Route::post('/admin/tags/{id}/edit', 'TagsController@update');
 Route::post('/admin/tags/delete', 'TagsController@destroy');
+
+Route::get('/admin/feedbacks', 'FeedbacksController@index');
+Route::get('/admin/posts/{id}/feedbacks', 'FeedbacksController@listByPost');
+Route::post('/admin/feedbacks', 'FeedbacksController@check');

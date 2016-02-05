@@ -27,7 +27,7 @@ app('navigator')
                     <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="8">
                         <thead>
                         <tr>
-                            <th data-toggle="true">Tiêu đề</th>
+                            <th data-toggle="true" width="50%">Tiêu đề</th>
                             <th data-hide="all">Tác giả</th>
                             <th>Chuyên mục</th>
                             <th data-hide="all">Ngày đăng</th>

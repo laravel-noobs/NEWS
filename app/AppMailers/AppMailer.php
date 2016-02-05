@@ -1,6 +1,7 @@
 <?php namespace App\AppMailers;
 
 
+use App\Feedback;
 use App\User;
 use Illuminate\Mail\Mailer;
 
@@ -62,6 +63,30 @@ class AppMailer
     }
 
     /**
+     * @param Feedback $feedback
+     * @param User $sender
+     * @param null $message
+     */
+    public function send_feedback_notification_to(Feedback $feedback, User $sender, $message = null)
+    {
+        $user = $feedback->user;
+
+        $this->to = $user->email;// $sender->email; for testing
+        $this->view = 'emails.user_feedback_notification';
+        $this->data = [
+            'name' => $user->name,
+            'email' => $user->email,
+            'first_name' => $user->first_name,
+            'last_name' => $user->last_name,
+            'staff' => $sender,
+            'staff_message' => $message,
+            'feedback' => $feedback
+        ];
+
+        $this->subject = "Phản hồi của bạn ở bài viết \"{$feedback->post->title}\" đã được xem.";
+        $this->deliver();
+    }
+    /**
      *
      */
     public function deliver()
@@ -69,7 +94,7 @@ class AppMailer
         $data = $this->data;
         $this->mailer->send($this->view, $this->data, function ($m) use($data) {
             $m->from($this->from['address'], $this->from['name']);
-            $m->to($data['email'], $data['name'])->subject($this->subject);
+            $m->to($this->to, $data['name'])->subject($this->subject);
         });
     }
 }
