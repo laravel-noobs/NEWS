@@ -26,7 +26,8 @@ elixir(function(mix) {
             bower + 'footable/css/footable.core.css',
             bower + 'toastr/toastr.css',
             bower + 'select2/dist/css/select2.css',
-            bower + 'eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css'
+            bower + 'eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css',
+            bower + 'jqcloud2/dist/jqcloud.css'
         ], 'public/css/plugins.css')
         .sass([
             inspinia.sass + 'style.scss',
@@ -50,7 +51,8 @@ elixir(function(mix) {
             bower + 'footable/dist/footable.all.min.js',
             bower + 'toastr/toastr.js',
             bower + 'select2/dist/js/select2.full.min.js',
-            bower + 'eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js'
+            bower + 'eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
+            bower + 'jqcloud2/dist/jqcloud.js'
         ], 'public/js/plugins.js')
 
         .scripts([

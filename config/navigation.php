@@ -54,6 +54,7 @@ return [
                 ],
                 'tags' => [
                     'text' => 'Tags',
+                    'action' => 'TagsController@index',
                     'active' => false,
                     'order' => 4
                 ]
@@ -110,6 +111,11 @@ return [
         'tags' => [
             'text' => 'Tags',
             'icon_class' => 'fa fa-tags',
+            'action' => 'TagsController@index'
+        ],
+        'tag_edit' => [
+            'text' => 'Sửa',
+            'icon_class' => 'fa fa-wrench'
         ],
         'categories' => [
             'text' => 'Chuyên mục',
