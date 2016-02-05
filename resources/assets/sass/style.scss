@@ -13,3 +13,16 @@
     font-style: normal;
   }
 }
+/* icheck plugin */
+.icheckbox_square-green,
+.iradio_square-green {
+  background: url(/css/icheck/green.png) no-repeat;
+}
+
+/* HiDPI support */
+@media (-o-min-device-pixel-ratio: 5/4), (-webkit-min-device-pixel-ratio: 1.25), (min-resolution: 120dpi) {
+  .icheckbox_square-green,
+  .iradio_square-green {
+    background-image: url(/css/icheck/green@2x.png);
+  }
+}

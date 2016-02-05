@@ -35,7 +35,8 @@
     "moment": "^2.10.6",
     "select2": "^4.0.0",
     "eonasdan-bootstrap-datetimepicker": "^4.17.37",
-    "jqcloud2": "^2.0.1"
+    "jqcloud2": "^2.0.1",
+    "icheck" : "^1.0.2"
   },
   "resolutions": {
     "jquery": "2.1.4"

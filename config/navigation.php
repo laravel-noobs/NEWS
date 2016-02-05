@@ -63,6 +63,7 @@ return [
         ],
         'feedbacks' => [
             'text' => 'Phản hồi',
+            'action' => 'FeedbacksController@index',
             'active' => false,
             'icon_class' => 'fa fa-send-o',
             'order' => 4
