@@ -1,0 +1,9 @@
+[submodule "packages/userconfig"]
+	path = packages/userconfig
+	url = https://github.com/laravel-noobs/userconfig
+[submodule "packages/flashmessage"]
+	path = packages/flashmessage
+	url = https://github.com/laravel-noobs/flashmessage
+[submodule "packages/navigation"]
+	path = packages/navigation
+	url = https://github.com/laravel-noobs/navigation

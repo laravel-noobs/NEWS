@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "37ae5bfcbdf9121ee7838dfa7395fd9a",
-    "content-hash": "d6fd0793d99ec86738539d495218e0ed",
+    "hash": "b42711b057d026190e1e90b62c2f8d86",
+    "content-hash": "8775229665b8d336c664f9bf3b7182ec",
     "packages": [
         {
             "name": "barryvdh/laravel-ide-helper",
@@ -448,6 +448,47 @@
                 "issues": "https://github.com/laravel-noobs/navigation/issues"
             },
             "time": "2016-01-19 14:29:28"
+        },
+        {
+            "name": "koutsuneka/userconfig",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel-noobs/userconfig.git",
+                "reference": "f354b5893a781b3a0ae4ac6d5168f680161264a1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel-noobs/userconfig/zipball/f354b5893a781b3a0ae4ac6d5168f680161264a1",
+                "reference": "f354b5893a781b3a0ae4ac6d5168f680161264a1",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/session": "5.2.*",
+                "illuminate/support": "5.2.*",
+                "symfony/http-foundation": "2.8.*|3.0.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "KouTsuneka\\UserConfig\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kou Tsuneka",
+                    "email": "tsuneka.kou@gmail.com"
+                }
+            ],
+            "description": "Laravel user configs repository base on session store.",
+            "support": {
+                "source": "https://github.com/laravel-noobs/userconfig/tree/master",
+                "issues": "https://github.com/laravel-noobs/userconfig/issues"
+            },
+            "time": "2016-02-07 04:36:41"
         },
         {
             "name": "laravel/framework",
@@ -3412,7 +3453,8 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "koutsuneka/flashmessage": 20,
-        "koutsuneka/navigation": 20
+        "koutsuneka/navigation": 20,
+        "koutsuneka/userconfig": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

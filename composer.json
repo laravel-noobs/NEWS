@@ -12,6 +12,10 @@
       {
         "type": "vcs",
         "url": "https://github.com/laravel-noobs/navigation.git"
+      },
+      {
+        "type": "vcs",
+        "url": "https://github.com/laravel-noobs/userconfig.git"
       }
     ],
     "require": {
@@ -20,7 +24,8 @@
         "barryvdh/laravel-ide-helper": "2.1.2",
         "laravelcollective/html": "^5.2",
         "koutsuneka/flashmessage": "dev-master@dev",
-        "koutsuneka/navigation": "dev-master@dev"
+        "koutsuneka/navigation": "dev-master@dev",
+        "koutsuneka/userconfig": "dev-master@dev"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
