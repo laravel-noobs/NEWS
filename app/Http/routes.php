@@ -60,3 +60,4 @@ Route::post('/admin/tags/delete', 'TagsController@destroy');
 Route::get('/admin/feedbacks', 'FeedbacksController@index');
 Route::get('/admin/posts/{id}/feedbacks', 'FeedbacksController@listByPost');
 Route::post('/admin/feedbacks', 'FeedbacksController@check');
+Route::post('/admin/feedbacks/config', 'FeedbacksController@postConfig');

@@ -32,7 +32,7 @@ app('navigator')
                             <th data-sort-ignore="true">
                                 <div class="i-checks pull-right">
                                     <label>
-                                        <input type="checkbox" name="show_checked"> Đã xem
+                                        <input type="checkbox" name="show_checked" {{ $filter_show_checked ? 'checked' : '' }}> Đã xem
                                     </label>
                                 </div>
                             </th>
@@ -112,7 +112,16 @@ app('navigator')
                 radioClass: 'iradio_square-green',
             });
             $('input').on('ifToggled', function(event){
-                // @TODO
+                $.ajax({
+                    url: location.pathname + '/config',
+                    method: 'post',
+                    data: { name: "filter.show_checked", value: $(this).attr('checked') == 'checked' ? 0 : 1 },
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                }).done(function() {
+                    location.reload();
+                });
             });
         });
         $('#modal-feedback-prompt').on('show.bs.modal', function(e) {
