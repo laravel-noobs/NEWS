@@ -26,10 +26,6 @@ class PostStatusTableSeeder extends Seeder
                 'slug' => str_slug('Đã duyệt')
             ],
             [
-                'name' => 'Đã đăng',
-                'slug' => str_slug('Đã đăng')
-            ],
-            [
                 'name' => 'Rác',
                 'slug' => str_slug('Rác')
             ]

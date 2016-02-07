@@ -44,7 +44,9 @@ $factory->define(App\Post::class, function (Faker\Generator $faker) {
         'title' => $faker->sentence(10),
         'slug' => str_slug($faker->sentence(10)),
         'content' => $faker->paragraph,
-        'view' => random_int(0, 500000)
+        'view' => random_int(0, 500000),
+        'published' => $faker->boolean(),
+        'published_at' => $faker->dateTimeBetween('-1 years', 'now')
     ];
 });
 
