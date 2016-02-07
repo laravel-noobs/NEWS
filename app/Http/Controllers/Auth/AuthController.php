@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\AppMailers\AppMailerFacade as AppMailer;
 use App\User;
+use Illuminate\Support\Facades\URL;
 use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
@@ -51,7 +52,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest', ['except' => 'logout']);
+        $this->middleware('guest', ['except' => ['logout', 'getLogout']]);
     }
 
     /**
@@ -117,5 +118,29 @@ class AuthController extends Controller
         }
 
         return view('auth.register');
+    }
+
+    /**
+     * Log the user out of the application.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getLogout(Request $request)
+    {
+        $ret = $this->logout();
+        $ref = $request->request->get('ref');
+        $redirect = $request->request->get('redirect');
+
+        if(!empty($redirect))
+            return redirect($redirect);
+
+        switch($ref) {
+            case 'admin':
+                return redirect()->action('AdminController@index');
+            case 'home':
+                return redirect()->action('HomeController@index');
+            default:
+                return $ret;
+        }
     }
 }
