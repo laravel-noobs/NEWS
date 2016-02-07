@@ -6,25 +6,44 @@ use App\Events\FeedbackChecked;
 use App\Feedback;
 use App\Post;
 use Illuminate\Http\Request;
-
 use App\Http\Requests;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 
 class FeedbacksController extends Controller
 {
+    protected $config_key = '_feedback';
+
+    protected $configs = [
+        'filter' => [
+            'show_checked' => false
+        ]
+    ];
+
+    public function __construct()
+    {
+        $this->load_config('filter');
+    }
+
     public function index(Request $request)
     {
-            $feedbacks = Feedback::with([
-                'post' => function($query) {
-                    $query->addSelect(['id', 'title', 'slug']);
-                },
-                'user'
-            ])->paginate(8);
+        $filter_show_checked = $this->read_config('filter.show_checked');
+        $query = Feedback::with([
+            'post' => function($query) {
+                $query->addSelect(['id', 'title', 'slug']);
+            },
+            'user'
+        ]);
 
-            return view('admin.feedback_index', compact('feedbacks'));
+        if(!$filter_show_checked)
+            $query->unChecked();
+
+        $feedbacks = $query->paginate(8);
+        if($feedbacks->count() == 0)
+            return \Redirect::action('FeedbacksController@index');
+
+        return view('admin.feedback_index', compact(['feedbacks', 'filter_show_checked']));
     }
 
     public function listByPost($id)
