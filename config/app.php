@@ -146,6 +146,7 @@ return [
         Collective\Html\HtmlServiceProvider::class,
         KouTsuneka\FlashMessage\FlashMessageServiceProvider::class,
         KouTsuneka\Navigation\NavigationServiceProvider::class,
+        KouTsuneka\UserConfig\UserConfigServiceProvider::class,
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
         /*
          * Application Service Providers...
@@ -156,6 +157,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\ViewComposerServiceProvider::class,
         App\Providers\AppMailerServiceProvider::class
+
     ],
 
     /*
@@ -206,6 +208,7 @@ return [
         'Form'      => Collective\Html\FormFacade::class,
         'Html'      => Collective\Html\HtmlFacade::class,
         'Flash'     => KouTsuneka\FlashMessage\Flash::class,
-        'AppMailer' => App\AppMailers\AppMailerFacade::class
+        'AppMailer' => App\AppMailers\AppMailerFacade::class,
+        'UserConfig' => KouTsuneka\UserConfig\UserConfigFacade::class
     ],
 ];
