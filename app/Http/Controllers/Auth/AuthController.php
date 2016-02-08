@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\AppMailers\AppMailerFacade as AppMailer;
+use App\Events\UserRegistered;
 use App\User;
 use Illuminate\Support\Facades\URL;
 use Validator;
@@ -104,7 +105,7 @@ class AuthController extends Controller
 
         $user = $this->create($request->all());
 
-        AppMailer::send_email_confirmation_to($user);
+        event(new UserRegistered($user));
 
         //Auth::guard($this->getGuard())->login();
 
