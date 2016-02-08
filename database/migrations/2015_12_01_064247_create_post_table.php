@@ -33,6 +33,7 @@ class CreatePostTable extends Migration
                 ->references('id')->on('category')
                 ->onDelete('restrict')
                 ->onUpdate('cascade');
+            $table->boolean('published')->default(false);
             $table->timestamp('published_at');
             $table->timestamps();
         });

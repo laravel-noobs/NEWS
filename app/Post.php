@@ -9,6 +9,7 @@
 namespace App;
 
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
@@ -80,5 +81,37 @@ class Post extends Model
     public function user()
     {
         return $this->belongsTo('App\User', 'user_id', 'id');
+    }
+
+    public static function publishPostsAsScheduled()
+    {
+        $affected = static::shouldBePublished()
+            ->publish();
+        return is_numeric($affected) ? $affected : 0;
+    }
+
+    public function scopePublish($query)
+    {
+        return $query->update(['published' => true]);
+    }
+    public function scopePublished($query)
+    {
+        return $query->where('published', '=', true);
+    }
+    public function scopeNotPublished($query)
+    {
+        return $query->where('published', '=', false);
+    }
+    public function scopeOnScheduled($query)
+    {
+        return $query->where('published_at', '<=', Carbon::now()->toDateTimeString());
+    }
+    public function scopeApproved($query)
+    {
+        return $query->where('status_id', '=', 3);
+    }
+    public function scopeShouldBePublished($query)
+    {
+        return $query->notPublished()->onScheduled()->approved();
     }
 }
