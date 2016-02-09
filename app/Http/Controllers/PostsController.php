@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Auth;
 use KouTsuneka\FlashMessage\Flash;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class PostsController extends Controller
 {
@@ -26,7 +27,7 @@ class PostsController extends Controller
      */
     public function index()
     {
-        $posts = Post::with(['category', 'user', 'postStatus'])->get();
+        $posts = Post::with(['category', 'user', 'postStatus'])->paginate(20);
         return view('admin.post_index', ['posts' => $posts]);
     }
 
@@ -175,7 +176,7 @@ class PostsController extends Controller
      */
     public function edit($id)
     {
-        //
+
     }
 
     /**
@@ -193,12 +194,27 @@ class PostsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return Redirect
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        $id = $request->request->get('post_id');
+        if(empty($id))
+            throw new BadRequestHttpException();
+
+        try
+        {
+            if(Post::destroy($id))
+                Flash::push("Xóa bài viết thành công", 'Hệ thống');
+            else
+                Flash::push("Xóa bài viết thất bại", 'Hệ thống', 'error');
+        }
+        catch(QueryException $ex)
+        {
+            Flash::push("Xóa bài viết thất bại", 'Hệ thống', 'error');
+        }
+        return redirect(action('PostsController@index'));
     }
 
     public function permalink($name)
