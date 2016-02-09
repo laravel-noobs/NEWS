@@ -19,7 +19,7 @@ Route::get('/admin', 'AdminController@index');
 
 Route::get('/admin/categories', 'CategoriesController@index');
 Route::post('/admin/categories', 'CategoriesController@store');
-Route::get('/admin/categories/{id}/delete', 'CategoriesController@destroy');
+Route::post('/admin/categories/delete', 'CategoriesController@destroy');
 Route::get('/admin/categories/{id}/edit', 'CategoriesController@edit');
 Route::post('/admin/categories/{id}/edit', 'CategoriesController@update');
 
@@ -33,6 +33,7 @@ Route::get('/admin/posts/create','PostsController@create');
 Route::post('/admin/posts','PostsController@store');
 Route::get('/admin/posts/{id}/edit', 'PostsController@edit');
 Route::get('/admin/posts/{id}/show', 'PostsController@show');
+Route::post('/admin/posts/delete', 'PostsController@destroy');
 Route::get('/admin/posts/getpermalink/{name}','PostsController@permalink');
 
 Route::get('/dang-nhap', 'Auth\AuthController@getLogin');

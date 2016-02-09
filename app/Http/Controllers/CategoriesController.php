@@ -8,9 +8,11 @@ use App\Http\Composers\NavigationBuilder\Navigator;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Redirect;
 use Mockery\CountValidator\Exception;
 use KouTsuneka\FlashMessage\Flash;
 use Illuminate\Database\QueryException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class CategoriesController extends Controller
 {
@@ -128,11 +130,15 @@ class CategoriesController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return Redirect
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
+        $id = $request->request->get('cat_id');
+        if(empty($id))
+            throw new BadRequestHttpException();
+
         try
         {
             if(Category::destroy($id))
@@ -144,6 +150,7 @@ class CategoriesController extends Controller
         {
             Flash::push("Xóa chuyên mục thất bại", 'Hệ thống', 'error');
         }
+
         return redirect(action('CategoriesController@index'));
     }
 }

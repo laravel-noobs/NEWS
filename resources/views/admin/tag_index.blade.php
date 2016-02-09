@@ -80,7 +80,7 @@ app('navigator')
                                         <a href="{{ action('TagsController@edit', ['id' => $tag->id]) }}"  class="btn-white btn btn-xs">Sửa</a>
                                         <a href="#" target="_blank" class="btn-white btn btn-xs">Xem</a>
                                         {{-- <a href="{{ action('TagsController@destroy', ['id' => $tag->id]) }}" class="btn-white btn btn-xs">Xóa</a> --}}
-                                        <a data-toggle="modal" href="#modal-delete-prompt" data-tag_name="{{ $tag->name }}" data-tag_id="{{ $tag->id }}" class="btn-white btn btn-xs">Xóa</a>
+                                        <a data-toggle="modal" href="#modal-tag-delete-prompt" data-tag_name="{{ $tag->name }}" data-tag_id="{{ $tag->id }}" class="btn-white btn btn-xs">Xóa</a>
                                     </div>
                                 </td>
                             </tr>
@@ -99,30 +99,18 @@ app('navigator')
             </div>
         </div>
     </div>
-    <div id="modal-delete-prompt" class="modal fade" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-sm-12"><h3 class="m-t-none m-b">Xác nhận</h3>
-                            <p>Bạn có chắc chắn muốn xóa thẻ "<span class="tag_name">này</span>" hay không?<br/></p>
-                            <form role="form" action="{{ URL::action('TagsController@destroy') }}" method="POST">
-                                <input name="tag_id" type="hidden">
-                                {{ csrf_field() }}
-                                <hr/>
-                                <div>
-                                    <div class="btn-group pull-right">
-                                        <button class="btn btn-sm btn-primary m-t-n-xs" type="submit"><strong>Yes</strong></button>
-                                        <button class="btn btn-sm btn-default m-t-n-xs" type="button" data-dismiss="modal"><strong>Close</strong></button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+
+    @section('tag-delete_inputs')
+        <input name="tag_id" type="hidden"/>
+    @endsection
+    @include('admin.partials._prompt',[
+        'id' => 'tag-delete',
+        'method' => 'post',
+        'action' => URL::action('TagsController@destroy'),
+        'title' => 'Xác nhận',
+        'message' => 'Bạn có chắc chắn muốn xóa thẻ "<span class="tag_name">này</span>" hay không?',
+    ])
+
 @endsection
 
 @section('footer-script')
@@ -131,7 +119,7 @@ app('navigator')
             $('.footable').footable();
         });
         //triggered when modal is about to be shown
-        $('#modal-delete-prompt').on('show.bs.modal', function(e) {
+        $('#modal-tag-delete-prompt').on('show.bs.modal', function(e) {
             tag_id = $(e.relatedTarget).data('tag_id');
             tag_name = $(e.relatedTarget).data('tag_name');
             $(e.currentTarget).find('input[name="tag_id"]').val(tag_id);
