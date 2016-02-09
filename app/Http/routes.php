@@ -27,6 +27,7 @@ Route::get('admin/users', 'UsersController@index');
 Route::get('/admin/users/{id}/edit', 'UsersController@edit');
 Route::post('/admin/users/{id}/edit', 'UsersController@update');
 Route::get('/admin/users/{id}/delete', 'UsersController@delete');
+Route::post('/admin/users/ban', 'UsersController@ban');
 
 Route::get('/admin/posts','PostsController@index');
 Route::get('/admin/posts/create','PostsController@create');

@@ -78,11 +78,17 @@ class Post extends Model
         return $this->belongsTo('App\Category', 'category_id', 'id');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function user()
     {
         return $this->belongsTo('App\User', 'user_id', 'id');
     }
 
+    /**
+     * @return int|string
+     */
     public static function publishPostsAsScheduled()
     {
         $affected = static::shouldBePublished()
@@ -90,26 +96,55 @@ class Post extends Model
         return is_numeric($affected) ? $affected : 0;
     }
 
+    /**
+     * @param $query
+     * @return mixed
+     */
     public function scopePublish($query)
     {
         return $query->update(['published' => true]);
     }
+
+    /**
+     * @param $query
+     * @return mixed
+     */
     public function scopePublished($query)
     {
         return $query->where('published', '=', true);
     }
+
+    /**
+     * @param $query
+     * @return mixed
+     */
     public function scopeNotPublished($query)
     {
         return $query->where('published', '=', false);
     }
+
+    /**
+     * @param $query
+     * @return mixed
+     */
     public function scopeOnScheduled($query)
     {
         return $query->where('published_at', '<=', Carbon::now()->toDateTimeString());
     }
+
+    /**
+     * @param $query
+     * @return mixed
+     */
     public function scopeApproved($query)
     {
         return $query->where('status_id', '=', 3);
     }
+
+    /**
+     * @param $query
+     * @return mixed
+     */
     public function scopeShouldBePublished($query)
     {
         return $query->notPublished()->onScheduled()->approved();

@@ -38,6 +38,11 @@ class User extends Model implements AuthenticatableContract,
     protected $hidden = ['password', 'remember_token'];
 
     /**
+     * @var array
+     */
+    protected $dates = ['expired_at'];
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function role()
@@ -61,15 +66,41 @@ class User extends Model implements AuthenticatableContract,
         return $this->hasMany('App\Comment');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function posts()
     {
         return $this->hasMany('App\Post');
     }
 
+    /**
+     * @param $query
+     * @return mixed
+     */
+    public function scopeBanned($query)
+    {
+        return $query->where('banned', '=', true);
+    }
+
+    /**
+     *
+     */
     public function verifyEmail()
     {
         $this->verify_token = null;
         $this->verified = true;
+
+        $this->save();
+    }
+
+    /**
+     * @param null $expired_at
+     */
+    public function ban($expired_at = null)
+    {
+        $this->banned = true;
+        $this->expired_at = $expired_at;
 
         $this->save();
     }

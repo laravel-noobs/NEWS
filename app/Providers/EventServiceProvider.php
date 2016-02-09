@@ -14,8 +14,14 @@ class EventServiceProvider extends ServiceProvider
      */
     protected $listen = [
         'App\Events\FeedbackChecked' => [
-            'App\Listeners\FeedbackCheckedNotification',
+            'App\Listeners\FeedbackCheckedNotification'
         ],
+        'App\Events\UserRegistered' => [
+            'App\Listeners\UserEmailConfirmation'
+        ],
+        'App\Events\UserWasBanned' => [
+            'App\Listeners\UserBannedNotification'
+        ]
     ];
 
     /**

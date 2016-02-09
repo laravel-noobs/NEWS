@@ -20,6 +20,8 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
         'last_name' => $faker->lastName,
         'verified' => $verified,
         'verify_token' => !$verified ? str_random(10) : null,
+        'banned' => $faker->boolean(25),
+        'expired_at' => $faker->dateTimeBetween('+2 days', '+2 years'),
         'password' => bcrypt(str_random(10)),
         'remember_token' => str_random(10),
     ];
