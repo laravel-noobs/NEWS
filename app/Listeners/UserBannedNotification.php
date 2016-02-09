@@ -2,12 +2,12 @@
 
 namespace App\Listeners;
 
-use App\Events\FeedbackChecked;
+use App\AppMailers\AppMailerFacade as AppMailer;
+use App\Events\UserWasBanned;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use App\AppMailers\AppMailerFacade as AppMailer;
 
-class FeedbackCheckedNotification
+class UserBannedNotification
 {
     /**
      * Create the event listener.
@@ -22,11 +22,11 @@ class FeedbackCheckedNotification
     /**
      * Handle the event.
      *
-     * @param  FeedbackChecked  $event
+     * @param  UserWasBanned  $event
      * @return void
      */
-    public function handle(FeedbackChecked $event)
+    public function handle(UserWasBanned $event)
     {
-        AppMailer::send_feedback_notification_to($event->feedback, $event->sender, $event->message);
+        AppMailer::send_user_banned_notification_to($event->user, $event->staff, $event->reason, $event->message);
     }
 }

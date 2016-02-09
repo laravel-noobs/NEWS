@@ -86,6 +86,26 @@ class AppMailer
         $this->subject = "Phản hồi của bạn ở bài viết \"{$feedback->post->title}\" đã được xem.";
         $this->deliver();
     }
+
+    public function send_user_banned_notification_to(User $user, User $staff, $reason, $message)
+    {
+        $this->to = $user->email;
+        $this->view = 'emails.user_banned_notification';
+        $this->data = [
+            'name' => $user->name,
+            'expired_at' => $user->expired_at,
+            'first_name' => $user->first_name,
+            'last_name' => $user->last_name,
+            'staff_first_name' => $staff->first_name,
+            'staff_last_name' => $staff->last_name,
+            'staff_message' => $message,
+            'reason' => $reason
+        ];
+
+        $this->subject = "Tài khoản của bạn đã bị khóa.";
+        $this->deliver();
+    }
+
     /**
      *
      */

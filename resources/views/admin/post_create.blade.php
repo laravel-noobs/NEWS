@@ -242,7 +242,7 @@ app('navigator')
 
         $('button[type="submit"]').click(function(e)
         {
-            $('#published_at').val($('#datetimepicker_published_at').data("DateTimePicker").date().utc().format('YYYY-mm-DD hh:mm:ss '));
+            $('#published_at').val($('#datetimepicker_published_at').data("DateTimePicker").date().utc().format('YYYY-MM-DD hh:mm:ss'));
             $('#tags option[data-select2-tag="true"]').each(function(){
                 $(this).val('*-' + $(this).text());
             }); // manually set value to non existed tags
