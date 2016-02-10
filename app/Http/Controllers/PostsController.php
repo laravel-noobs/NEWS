@@ -9,7 +9,6 @@ use App\Tag;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
@@ -21,14 +20,65 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 class PostsController extends Controller
 {
     /**
+     * @var string
+     */
+    protected $config_key = '_post';
+
+    /**
+     * @var array
+     */
+    protected $configs = [
+        'filter' => [
+            'status_type' => 'approved',
+            'category' => null,
+            'search_term' => null
+        ]
+    ];
+
+    /**
+     * @var array
+     */
+    protected $configs_validate = [
+        'filter.search_term' => 'min:4,max:255',
+        'filter.category' => 'exists:category,id'
+    ];
+
+    /**
+     * PostsController constructor.
+     */
+    public function __construct()
+    {
+        $this->load_config('filter');
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        $posts = Post::with(['category', 'user', 'postStatus'])->paginate(20);
-        return view('admin.post_index', ['posts' => $posts]);
+        $configs = $this->read_configs([
+            'filter.status_type',
+            'filter.category',
+            'filter.search_term'
+        ]);
+
+        $posts = Post::with(['category', 'user', 'postStatus'])
+            ->hasStatus($configs['filter_status_type']);
+
+        if($configs['filter_category'] != '')
+            $posts->hasCategory($configs['filter_category']);
+
+        $term = trim($configs['filter_search_term']);
+
+        if($term != '' && strlen($term) >= 4)
+            $posts->hasTitleContains($term);
+
+        $posts = $posts->paginate(20);
+
+        $categories = Category::all(['id', 'name']);
+        return view('admin.post_index', array_merge(compact('posts', 'categories'), $configs));
     }
 
     /**
@@ -217,6 +267,10 @@ class PostsController extends Controller
         return redirect(action('PostsController@index'));
     }
 
+    /**
+     * @param $name
+     * @return array
+     */
     public function permalink($name)
     {
         $slug = str_slug($name);

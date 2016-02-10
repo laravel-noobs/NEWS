@@ -455,12 +455,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel-noobs/userconfig.git",
-                "reference": "f354b5893a781b3a0ae4ac6d5168f680161264a1"
+                "reference": "e2c6dc0d921235963c3f16b33371056550348094"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel-noobs/userconfig/zipball/f354b5893a781b3a0ae4ac6d5168f680161264a1",
-                "reference": "f354b5893a781b3a0ae4ac6d5168f680161264a1",
+                "url": "https://api.github.com/repos/laravel-noobs/userconfig/zipball/e2c6dc0d921235963c3f16b33371056550348094",
+                "reference": "e2c6dc0d921235963c3f16b33371056550348094",
                 "shasum": ""
             },
             "require": {
@@ -488,7 +488,7 @@
                 "source": "https://github.com/laravel-noobs/userconfig/tree/master",
                 "issues": "https://github.com/laravel-noobs/userconfig/issues"
             },
-            "time": "2016-02-07 04:36:41"
+            "time": "2016-02-10 12:04:25"
         },
         {
             "name": "laravel/framework",

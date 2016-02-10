@@ -36,6 +36,9 @@ class Post extends Model
      */
     protected $hidden = [];
 
+    /**
+     * @var array
+     */
     protected $dates = ['published_at'];
 
     /**
@@ -148,5 +151,53 @@ class Post extends Model
     public function scopeShouldBePublished($query)
     {
         return $query->notPublished()->onScheduled()->approved();
+    }
+
+    /**
+     * @param $query
+     * @param $status
+     * @return mixed
+     */
+    public function scopeHasStatus($query, $status)
+    {
+        if(is_string($status))
+            $status = $this->getStatusByName($status);
+        return $query->where('status_id', '=', $status);
+    }
+
+    /**
+     * @param $query
+     * @param $category_id
+     * @return mixed
+     */
+    public function scopeHasCategory($query, $category_id)
+    {
+        return $query->where('category_id', '=', $category_id);
+    }
+
+    public function scopeHasTitleContains($query, $term)
+    {
+        return $query->where('title', 'like', '%' . $term . '%');
+    }
+
+    /**
+     * @param $name
+     * @return int|null
+     */
+    private function getStatusByName($name)
+    {
+        switch($name)
+        {
+            case 'pending':
+                return 2;
+            case 'approved':
+                return 3;
+            case 'draft':
+                return 1;
+            case 'trash':
+                return 4;
+            default:
+                return null;
+        }
     }
 }

@@ -108,7 +108,7 @@ app('navigator')
         $(document).ready(function(){
             $('.footable').footable();
             $('.i-checks').iCheck({
-                checkboxClass: 'icheckbox_square-green',
+                checkboxClass: 'iradio_square-green',
                 radioClass: 'iradio_square-green',
             });
             $('input').on('ifToggled', function(event){

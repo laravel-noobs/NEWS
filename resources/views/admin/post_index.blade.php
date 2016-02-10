@@ -7,7 +7,73 @@ app('navigator')
 
 @extends('partials.admin._layout')
 
+@section('post-delete_inputs')
+    <input name="post_id" type="hidden"/>
+@endsection
+
 @section('content')
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox" style="margin-bottom: 5px">
+                <div class="ibox-content" style="padding: 10px 15px 5px 15px">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="input-group search-box">
+                                <input placeholder="Tìm bài viết" id="search-input" type="text" class="form-control input-sm" value="{{ $filter_search_term }}">
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn-white btn btn-sm"><i class="fa fa-search"></i></button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <select id="category_id" name="category_id" class="category form-control">
+                                <option value="*">Tất cả chuyên mục</option>
+                                @foreach($categories as $cat)
+                                    @if($filter_category == $cat['id'])
+                                        <option value="$filter_category" selected="selected">{{ $cat['name'] }}</option>
+                                    @else
+                                        <option value="{{ $cat['id'] }}">{{ $cat['name'] }}</option>
+                                    @endif
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-inline" style="padding-top: 3px">
+                                <div class="form-group" style="margin-right:5px">
+                                    <div class="i-checks">
+                                        <label>
+                                            <input type="radio" name="status_type" {{ $filter_status_type == 'pending' ? 'checked' : '' }} value="pending"> Đợi duyệt
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group" style="margin-right:5px">
+                                    <div class="i-checks">
+                                        <label>
+                                            <input type="radio" name="status_type" {{  $filter_status_type == 'approved' ? 'checked' : '' }} value="approved"> Đã duyệt
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group" style="margin-right:5px">
+                                    <div class="i-checks">
+                                        <label>
+                                            <input type="radio" name="status_type" {{  $filter_status_type == 'draft' ? 'checked' : '' }} value="draft"> Nháp
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group" style="margin-right:5px">
+                                    <div class="i-checks">
+                                        <label>
+                                            <input type="radio" name="status_type" {{  $filter_status_type == 'trash' ? 'checked' : '' }} value="trash"> Rác
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="row">
         <div class="col-lg-12">
             <div class="ibox float-e-margins">
@@ -33,7 +99,7 @@ app('navigator')
                             <th data-hide="all">Ngày đăng</th>
                             <th data-sort-ignore="true">Tình trạng</th>
                             <th data-sort-ignore="true">Lượt xem</th>
-                            <th data-sort-ignore="true">Hành động</th>
+                            <th data-sort-ignore="true"><span class="pull-right">Hành động</span></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -69,9 +135,6 @@ app('navigator')
             </div>
         </div>
     </div>
-    @section('post-delete_inputs')
-        <input name="post_id" type="hidden"/>
-    @endsection
     @include('admin.partials._prompt',
         [
             'id' => 'post-delete',
@@ -88,11 +151,80 @@ app('navigator')
             $('.footable').footable();
         });
 
+        $(".category").select2({
+            placeholder: "Lọc theo chuyên mục",
+            tags: true
+        });
+
         $('#modal-post-delete-prompt').on('show.bs.modal', function(e) {
             post_id = $(e.relatedTarget).data('post_id');
             post_title = $(e.relatedTarget).data('post_title');
             $(e.currentTarget).find('input[name="post_id"]').val(post_id);
             $(e.currentTarget).find('span.post_title').text(post_title);
+        });
+
+        $('.i-checks').iCheck({
+            checkboxClass: 'icheckbox_square-gree',
+            radioClass: 'iradio_square-green'
+        });
+
+        $('.sort-views').click(function (e) {
+            e.preventDefault();
+
+            //get the footable sort object
+            var footableSort = $('table').data('footable-sort');
+
+            //get the index we are wanting to sort by
+            var index = $(this).data('index');
+
+            //get the sort order
+            var ascending = $(this).data('ascending');
+        });
+
+        $('input[name="status_type"]').on('ifChecked', function(event){
+            $.ajax({
+                url: location.pathname + '/config',
+                method: 'post',
+                data: { name: "filter.status_type", value: $(this).val() },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            }).done(function() {
+                location.reload();
+            });
+        });
+
+        $('select[name="category_id"]').on("select2:select", function (e) {
+            cat_id = $(e.currentTarget).val();
+            $.ajax({
+                url: location.pathname + '/config',
+                method: 'post',
+                data: { name: "filter.category", value: cat_id === '*' ? 'NULL' : cat_id },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            }).done(function() {
+                location.reload();
+            });
+        });
+
+        $('.search-box button').on('click', function(){
+            box = $(this).parents('.search-box');
+            $.ajax({
+                url: location.pathname + '/config',
+                method: 'post',
+                data: { name: "filter.search_term", value: box.find('#search-input').val() },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                statusCode: {
+                    400: function(jqXHR, textStatus, errorThrown){
+                        toastr.error(jqXHR.responseJSON.join('<br/>'));
+                    }
+                }
+            }).done(function() {
+                location.reload();
+            });
         });
     </script>
 @endsection
