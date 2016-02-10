@@ -36,6 +36,7 @@ Route::get('/admin/posts/{id}/edit', 'PostsController@edit');
 Route::get('/admin/posts/{id}/show', 'PostsController@show');
 Route::post('/admin/posts/delete', 'PostsController@destroy');
 Route::get('/admin/posts/getpermalink/{name}','PostsController@permalink');
+Route::post('/admin/posts/config', 'PostsController@postConfig');
 
 Route::get('/dang-nhap', 'Auth\AuthController@getLogin');
 Route::post('/dang-nhap', 'Auth\AuthController@postLogin');

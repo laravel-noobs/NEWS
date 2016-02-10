@@ -1,3 +1,4 @@
+/* footable plugin tweak */
 @font-face {
   font-family: 'footable';
   src: url('/fonts/footable.eot');
@@ -13,16 +14,24 @@
     font-style: normal;
   }
 }
-/* icheck plugin */
+/* icheck plugin tweak */
 .icheckbox_square-green,
 .iradio_square-green {
   background: url(/css/icheck/green.png) no-repeat;
 }
 
-/* HiDPI support */
 @media (-o-min-device-pixel-ratio: 5/4), (-webkit-min-device-pixel-ratio: 1.25), (min-resolution: 120dpi) {
   .icheckbox_square-green,
   .iradio_square-green {
     background-image: url(/css/icheck/green@2x.png);
   }
+}
+
+.iradio_square-green {
+  background-position: -120px 0;
+}
+
+/* select2 plugin tweak */
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+  line-height: 25px;
 }
