@@ -43,7 +43,7 @@ class UserExampleTableSeeder extends Seeder
         DB::table('user')->insert($users);
         foreach($roles as $role)
         {
-            factory('App\User', 5)->create([
+            factory('App\User', 15)->create([
                 'role_id' => $role->id
             ]);
         }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\UserWasBanned;
+use App\Role;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -16,10 +17,43 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\View;
 use KouTsuneka\FlashMessage\Flash;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class UsersController extends Controller
 {
+    /**
+     * @var string
+     */
+    protected $config_key = '_user';
+
+    /**
+     * @var array
+     */
+    protected $configs = [
+        'filter' => [
+            'status_type' => 'verified',
+            'role' => null,
+            'search_term' => null
+        ]
+    ];
+
+    /**
+     * @var array
+     */
+    protected $configs_validate = [
+        'filter.search_term' => 'min:4,max:255',
+        'filter.role' => 'exists:role,id'
+    ];
+
+    /**
+     * PostsController constructor.
+     */
+    public function __construct()
+    {
+        $this->load_config('filter');
+    }
+
+
+
     /**
      * Display a listing of the resource.
      *
@@ -27,8 +61,22 @@ class UsersController extends Controller
      */
     public function index()
     {
-        $users = User::all();
-        return view('admin.user_index', ['users' => $users]);
+        $configs = $this->read_configs(['filter.search_term', 'filter.status_type', 'filter.role']);
+
+        $users = User::with('role', 'postsCount', 'feedbacksCount')
+            ->hasStatus($configs['filter_status_type']);
+
+        if($configs['filter_role'])
+            $users = $users->hasRole($configs['filter_role']);
+
+        if($configs['filter_search_term'])
+            $users = $users->searchByTerm($configs['filter_search_term']);
+
+        $users = $users->paginate(20);
+
+        $roles = Role::all(['id', 'name']);
+
+        return view('admin.user_index', array_merge(compact('users', 'roles'), $configs));
     }
 
     /**
