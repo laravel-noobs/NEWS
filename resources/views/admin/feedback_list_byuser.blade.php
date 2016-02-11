@@ -62,7 +62,7 @@ app('navigator')
             </div>
         </div>
     </div>
-    @include('admin.partials._promt_feedback_check')
+    @include('admin.partials._prompt_feedback_check')
 @endsection
 
 @section('footer-script')

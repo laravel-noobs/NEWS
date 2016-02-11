@@ -50,7 +50,8 @@ class Feedback extends Model
     {
         return $this->belongsTo('App\User');
     }
-    public function scopeUnChecked($query)
+
+    public function scopeNotChecked($query)
     {
         $query->where('checked', '=', false);
     }
