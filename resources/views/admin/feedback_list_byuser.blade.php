@@ -1,9 +1,9 @@
 <?php
 app('navigator')
         ->activate('feedbacks', 'index')
-        ->set_page_heading('Phản hồi của bài viết')
-        ->set_breadcrumb('admin', 'posts', 'feedbacks', ['feedbacks_by_post' => ['text' => $post->title]])
-        ->set_page_title($post->title . " - phản hồi" );
+        ->set_page_heading('Phản hồi của người dùng')
+        ->set_breadcrumb('admin', 'users', 'feedbacks', ['feedbacks_by_user' => ['text' => $user->name]])
+        ->set_page_title($user->name . " - phản hồi" );
 ?>
 
 @extends('partials.admin._layout')
@@ -13,16 +13,16 @@ app('navigator')
         <div class="col-lg-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5>Phản hồi bài viết: </h5><strong class="m-l-sm"><a href="{{ URL::action('PostsController@show', ['id' => $post->id]) }}">{{ $post->title }}</a></strong>
-                    <span class="text-muted small pull-right">{{ $post->feedbacks->count() }} phản hồi</span>
+                    <h5>Phản hồi người dùng: </h5><strong class="m-l-sm"><a href="{{ URL::action('UsersController@show', ['id' => $user->id]) }}">{{ $user->name }}</a></strong>
+                    <span class="text-muted small pull-right">{{ $user->feedbacks->count() }} phản hồi</span>
                 </div>
                 <div class="ibox-content">
 
                     <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="8" data-page-navigation=".footable-pagination">
                         <thead>
                         <tr>
-                            <th data-sort-ignore="true">Người dùng</th>
                             <th data-sort-ignore="true" width="40%">Nội dung</th>
+                            <th width="30%" data-sort-ignore="true">Bài viết</th>
                             <th data-sort-ignore="true">Ngày nhận</th>
                             <th data-sort-ignore="true">
                                 <div class="i-checks pull-right">
@@ -34,20 +34,20 @@ app('navigator')
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($post->feedbacks as $feedback)
-                        <tr>
-                            <td><a href="{{ URL::action('FeedbacksController@listByUser', ['id' => $feedback->user->id]) }}">{{ $feedback->user->name }}</a></td>
-                            <td>{{ $feedback->content }}</td>
-                            <td>{{ $feedback->created_at }}</td>
-                            <td>
-                                <div class="pull-right">
-                                    <a  href="#modal-feedback-check-prompt" data-user_email="{{ $feedback->user->email }}" data-feedback_id="{{ $feedback->id }}"class="btn-white btn btn-xs" data-toggle="modal">
-                                        <i class="fa {{ $feedback->checked ? "fa-check-square-o" : "fa-square-o" }}"></i>
-                                        <span> Phản hồi</span>
-                                    </a>
-                                </div>
-                            </td>
-                        </tr>
+                        @foreach($user->feedbacks as $feedback)
+                            <tr>
+                                <td>{{ $feedback->content }}</td>
+                                <td><a href="{{ URL::action('FeedbacksController@listByPost', ['id' => $feedback->post->id]) }}">{{$feedback->post->title}}</a></td>
+                                <td>{{ $feedback->created_at }}</td>
+                                <td>
+                                    <div class="pull-right">
+                                        <a  href="#modal-feedback-check-prompt" data-user_email="{{ $user->email }}" data-feedback_id="{{ $feedback->id }}"class="btn-white btn btn-xs" data-toggle="modal">
+                                            <i class="fa {{ $feedback->checked ? "fa-check-square-o" : "fa-square-o" }}"></i>
+                                            <span> Phản hồi</span>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
                         @endforeach
                         </tbody>
                         <tfoot>

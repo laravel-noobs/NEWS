@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Events\FeedbackChecked;
 use App\Feedback;
 use App\Post;
+use App\User;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use Illuminate\Support\Facades\Auth;
@@ -71,18 +72,46 @@ class FeedbacksController extends Controller
      */
     public function listByPost($id)
     {
+        $filter_show_checked = $this->read_config('filter.show_checked');
+
         $post = Post::with([
-            'feedbacks' => function($query)
+            'feedbacks' => function($query) use($filter_show_checked)
             {
+                if(!$filter_show_checked)
+                    $query->unChecked();
                 $query->orderBy('created_at', 'desc');
             },
             'feedbacks.user' => function($query)
             {
-                $query->addSelect(['id', 'name']);
+                $query->addSelect(['id', 'name', 'email']);
             },
         ])->findOrFail($id, ['id', 'title']);
 
-        return view('admin.feedback_list_bypost', compact('post'));
+        return view('admin.feedback_list_bypost', compact('post', 'filter_show_checked'));
+    }
+
+    /**
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function listByUser($id)
+    {
+        $filter_show_checked = $this->read_config('filter.show_checked');
+
+        $user = User::with([
+            'feedbacks' => function($query) use($filter_show_checked)
+            {
+                if(!$filter_show_checked)
+                    $query->unChecked();
+                $query->orderBy('created_at', 'desc');
+            },
+            'feedbacks.post' => function($query)
+            {
+                $query->addSelect(['id', 'title']);
+            },
+        ])->findOrFail($id, ['id', 'name', 'email']);
+
+        return view('admin.feedback_list_byuser', compact('user', 'filter_show_checked'));
     }
 
     /**

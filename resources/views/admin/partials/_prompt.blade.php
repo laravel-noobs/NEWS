@@ -9,7 +9,7 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-sm-12">
-                        <p>{!! $message !!}<br/></p>
+                        <p>{!! $message !!}</p>
                             @yield($id . '_inputs')
                             @if(strtolower($method) == 'post')
                                 {{ csrf_field() }}
