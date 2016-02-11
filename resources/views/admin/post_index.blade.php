@@ -30,7 +30,7 @@ app('navigator')
                                 <option value="*">Tất cả chuyên mục</option>
                                 @foreach($categories as $cat)
                                     @if($filter_category == $cat['id'])
-                                        <option value="$filter_category" selected="selected">{{ $cat['name'] }}</option>
+                                        <option value="{{ $cat['id'] }}" selected="selected">{{ $cat['name'] }}</option>
                                     @else
                                         <option value="{{ $cat['id'] }}">{{ $cat['name'] }}</option>
                                     @endif
@@ -166,19 +166,6 @@ app('navigator')
         $('.i-checks').iCheck({
             checkboxClass: 'icheckbox_square-gree',
             radioClass: 'iradio_square-green'
-        });
-
-        $('.sort-views').click(function (e) {
-            e.preventDefault();
-
-            //get the footable sort object
-            var footableSort = $('table').data('footable-sort');
-
-            //get the index we are wanting to sort by
-            var index = $(this).data('index');
-
-            //get the sort order
-            var ascending = $(this).data('ascending');
         });
 
         $('input[name="status_type"]').on('ifChecked', function(event){

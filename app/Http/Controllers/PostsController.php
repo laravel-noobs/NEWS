@@ -58,11 +58,7 @@ class PostsController extends Controller
      */
     public function index()
     {
-        $configs = $this->read_configs([
-            'filter.status_type',
-            'filter.category',
-            'filter.search_term'
-        ]);
+        $configs = $this->read_configs(['filter.status_type', 'filter.category', 'filter.search_term']);
 
         $posts = Post::with(['category', 'user', 'postStatus'])
             ->hasStatus($configs['filter_status_type']);
