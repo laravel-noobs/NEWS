@@ -108,6 +108,13 @@ return [
         'feedbacks' => [
             'text' => 'Phản hồi',
             'icon_class' => 'fa fa-send',
+            'action' => 'FeedbacksController@index'
+        ],
+        'feedbacks_by_post' => [
+            'text' => 'Theo người dùng'
+        ],
+        'feedbacks_by_user' => [
+            'text' => 'Theo người dùng'
         ],
         'tags' => [
             'text' => 'Tags',

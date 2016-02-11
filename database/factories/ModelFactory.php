@@ -55,7 +55,8 @@ $factory->define(App\Post::class, function (Faker\Generator $faker) {
 $factory->define(App\Feedback::class, function (Faker\Generator $faker) {
     return [
         'content' => $faker->paragraph,
-        'checked' => random_int(0,1)
+        'checked' => random_int(0,1),
+        'created_at' => $faker->dateTimeBetween('-1 years')
     ];
 });
 

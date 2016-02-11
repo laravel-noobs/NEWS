@@ -27,6 +27,7 @@ Route::get('admin/users', 'UsersController@index');
 Route::get('/admin/users/{id}/edit', 'UsersController@edit');
 Route::post('/admin/users/{id}/edit', 'UsersController@update');
 Route::get('/admin/users/{id}/delete', 'UsersController@delete');
+Route::post('/admin/users/{id}/show', 'UsersController@show');
 Route::post('/admin/users/ban', 'UsersController@ban');
 
 Route::get('/admin/posts','PostsController@index');
@@ -57,5 +58,6 @@ Route::post('/admin/tags/delete', 'TagsController@destroy');
 
 Route::get('/admin/feedbacks', 'FeedbacksController@index');
 Route::get('/admin/posts/{id}/feedbacks', 'FeedbacksController@listByPost');
+Route::get('/admin/users/{id}/feedbacks', 'FeedbacksController@listByUser');
 Route::post('/admin/feedbacks', 'FeedbacksController@check');
 Route::post('/admin/feedbacks/config', 'FeedbacksController@postConfig');
