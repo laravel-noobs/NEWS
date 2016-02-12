@@ -57,7 +57,7 @@ class FeedbacksController extends Controller
         ]);
 
         if(!$filter_show_checked)
-            $query->unChecked();
+            $query->notChecked();
 
         $feedbacks = $query->paginate(8);
         if($feedbacks->count() == 0)
