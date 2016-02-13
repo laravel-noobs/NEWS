@@ -184,7 +184,7 @@ class Post extends Model
      * @param $name
      * @return int|null
      */
-    private function getStatusByName($name)
+    private static function getStatusByName($name)
     {
         switch($name)
         {

@@ -60,8 +60,9 @@ class FeedbacksController extends Controller
             $query->notChecked();
 
         $feedbacks = $query->paginate(8);
-        if($feedbacks->count() == 0)
-            return \Redirect::action('FeedbacksController@index');
+
+        if($feedbacks->currentPage() != 1 && $feedbacks->count() == 0)
+            return Redirect::action('FeedbacksController@index');
 
         return view('admin.feedback_index', compact(['feedbacks', 'filter_show_checked']));
     }

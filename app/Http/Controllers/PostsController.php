@@ -73,7 +73,11 @@ class PostsController extends Controller
 
         $posts = $posts->paginate(20);
 
+        if($posts->currentPage() != 1 && $posts->count() == 0)
+            return Redirect::action('PostController@index');
+
         $categories = Category::all(['id', 'name']);
+
         return view('admin.post_index', array_merge(compact('posts', 'categories'), $configs));
     }
 

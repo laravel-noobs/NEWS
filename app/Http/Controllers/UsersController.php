@@ -74,6 +74,9 @@ class UsersController extends Controller
 
         $users = $users->paginate(20);
 
+        if($users->currentPage() != 1 && $users->count() == 0)
+            return Redirect::action('UsersController@index');
+
         $roles = Role::all(['id', 'name']);
 
         return view('admin.user_index', array_merge(compact('users', 'roles'), $configs));
