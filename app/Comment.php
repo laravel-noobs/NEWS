@@ -10,10 +10,14 @@ namespace App;
 
 
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class Comment extends Model
 {
+    /**
+     * @var string
+     */
     protected $table = 'comment';
 
     /**
@@ -35,7 +39,7 @@ class Comment extends Model
      */
     public function post()
     {
-        return $this->belongsTo('App\Post','');
+        return $this->belongsTo('App\Post');
     }
 
     /**
@@ -44,5 +48,54 @@ class Comment extends Model
     public function user()
     {
         return $this->belongsTo('App\User');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function status()
+    {
+        return $this->belongsTo('App\CommentStatus', 'status_id', 'id');
+    }
+
+    public function scopeNotSpam($query)
+    {
+        return $query->where('spam', '=', false);
+    }
+
+    public function scopeHasStatus($query, $status)
+    {
+        if(is_string($status))
+            $status = self::getStatusByName($status);
+
+        return $query->where('status_id', '=', $status);
+    }
+
+    public function scopeOrContentContains($query, $term)
+    {
+        $query->orwhere('content', 'like', '%'. $term . '%');
+    }
+
+    public function scopeSearchByTerm(Builder $query, $term)
+    {
+        $query->orWhereHas('user', function($query) use($term) {
+            $query->searchByTerm($term);
+        });
+        $query->orContentContains($term);
+    }
+
+    private static function getStatusByName($name)
+    {
+        switch($name)
+        {
+            case 'pending':
+                return 1;
+            case 'approved':
+                return 2;
+            case 'trash':
+                return 3;
+            default:
+                return null;
+        }
     }
 }
