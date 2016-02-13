@@ -68,6 +68,13 @@ return [
             'icon_class' => 'fa fa-send-o',
             'order' => 4
         ],
+        'comments' => [
+            'text' => 'Bình luận',
+            'action' => 'CommentsController@index',
+            'active' => false,
+            'icon_class' => 'fa fa-comments',
+            'order' => 4
+        ],
     ],
 
     /*
@@ -133,6 +140,11 @@ return [
         'category_edit' => [
             'text' => 'Sửa',
             'icon_class' => 'fa fa-wrench'
+        ],
+        'comments'=> [
+            'text' => 'Bình luận',
+            'icon_class' => 'fa fa-comments',
+            'action' => 'CommentsController@index'
         ],
         'search_result' => [
             'text' => 'Kết quả tìm kiếm',

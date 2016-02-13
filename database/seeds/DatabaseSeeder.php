@@ -6,6 +6,8 @@ use App\Category;
 use App\Tag;
 use App\PostStatus;
 use App\User;
+use App\CommentStatus;
+
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -23,6 +25,7 @@ class DatabaseSeeder extends Seeder
         $this->call(RoleTableSeeder::class);
         $this->call(UserExampleTableSeeder::class);
         $this->call(PostStatusTableSeeder::class);
+        $this->call(CommentStatusTableSeeder::class);
         $this->call(TagExampleTableSeeder::class);
 
         $users = User::all(['id']);
@@ -30,6 +33,7 @@ class DatabaseSeeder extends Seeder
         $categories = Category::all(['id']);
         $tag = Tag::all(['id']);
         $posts = [];
+        $comment_status = CommentStatus::all(['id']);
 
         DB::table('post')->delete();
         for($i = 0; $i < 50; $i++)
@@ -46,11 +50,12 @@ class DatabaseSeeder extends Seeder
 
         $comments = [];
         DB::table('comment')->delete();
-        for($i = 0; $i < 50; $i++)
+        for($i = 0; $i < 200; $i++)
         {
             $comment = factory('App\Comment')->make([
                 'user_id' => $users->random()->id,
-                'post_id' => $posts[random_int(0, count($posts)-1)]
+                'post_id' => $posts[random_int(0, count($posts)-1)],
+                'status_id' => $post_status->random()->id
             ]);
             $comment->save();
             $comments[] = $comment->id;

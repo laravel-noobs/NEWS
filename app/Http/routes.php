@@ -62,3 +62,6 @@ Route::get('/admin/posts/{id}/feedbacks', 'FeedbacksController@listByPost');
 Route::get('/admin/users/{id}/feedbacks', 'FeedbacksController@listByUser');
 Route::post('/admin/feedbacks', 'FeedbacksController@check');
 Route::post('/admin/feedbacks/config', 'FeedbacksController@postConfig');
+
+Route::get('/admin/comments', 'CommentsController@index');
+Route::post('/admin/comments/config', 'CommentsController@postConfig');
