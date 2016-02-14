@@ -8,6 +8,8 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Comment;
 use Illuminate\Support\Facades\Redirect;
+use KouTsuneka\FlashMessage\Flash;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class CommentsController extends Controller
 {
@@ -64,10 +66,77 @@ class CommentsController extends Controller
         if($configs['filter_hide_spam'])
             $comments->notSpam();
 
-        $comments = $comments->paginate(8);
+        $comments = $comments->orderBy('created_at','desc')->paginate(8);
         if($comments->currentPage() != 1 && $comments->count() == 0)
             return Redirect::action('CommentsController@index');
 
         return view('admin.comment_index', array_merge(compact(['comments']), $configs));
+    }
+
+    public function spam(Comment $comment_id)
+    {
+        $comment_id->spam = true;
+        if($comment_id->save())
+            Flash::push("Đánh dấu spam bình luận #$comment_id->id thành công", 'Hệ thống');
+        else
+            Flash::push("Đánh dấu spam bình luận #$comment_id->id thất bại", 'Hệ thống');
+
+        return redirect()->back();
+    }
+    public function notspam(Comment $comment_id)
+    {
+        $comment_id->spam = false;
+        if($comment_id->save())
+            Flash::push("Bỏ đánh dấu spam bình luận #$comment_id->id thành công", 'Hệ thống');
+        else
+            Flash::push("Bỏ đánh dấu spam bình luận #$comment_id->id thất bại", 'Hệ thống');
+
+        return redirect()->back();
+    }
+
+    public function approve(Comment $comment_id)
+    {
+        $comment_id->status_id = Comment::getStatusByName('approved');
+        if($comment_id->save())
+            Flash::push("Duyệt bình luận #$comment_id->id thành công", 'Hệ thống');
+        else
+            Flash::push("Duyệt bình luận #$comment_id->id thất bại", 'Hệ thống');
+
+        return redirect()->back();
+    }
+
+    public function unapprove(Comment $comment_id)
+    {
+        $comment_id->status_id = Comment::getStatusByName('pending');
+        $comment_id->save();
+        if($comment_id->save())
+            Flash::push("Bỏ duyệt bình luận #$comment_id->id thành công", 'Hệ thống');
+        else
+            Flash::push("Bỏ duyệt bình luận #$comment_id->id thất bại", 'Hệ thống');
+
+        return redirect()->back();
+    }
+
+    public function trash(Comment $comment_id)
+    {
+        $comment_id->status_id = Comment::getStatusByName('trash');
+        $comment_id->save();
+
+        if($comment_id->save())
+            Flash::push("Cho bình luận #$comment_id->id vào thùng rác thành công", 'Hệ thống');
+        else
+            Flash::push("Cho bình luận #$comment_id->id vào thùng rác thất bại", 'Hệ thống');
+
+        return redirect()->back();
+    }
+
+    public function delete(Comment $comment_id)
+    {
+        if($comment_id->delete())
+            Flash::push("Xóa bình luận #$comment_id->id thành công", 'Hệ thống');
+        else
+            Flash::push("Xóa bình luận #$comment_id->id thất bại", 'Hệ thống');
+
+        return redirect()->back();
     }
 }

@@ -89,7 +89,7 @@ class Comment extends Model
         return $this->status_id == self::getStatusByName($name);
     }
 
-    private static function getStatusByName($name)
+    public static function getStatusByName($name)
     {
         switch($name)
         {

@@ -64,4 +64,10 @@ Route::post('/admin/feedbacks', 'FeedbacksController@check');
 Route::post('/admin/feedbacks/config', 'FeedbacksController@postConfig');
 
 Route::get('/admin/comments', 'CommentsController@index');
+Route::get('/admin/comments/{comment_id}/spam', 'CommentsController@spam');
+Route::get('/admin/comments/{comment_id}/notspam', 'CommentsController@notspam');
+Route::get('/admin/comments/{comment_id}/approve', 'CommentsController@approve');
+Route::get('/admin/comments/{comment_id}/unapprove', 'CommentsController@unapprove');
+Route::get('/admin/comments/{comment_id}/trash', 'CommentsController@trash');
+Route::get('/admin/comments/{comment_id}/delete', 'CommentsController@delete');
 Route::post('/admin/comments/config', 'CommentsController@postConfig');
