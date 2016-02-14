@@ -84,6 +84,11 @@ class Comment extends Model
         $query->orContentContains($term);
     }
 
+    public function isStatus($name)
+    {
+        return $this->status_id == self::getStatusByName($name);
+    }
+
     private static function getStatusByName($name)
     {
         switch($name)

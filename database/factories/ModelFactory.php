@@ -30,7 +30,9 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
 $factory->define(App\Comment::class, function (Faker\Generator $faker) {
     return [
         'content' => $faker->paragraph,
-        'spam' => $faker->boolean(20)
+        'spam' => $faker->boolean(20),
+        'name' => $faker->name,
+        'email' => $faker->email
     ];
 });
 

@@ -63,46 +63,56 @@ app('navigator')
         <div class="col-lg-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5>Danh sách phản hồi</h5>
+                    <h5>Danh sách bình luận</h5>
                     <span class="text-muted small pull-right">{{ $comments->total() }} bình luận</span>
                 </div>
                 <div class="ibox-content">
                     <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="8" data-page-navigation=".footable-pagination">
                         <thead>
                         <tr>
-                            @if(!$filter_hide_spam)
-                                <th data-sort-ignore="true" width="10px"></th>
-                            @endif
                             <th data-sort-ignore="true" data-hide="phone">Người dùng</th>
                             <th data-sort-ignore="true" width="40%">Nội dung</th>
                             <th data-sort-ignore="true" data-hide="phone" width="20%">Bài viết</th>
                             <th data-sort-ignore="true" data-hide="phone">Ngày nhận</th>
-                            <th data-sort-ignore="true" width="125px"><span class="pull-right">Hành động</span></th>
                         </tr>
                         </thead>
                         <tbody>
                         @foreach($comments as $comment)
                             <tr>
-                                @if(!$filter_hide_spam)
-                                    @if($comment->spam)
-                                        <td class="danger">
-                                            <span> </span>
-                                        </td>
+                                <td>
+                                    @if($comment->user)
+                                    <a href="{{ URL::action('CommentsController@index', ['id' => $comment->user->id]) }}">
+                                        {{ $comment->user->name }}
+                                    </a>
                                     @else
-                                        <td></td>
+                                        <div>{{ $comment->name }}</div>
+                                        <a href="mailto:{{ $comment->email }}" target="_top">{{ $comment->email }}</a>
                                     @endif
-                                @endif
-                                <td><a href="{{ URL::action('FeedbacksController@listByUser', ['id' => $comment->user->id]) }}">{{ $comment->user->name }}</a></td>
-                                <td>{{ $comment->content }}</td>
+                                </td>
+                                <td>
+                                    {{ $comment->content }}
+                                    <ul class="list-inline" style="padding-top: 5px; margin-bottom: 0px;">
+                                        @if($filter_status_type == 'pending')
+                                            <li><a href="" class="text-success">Duyệt</a></li>
+                                        @elseif($filter_status_type == 'approved')
+                                            <li><a href="" class="text-success">Bỏ duyệt</a></li>
+                                        @endif
+                                        <li>
+                                        @if($comment->spam)
+                                            <a href="" class="text-info">Không phải spam</a>
+                                        @else
+                                            <a href="" class="text-warning">Spam</a>
+                                        @endif
+                                        </li>
+                                        @if($filter_status_type == 'trash')
+                                            <li><a href="" class="text-danger">Xóa</a></li>
+                                        @else
+                                            <li><a href="" class="text-danger">Rác</a></li>
+                                        @endif
+                                    </ul>
+                                </td>
                                 <td><a href="{{ URL::action('FeedbacksController@listByPost', ['id' => $comment->post->id]) }}">{{$comment->post->title}}</a></td>
                                 <td>{{ $comment->created_at }}</td>
-                                <td>
-                                    <div class="btn-group pull-right">
-                                        <a href="" class="btn-white btn btn-xs">Sửa</a>
-                                        <a href="" target="_blank" class="btn-white btn btn-xs">Spam</a>
-                                        <a href="" target="_blank" class="btn-white btn btn-xs">Xóa</a>
-                                    </div>
-                                </td>
                             </tr>
                         @endforeach
                         </tbody>

@@ -52,11 +52,15 @@ class DatabaseSeeder extends Seeder
         DB::table('comment')->delete();
         for($i = 0; $i < 200; $i++)
         {
-            $comment = factory('App\Comment')->make([
-                'user_id' => $users->random()->id,
+            $chance = random_int(0,100);
+            $attributes = [
                 'post_id' => $posts[random_int(0, count($posts)-1)],
                 'status_id' => $post_status->random()->id
-            ]);
+            ];
+            if($chance <= 20)
+                $attributes = array_merge($attributes, ['user_id' =>  $users->random()->id, 'name' => null, 'email' => null]);
+
+            $comment = factory('App\Comment')->make($attributes);
             $comment->save();
             $comments[] = $comment->id;
         }
