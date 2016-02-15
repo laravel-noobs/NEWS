@@ -78,7 +78,7 @@ app('navigator')
                         </thead>
                         <tbody>
                         @foreach($comments as $comment)
-                            <tr>
+                            <tr  class="{{ $comment->spam ? 'warning' : '' }}">
                                 <td>
                                     @if($comment->user)
                                     <a href="{{ URL::action('CommentsController@index', ['id' => $comment->user->id]) }}">
@@ -91,7 +91,7 @@ app('navigator')
                                 </td>
                                 <td>
                                     {{ $comment->content }}
-                                    <ul class="list-inline" style="padding-top: 5px; margin-bottom: 0px;">
+                                    <ul class="list-inline action" style="padding-top: 5px; margin-bottom: 0px;">
                                         @if($filter_status_type == 'pending')
                                             <li><a href="{{ URL::action('CommentsController@approve', ['id' => $comment->id]) }}" class="text-success">Duyệt</a></li>
                                             <li style="padding: 0px">|</li>
@@ -116,14 +116,14 @@ app('navigator')
                                         <li class="pull-right"><a href="{{ URL::action('CommentsController@edit', ['id' => $comment->id]) }}">Sửa</a></li>
                                     </ul>
                                 </td>
-                                <td><a href="{{ URL::action('FeedbacksController@listByPost', ['id' => $comment->post->id]) }}">{{$comment->post->title}}</a></td>
+                                <td><a href="{{ URL::action('PostsController@show', ['id' => $comment->post->id]) }}">{{$comment->post->title}}</a></td>
                                 <td>{{ $comment->created_at }}</td>
                             </tr>
                         @endforeach
                         </tbody>
                         <tfoot>
                         <tr>
-                            <td colspan="{{ $filter_hide_spam ? 5 : 6 }}">
+                            <td colspan="5">
                                 <div class="pull-right">{!! $comments->links() !!}</div>
                             </td>
                         </tr>
