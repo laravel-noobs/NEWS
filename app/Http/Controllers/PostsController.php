@@ -61,7 +61,7 @@ class PostsController extends Controller
     {
         $configs = $this->read_configs(['filter.status_type', 'filter.category', 'filter.search_term']);
 
-        $posts = Post::with(['category', 'user', 'postStatus', 'feedbacksCount', 'commentsCount'])
+        $posts = Post::with(['category', 'user', 'status', 'feedbacksCount', 'commentsCount'])
             ->hasStatus($configs['filter_status_type']);
 
         if($configs['filter_category'] != '')
@@ -227,7 +227,19 @@ class PostsController extends Controller
      */
     public function edit($id)
     {
-
+        $post = Post::with([
+            'status',
+            'user' => function($query) {
+                $query->addSelect(['id', 'name']);
+            },
+            'tags' => function($query) {
+                $query->addSelect(['id', 'name']);
+            }
+        ])->findOrFail($id);
+        $categories = Category::all(['id', 'name']);
+        $post_status = PostStatus::all(['id', 'name']);
+        $post_status_default_id = 2;
+        return view('admin.post_edit', compact(['post', 'categories','post_status','post_status_default_id']));
     }
 
     /**

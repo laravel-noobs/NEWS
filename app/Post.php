@@ -60,7 +60,7 @@ class Post extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function postStatus()
+    public function status()
     {
         return $this->belongsTo('App\PostStatus', 'status_id', 'id');
     }
