@@ -92,9 +92,33 @@ class CommentsController extends Controller
         return view('admin.comment_edit', compact('comment', 'comment_status'));
     }
 
-    public function update(Request $request)
+    public function update($id, Request $request)
     {
-        dd($request);
+        $comment = Comment::findOrFail($id);
+
+        $this->validate($request, [
+            'user_id' => 'required_without:name,email|exists:user,id',
+            'name' => 'required_without:user_id|min:4|max:20',
+            'email' => 'required_without:user_id|email',
+            'post_id' => 'required|exists:post,id',
+            'status_id' => 'required|exists:comment_status,id',
+            'spam' => 'boolean',
+            'created_at' => 'date_format:Y-m-d H:i:s'
+        ]);
+
+        $input = $request->input();
+        $comment->spam = isset($input['spam']) ? true : false;
+        $comment->created_at = $input['created_at'];
+        $comment->post_id = $input['post_id'];
+        $comment->user_id = isset($input['user_id']) ? $input['user_id'] : null;
+        $comment->fill($input);
+
+        if($comment->save())
+            Flash::push("Sửa bình luận #$comment->id thành công", 'Hệ thống');
+        else
+            Flash::push("Sửa bình luận #$comment->id thất bại", 'Hệ thống');
+
+        return Redirect::action('CommentsController@index');
     }
 
     /**

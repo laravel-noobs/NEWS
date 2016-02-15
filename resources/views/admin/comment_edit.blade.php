@@ -30,7 +30,7 @@ app('navigator')
                             <div class="form-group {{ count($errors->get('name')) > 0 ? 'has-error' : '' }}">
                                 <label class="col-sm-2 control-label">Tên</label>
                                 <div class="col-sm-10">
-                                    <input {{ $comment->user ? 'disabled="disabled"' : '' }} placeholder="Nhập tên khách" id="name" name="title" value="{{ old('name', $comment->name) }}" type="text" class="form-control">
+                                    <input {{ $comment->user ? 'disabled="disabled"' : '' }} placeholder="Nhập tên khách" id="name" name="name" value="{{ old('name', $comment->name) }}" type="text" class="form-control">
                                     @foreach($errors->get('name') as $err)
                                         <label class="error" for="name">{{ $err }}</label>
                                     @endforeach
@@ -125,7 +125,7 @@ app('navigator')
                                         </select>
                                         <div class="i-checks input-group-addon">
                                             <label style="margin-bottom: 0">
-                                                <input type="checkbox" name="spam" {{  $comment->spam ? 'checked' : '' }}/> Spam
+                                                <input  value="1" type="checkbox" name="spam" {{  $comment->spam ? 'checked' : '' }}/> Spam
                                             </label>
                                         </div>
                                     </div>
