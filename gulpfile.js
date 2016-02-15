@@ -45,6 +45,7 @@ elixir(function(mix) {
 
         .scripts([
             bower + 'moment/moment.js',
+            bower + 'moment-timezone/builds/moment-timezone-with-data.js',
             bower + 'moment/locale/vi.js',
             bower + 'metisMenu/dist/metisMenu.js',
             bower + 'pace/pace.js',

@@ -260,4 +260,17 @@ class UsersController extends Controller
         $user->verifyEmail();
         return view('unify.email_verified_welcome');
     }
+
+    /**
+     * @param Request $request
+     * @return null
+     */
+    public function queryUsers(Request $request)
+    {
+        $term = $request->request->get('query');
+        if(strlen($term) < 3)
+            return null;
+        $users = User::searchByTerm($term)->get(['id', 'name']);
+        return $users;
+    }
 }

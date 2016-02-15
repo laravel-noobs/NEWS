@@ -146,6 +146,10 @@ return [
             'icon_class' => 'fa fa-comments',
             'action' => 'CommentsController@index'
         ],
+        'comment_edit' =>[
+            'text' => 'Sửa',
+            'icon_class' => 'fa fa-wrench'
+        ],
         'search_result' => [
             'text' => 'Kết quả tìm kiếm',
             'icon_class' => 'fa fa-search',

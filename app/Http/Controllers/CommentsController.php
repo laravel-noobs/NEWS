@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\CommentStatus;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -44,6 +45,9 @@ class CommentsController extends Controller
         $this->load_config('filter');
     }
 
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function index()
     {
         $configs = $this->read_configs(['filter.status_type', 'filter.search_term', 'filter.hide_spam']);
@@ -73,6 +77,30 @@ class CommentsController extends Controller
         return view('admin.comment_index', array_merge(compact(['comments']), $configs));
     }
 
+    public function edit($id)
+    {
+        $comment = Comment::with([
+            'status',
+            'user' => function($query) {
+                $query->addSelect(['id', 'name']);
+            },
+            'post' => function($query) {
+                $query->addSelect(['id', 'title', 'slug']);
+            }
+        ])->findOrFail($id);
+        $comment_status = CommentStatus::all(['id', 'name']);
+        return view('admin.comment_edit', compact('comment', 'comment_status'));
+    }
+
+    public function update(Request $request)
+    {
+        dd($request);
+    }
+
+    /**
+     * @param Comment $comment_id
+     * @return mixed
+     */
     public function spam(Comment $comment_id)
     {
         $comment_id->spam = true;
@@ -83,6 +111,11 @@ class CommentsController extends Controller
 
         return redirect()->back();
     }
+
+    /**
+     * @param Comment $comment_id
+     * @return mixed
+     */
     public function notspam(Comment $comment_id)
     {
         $comment_id->spam = false;
@@ -94,6 +127,10 @@ class CommentsController extends Controller
         return redirect()->back();
     }
 
+    /**
+     * @param Comment $comment_id
+     * @return mixed
+     */
     public function approve(Comment $comment_id)
     {
         $comment_id->status_id = Comment::getStatusByName('approved');
@@ -105,6 +142,10 @@ class CommentsController extends Controller
         return redirect()->back();
     }
 
+    /**
+     * @param Comment $comment_id
+     * @return mixed
+     */
     public function unapprove(Comment $comment_id)
     {
         $comment_id->status_id = Comment::getStatusByName('pending');
@@ -117,6 +158,10 @@ class CommentsController extends Controller
         return redirect()->back();
     }
 
+    /**
+     * @param Comment $comment_id
+     * @return mixed
+     */
     public function trash(Comment $comment_id)
     {
         $comment_id->status_id = Comment::getStatusByName('trash');
@@ -130,6 +175,11 @@ class CommentsController extends Controller
         return redirect()->back();
     }
 
+    /**
+     * @param Comment $comment_id
+     * @return mixed
+     * @throws \Exception
+     */
     public function delete(Comment $comment_id)
     {
         if($comment_id->delete())

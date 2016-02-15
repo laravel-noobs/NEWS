@@ -94,8 +94,10 @@ app('navigator')
                                     <ul class="list-inline" style="padding-top: 5px; margin-bottom: 0px;">
                                         @if($filter_status_type == 'pending')
                                             <li><a href="{{ URL::action('CommentsController@approve', ['id' => $comment->id]) }}" class="text-success">Duyệt</a></li>
+                                            <li style="padding: 0px">|</li>
                                         @elseif($filter_status_type == 'approved')
                                             <li><a href="{{ URL::action('CommentsController@unapprove', ['id' => $comment->id]) }}" class="text-success">Bỏ duyệt</a></li>
+                                            <li style="padding: 0px">|</li>
                                         @endif
                                         <li>
                                         @if($comment->spam)
@@ -105,10 +107,13 @@ app('navigator')
                                         @endif
                                         </li>
                                         @if($filter_status_type == 'trash')
-                                            <li><a href="{{ URL::action('CommentsController@delete', ['id' => $comment->id]) }}" class="text-danger">Xóa</a></li>
+                                            <li class="pull-right"><a href="{{ URL::action('CommentsController@delete', ['id' => $comment->id]) }}" class="text-danger">Xóa</a></li>
+                                            <li class="pull-right" style="padding: 0px">|</li>
                                         @else
+                                            <li style="padding: 0px">|</li>
                                             <li><a href="{{ URL::action('CommentsController@trash', ['id' => $comment->id]) }}" class="text-danger">Rác</a></li>
                                         @endif
+                                        <li class="pull-right"><a href="{{ URL::action('CommentsController@edit', ['id' => $comment->id]) }}">Sửa</a></li>
                                     </ul>
                                 </td>
                                 <td><a href="{{ URL::action('FeedbacksController@listByPost', ['id' => $comment->post->id]) }}">{{$comment->post->title}}</a></td>

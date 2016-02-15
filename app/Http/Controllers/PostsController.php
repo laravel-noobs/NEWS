@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Auth;
@@ -276,5 +277,23 @@ class PostsController extends Controller
         $slug = str_slug($name);
         $link = array('permalink'=> $slug);
         return $link;
+    }
+
+    /**
+     * @param Request $request
+     * @return null
+     */
+    public function queryPostsByTitle(Request $request)
+    {
+        $term = $request->request->get('query');
+        if(strlen($term) < 3)
+            return null;
+
+        $posts = Post::hasTitleContains($term)->get(['id', 'title', 'slug']);
+
+        foreach($posts as $post)
+            $post->url = URL::action('PostsController@show', ['id' => $post->id]);
+
+        return $posts;
     }
 }
