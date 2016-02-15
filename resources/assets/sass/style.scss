@@ -1,3 +1,13 @@
+/* Action bar */
+td:hover ul.action {
+  visibility: visible;
+}
+
+td ul.action {
+  visibility: hidden;
+}
+
+
 /* footable plugin tweak */
 @font-face {
   font-family: 'footable';

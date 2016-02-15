@@ -61,7 +61,7 @@ class PostsController extends Controller
     {
         $configs = $this->read_configs(['filter.status_type', 'filter.category', 'filter.search_term']);
 
-        $posts = Post::with(['category', 'user', 'postStatus'])
+        $posts = Post::with(['category', 'user', 'postStatus', 'feedbacksCount', 'commentsCount'])
             ->hasStatus($configs['filter_status_type']);
 
         if($configs['filter_category'] != '')
@@ -240,6 +240,54 @@ class PostsController extends Controller
     public function update(Request $request, $id)
     {
         //
+    }
+
+    /**
+     * @param Post $comment_id
+     * @return mixed
+     */
+    public function approve(Post $post_id)
+    {
+        $post_id->status_id = Post::getStatusByName('approved');
+        if($post_id->save())
+            Flash::push("Duyệt bài viết \\\"$post_id->title\\\" thành công", 'Hệ thống');
+        else
+            Flash::push("Duyệt bài viết \\\"$post_id->title\\\" thất bại", 'Hệ thống');
+
+        return redirect()->back();
+    }
+
+    /**
+     * @param Post $comment_id
+     * @return mixed
+     */
+    public function unapprove(Post $post_id)
+    {
+        $post_id->status_id = Post::getStatusByName('pending');
+        $post_id->save();
+        if($post_id->save())
+            Flash::push("Bỏ duyệt bài viết \\\"$post_id->title\\\" thành công", 'Hệ thống');
+        else
+            Flash::push("Bỏ duyệt bài viết \\\"$post_id->title\\\" thất bại", 'Hệ thống');
+
+        return redirect()->back();
+    }
+
+    /**
+     * @param Post $comment_id
+     * @return mixed
+     */
+    public function trash(Post $post_id)
+    {
+        $post_id->status_id = Post::getStatusByName('trash');
+        $post_id->save();
+
+        if($post_id->save())
+            Flash::push("Cho bài viết \\\"$post_id->title\\\" vào thùng rác thành công", 'Hệ thống');
+        else
+            Flash::push("Cho bài viết \\\"$post_id->title\\\" vào thùng rác thất bại", 'Hệ thống');
+
+        return redirect()->back();
     }
 
     /**

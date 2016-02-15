@@ -32,6 +32,10 @@ class RouteServiceProvider extends ServiceProvider
         Route::bind('comment_id', function($comment_id){
             return \App\Comment::findOrFail($comment_id, ['id']);
         });
+
+        Route::bind('post_id', function($post_id){
+            return \App\Post::findOrFail($post_id, ['id', 'title']);
+        });
     }
 
     /**

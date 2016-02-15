@@ -96,30 +96,41 @@ app('navigator')
                             <th data-sort-ignore="true" data-toggle="true" width="50%">Tiêu đề</th>
                             <th data-sort-ignore="true" data-hide="all">Tác giả</th>
                             <th data-sort-ignore="true">Chuyên mục</th>
-                            <th data-hide="all">Ngày đăng</th>
-                            <th data-sort-ignore="true">Tình trạng</th>
+                            <th data-sort-ignore="true" data-hide="phone">Phản hồi</th>
+                            <th data-sort-ignore="true" data-hide="phone">Bình luận</th>
                             <th data-sort-ignore="true">Lượt xem</th>
-                            <th data-sort-ignore="true"><span class="pull-right">Hành động</span></th>
+                            <th data-sort-ignore="true" data-hide="phone">Ngày đăng</th>
                         </tr>
                         </thead>
                         <tbody>
                         @foreach($posts as $post)
                             <tr>
-                                <td>{{ $post->title }}</td>
+                                <td>
+                                    <strong>{{ $post->title }}</strong>
+                                    <ul class="list-inline action" style="padding-top: 5px; margin-bottom: 0px;">
+                                        @if($filter_status_type == 'pending' || $filter_status_type == 'draft')
+                                            <li class=""><a href="{{ URL::action('PostsController@approve', ['id' => $post->id]) }}" class="text-success">Duyệt</a></li>
+                                            <li style="padding: 0px">|</li>
+                                        @endif
+                                        @if($filter_status_type == 'approved'  || $filter_status_type == 'draft')
+                                            <li class=""><a href="{{ URL::action('PostsController@unapprove', ['id' => $post->id]) }}" class="text-success">Bỏ duyệt</a></li>
+                                            <li style="padding: 0px">|</li>
+                                        @endif
+                                        @if($filter_status_type == 'trash')
+                                            <li class="pull-right"><a data-toggle="modal" href="#modal-post-delete-prompt" data-post_title="{{ $post->title }}" data-post_id="{{ $post->id }}" class="text-danger">Xóa</a></li>
+                                            <li class="pull-right" style="padding: 0px">|</li>
+                                        @else
+                                            <li class=""><a href="{{ URL::action('PostsController@trash', ['id' => $post->id]) }}" class="text-danger">Rác</a></li>
+                                        @endif
+                                        <li class="pull-right"><a href="{{ URL::action('PostsController@edit', ['id' => $post->id]) }}">Sửa</a></li>
+                                    </ul>
+                                </td>
                                 <td>{{ $post->user->name }}</td>
                                 <td>{{ $post->category != null ? $post->category->name : '' }}</td>
-                                <td>{{ $post->published_at }}</td>
-                                <td>{{ $post->postStatus->name }}</td>
+                                <td><a href="{{ URL::action('FeedbacksController@listByPost', ['id' => $post->id]) }}"><span>{{ $post->feedbacksCount }}</span></a></td>
+                                <td>{{ $post->commentsCount }}</td>
                                 <td>{{ $post->view }}</td>
-                                <td>
-                                    <div class="btn-group pull-right">
-                                        @if($post->postStatus->id != 4)
-                                            <a href="#" target="_blank" class="btn-white btn btn-xs">Rác</a>
-                                        @endif
-                                        <a href="#"  class="btn-white btn btn-xs">Sửa</a>
-                                        <a data-toggle="modal" href="#modal-post-delete-prompt" data-post_title="{{ $post->title }}" data-post_id="{{ $post->id }}" class="btn-white btn btn-xs">Xóa</a>
-                                    </div>
-                                </td>
+                                <td>{{ $post->published_at }}</td>
                             </tr>
                         @endforeach
                         </tbody>
