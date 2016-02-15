@@ -25,7 +25,7 @@ class Comment extends Model
      *
      * @var array
      */
-    protected $fillable = ['content', 'post_id', 'user_id', 'created_at', 'updated_at'];
+    protected $fillable = ['name', 'email', 'content'];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -89,7 +89,7 @@ class Comment extends Model
         return $this->status_id == self::getStatusByName($name);
     }
 
-    private static function getStatusByName($name)
+    public static function getStatusByName($name)
     {
         switch($name)
         {

@@ -93,22 +93,27 @@ app('navigator')
                                     {{ $comment->content }}
                                     <ul class="list-inline" style="padding-top: 5px; margin-bottom: 0px;">
                                         @if($filter_status_type == 'pending')
-                                            <li><a href="" class="text-success">Duyệt</a></li>
+                                            <li><a href="{{ URL::action('CommentsController@approve', ['id' => $comment->id]) }}" class="text-success">Duyệt</a></li>
+                                            <li style="padding: 0px">|</li>
                                         @elseif($filter_status_type == 'approved')
-                                            <li><a href="" class="text-success">Bỏ duyệt</a></li>
+                                            <li><a href="{{ URL::action('CommentsController@unapprove', ['id' => $comment->id]) }}" class="text-success">Bỏ duyệt</a></li>
+                                            <li style="padding: 0px">|</li>
                                         @endif
                                         <li>
                                         @if($comment->spam)
-                                            <a href="" class="text-info">Không phải spam</a>
+                                            <a href="{{ URL::action('CommentsController@notspam', ['id' => $comment->id]) }}" class="text-info">Không phải spam</a>
                                         @else
-                                            <a href="" class="text-warning">Spam</a>
+                                            <a href="{{ URL::action('CommentsController@spam', ['id' => $comment->id]) }}" class="text-warning">Spam</a>
                                         @endif
                                         </li>
                                         @if($filter_status_type == 'trash')
-                                            <li><a href="" class="text-danger">Xóa</a></li>
+                                            <li class="pull-right"><a href="{{ URL::action('CommentsController@delete', ['id' => $comment->id]) }}" class="text-danger">Xóa</a></li>
+                                            <li class="pull-right" style="padding: 0px">|</li>
                                         @else
-                                            <li><a href="" class="text-danger">Rác</a></li>
+                                            <li style="padding: 0px">|</li>
+                                            <li><a href="{{ URL::action('CommentsController@trash', ['id' => $comment->id]) }}" class="text-danger">Rác</a></li>
                                         @endif
+                                        <li class="pull-right"><a href="{{ URL::action('CommentsController@edit', ['id' => $comment->id]) }}">Sửa</a></li>
                                     </ul>
                                 </td>
                                 <td><a href="{{ URL::action('FeedbacksController@listByPost', ['id' => $comment->post->id]) }}">{{$comment->post->title}}</a></td>
@@ -169,6 +174,24 @@ app('navigator')
 
         $('.search-box button').on('click', function(){
             box = $(this).parents('.search-box');
+            $.ajax({
+                url: location.pathname + '/config',
+                method: 'post',
+                data: { name: "filter.search_term", value: box.find('#search-input').val() },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                statusCode: {
+                    400: function(jqXHR, textStatus, errorThrown){
+                        toastr.error(jqXHR.responseJSON.join('<br/>'));
+                    }
+                }
+            }).done(function() {
+                location.reload();
+            });
+        });
+
+        $('a.action').on('click', function(){
             $.ajax({
                 url: location.pathname + '/config',
                 method: 'post',

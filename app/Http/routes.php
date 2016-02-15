@@ -29,6 +29,7 @@ Route::post('/admin/users/{id}/edit', 'UsersController@update');
 Route::get('/admin/users/{id}/delete', 'UsersController@delete');
 Route::post('/admin/users/{id}/show', 'UsersController@show');
 Route::post('/admin/users/ban', 'UsersController@ban');
+Route::get('/admin/users/search', 'UsersController@queryUsers');
 Route::post('/admin/users/config', 'UsersController@postConfig');
 
 Route::get('/admin/posts','PostsController@index');
@@ -38,6 +39,7 @@ Route::get('/admin/posts/{id}/edit', 'PostsController@edit');
 Route::get('/admin/posts/{id}/show', 'PostsController@show');
 Route::post('/admin/posts/delete', 'PostsController@destroy');
 Route::get('/admin/posts/getpermalink/{name}','PostsController@permalink');
+Route::get('/admin/posts/search/title', 'PostsController@queryPostsByTitle');
 Route::post('/admin/posts/config', 'PostsController@postConfig');
 
 Route::get('/dang-nhap', 'Auth\AuthController@getLogin');
@@ -64,4 +66,12 @@ Route::post('/admin/feedbacks', 'FeedbacksController@check');
 Route::post('/admin/feedbacks/config', 'FeedbacksController@postConfig');
 
 Route::get('/admin/comments', 'CommentsController@index');
+Route::get('/admin/comments/{comment_id}/spam', 'CommentsController@spam');
+Route::get('/admin/comments/{comment_id}/notspam', 'CommentsController@notspam');
+Route::get('/admin/comments/{comment_id}/approve', 'CommentsController@approve');
+Route::get('/admin/comments/{comment_id}/unapprove', 'CommentsController@unapprove');
+Route::get('/admin/comments/{comment_id}/trash', 'CommentsController@trash');
+Route::get('/admin/comments/{comment_id}/delete', 'CommentsController@delete');
+Route::get('/admin/comments/{id}/edit', 'CommentsController@edit');
+Route::post('/admin/comments/{id}/edit', 'CommentsController@update');
 Route::post('/admin/comments/config', 'CommentsController@postConfig');
