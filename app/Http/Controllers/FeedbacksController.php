@@ -79,7 +79,7 @@ class FeedbacksController extends Controller
             'feedbacks' => function($query) use($filter_show_checked)
             {
                 if(!$filter_show_checked)
-                    $query->unChecked();
+                    $query->notChecked();
                 $query->orderBy('created_at', 'desc');
             },
             'feedbacks.user' => function($query)
