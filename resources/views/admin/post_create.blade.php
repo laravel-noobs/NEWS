@@ -195,8 +195,8 @@ app('navigator')
     <script type="text/javascript">
         $(function () {
             $('#datetimepicker_published_at').datetimepicker({
-                format: 'HH:mm - dddd DD/MM/YYYY',
-                defaultDate: moment.utc().format()
+                format: 'Do MMMM YYYY HH:mm:ss',
+                defaultDate: moment().tz(moment.tz.guess()).format('YYYY-MM-DD HH:mm:ss')
             });
         });
     </script>
@@ -204,11 +204,11 @@ app('navigator')
         $(".category").select2({
             placeholder: "Chọn một chuyên mục",
             tags: true
-        });
-        $(".category").trigger("change");
+        }).trigger("change");
         $(".tags").select2({
             tags: true
-        })
+        });
+
         var flag = true;
         $('#title').on('change', function () {
             var title = $('#title').val();
@@ -220,7 +220,7 @@ app('navigator')
                         $('#permalink').text(data.permalink);
                         $('#slug').val(data.permalink);
                     }
-                })
+                });
                 $('.slug').removeClass('hidden');
                 flag = false;
             }
@@ -242,14 +242,20 @@ app('navigator')
 
         $('button[type="submit"]').click(function(e)
         {
-            $('#published_at').val($('#datetimepicker_published_at').data("DateTimePicker").date().utc().format('YYYY-MM-DD hh:mm:ss'));
+            // get datetime from datetimepicker plugin
+            time = $('#datetimepicker_published_at').data("DateTimePicker").date();
+            // corecting timezone (wrong because of datetimepicker bug)
+            time = moment.tz(time.format('YYYY-MM-DD HH:mm:ss'), moment.tz.guess()).format();
+            // converting timezone to UTC and send back to server
+            $('#published_at').val(moment(time).utc().format('YYYY-MM-DD HH:mm:ss'));
+
             $('#tags option[data-select2-tag="true"]').each(function(){
                 $(this).val('*-' + $(this).text());
             }); // manually set value to non existed tags
             $('.category option[data-select2-tag="true"]').each(function(){
                 $(this).val('*-' + $(this).text());
             }); // manually set value to non existed tags
-        })
+        });
 
         $("#tags").select2({
             tags: true,
