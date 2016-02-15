@@ -24,5 +24,3 @@ var navbarMinimize = function(){
         $('body').removeClass('mini-navbar')
 };
 
-
-

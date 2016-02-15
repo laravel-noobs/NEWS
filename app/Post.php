@@ -90,6 +90,60 @@ class Post extends Model
     }
 
     /**
+     *
+     * Count number of posts belongs to this user
+     *
+     * @return mixed
+     */
+    public function commentsCount()
+    {
+        return $this->hasOne('App\Comment')
+            ->selectRaw('post_id, count(*) as aggregate')
+            ->groupBy('post_id');
+    }
+
+    /**
+     *
+     * postsCount attribute to count number of post belongs to this user
+     *
+     * @return int
+     */
+    public function getCommentsCountAttribute()
+    {
+        if (!$this->relationLoaded('commentsCount'))
+            $this->load('commentsCount');
+        $related = $this->getRelation('commentsCount');
+        return ($related) ? (int) $related->aggregate : 0;
+    }
+
+    /**
+     *
+     * Count number of feedbacks belongs to this post
+     *
+     * @return mixed
+     */
+    public function feedbacksCount()
+    {
+        return $this->hasOne('App\Feedback')
+            ->selectRaw('post_id, count(*) as aggregate')
+            ->groupBy('post_id');
+    }
+
+    /**
+     *
+     * postsCount attribute to count number of feedbacks belongs to this post
+     *
+     * @return int
+     */
+    public function getFeedbacksCountAttribute()
+    {
+        if (!$this->relationLoaded('feedbacksCount'))
+            $this->load('feedbacksCount');
+        $related = $this->getRelation('feedbacksCount');
+        return ($related) ? (int) $related->aggregate : 0;
+    }
+
+    /**
      * @return int|string
      */
     public static function publishPostsAsScheduled()
@@ -184,7 +238,7 @@ class Post extends Model
      * @param $name
      * @return int|null
      */
-    private static function getStatusByName($name)
+    public static function getStatusByName($name)
     {
         switch($name)
         {
