@@ -110,6 +110,7 @@ class CommentsController extends Controller
         $comment->spam = isset($input['spam']) ? true : false;
         $comment->created_at = $input['created_at'];
         $comment->post_id = $input['post_id'];
+        $comment->status_id = $input['status_id'];
         $comment->user_id = isset($input['user_id']) ? $input['user_id'] : null;
         $comment->fill($input);
 
