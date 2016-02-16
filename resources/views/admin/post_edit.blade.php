@@ -37,7 +37,7 @@ app('navigator')
                             <div class="form-group slug {{ count($errors->get('slug')) > 0 ? 'has-error' : '' }}">
                                 <div class="col-md-12">
                                     <strong>Liên kết tĩnh: </strong>{{ Request::root() }}/<span id="permalink" title="Đường dẫn tĩnh tạm thời. Ấn để sửa phần này.">{{ old('slug', $post->slug) }}</span>
-                                    <input placeholder="" id="slug" name="slug" value="{{ old('slug', '') }}" type="text" class="form-control" style="display: none">
+                                    <input placeholder="" id="slug" name="slug" value="{{ old('slug', $post->slug) }}" type="text" class="form-control" style="display: none">
                                     <button id="btn-editslug" onclick="editpermalink();" type="button" class="btn btn-default btn-xs">Sửa</button>
                                     <button id="btn-okslug" onclick="okpermalink();" type="button" class="btn btn-default btn-xs" style="display: none">Ok</button>
                                     @foreach($errors->get('slug') as $err)
@@ -114,18 +114,31 @@ app('navigator')
                     </div>
                     <div class="ibox-content">
                         <div class="form-horizontal">
-                            <div class="form-group {{ count($errors->get('category_id')) > 0  ? 'has-error' : '' }}">
+                            <div class="form-group {{ count($errors->get('categorycategory_id')) > 0  ? 'has-error' : '' }}">
                                 <div class="col-sm-12">
                                     <select id="category_id" name="category_id" class="category form-control">
-                                        @foreach($categories as $cat)
-                                            @if(old('category_id', $post->category_id) == $cat['id'])
-                                                <option value="{{ $cat->id }}" selected="selected">{{ $cat->name }}</option>
-                                            @else
-                                                <option value="{{ $cat->id }}">{{ $cat->name }}</option>
-                                            @endif
-                                        @endforeach
+                                        @if(empty(old('category_name', null)))
+                                            @foreach($categories as $cat)
+                                                @if(old('category_id', $post->category_id) == $cat['id'])
+                                                    <option value="{{ old('category_id', $post->category_id) }}" selected="selected">{{ $cat['name'] }}</option>
+                                                @else
+                                                    <option value="{{ $cat['id'] }}">{{ $cat['name'] }}</option>
+                                                @endif
+                                            @endforeach
+                                        @else
+                                            <option value="{{ old('category_name') }}" selected="selected" data-select2-tag="true">{{ old('category_name') }}</option>
+                                            @foreach($categories as $cat)
+                                                <option value="{{ $cat['id'] }}">{{ $cat['name'] }}</option>
+                                            @endforeach
+                                        @endif
                                     </select>
                                     @foreach($errors->get('category_id') as $err)
+                                        <label class="error" for="category_id">{{ $err }}</label>
+                                    @endforeach
+                                    @foreach($errors->get('category_name') as $err)
+                                        <label class="error" for="category_id">{{ $err }}</label>
+                                    @endforeach
+                                    @foreach($errors->get('category_slug') as $err)
                                         <label class="error" for="category_id">{{ $err }}</label>
                                     @endforeach
                                 </div>
@@ -180,13 +193,14 @@ app('navigator')
         $(function () {
             $('#datetimepicker_published_at').datetimepicker({
                 format: 'Do MMMM YYYY HH:mm:ss',
-                defaultDate: moment().tz(moment.tz.guess()).format('YYYY-MM-DD HH:mm:ss')
+                defaultDate: moment.tz('{{ $post->published_at }}',moment.tz.guess()).format('YYYY-MM-DD HH:mm:ss')
             });
         });
     </script>
     <script>
         $(".category").select2({
             placeholder: "Chọn một chuyên mục",
+            tags: true
         }).trigger("change");
         $(".tags").select2({
             tags: true
