@@ -61,7 +61,7 @@ class PostsController extends Controller
     {
         $configs = $this->read_configs(['filter.status_type', 'filter.category', 'filter.search_term']);
 
-        $posts = Post::with(['category', 'user', 'postStatus', 'feedbacksCount', 'commentsCount'])
+        $posts = Post::with(['category', 'user', 'status', 'feedbacksCount', 'commentsCount'])
             ->hasStatus($configs['filter_status_type']);
 
         if($configs['filter_category'] != '')
@@ -105,46 +105,13 @@ class PostsController extends Controller
     {
         $input = $request->all();
 
-        $cat_id = $input['category_id'];
-        $cat = [];
-        if(strrpos($cat_id, '*-', -strlen($cat_id)) !== FALSE)
-        {
-            $input['category_id'] = null;
-            $cat_id = substr($cat_id, 2);
-            $cat = [
-                'category_name' => $cat_id,
-                'category_slug' => str_slug($cat_id)
-            ];
-        }
-
-        $tags = [];
-        $new_tags = [];
-        if(isset($input['tags']))
-        {
-            foreach($input['tags'] as $tag_id)
-            {
-                if(strrpos($tag_id, '*-', -strlen($tag_id)) !== FALSE)
-                {
-                    $tag_id = substr($tag_id, 2);
-                    $tag_slug = str_slug($tag_id);
-                    array_push($new_tags, ['name' => $tag_id, 'slug' => $tag_slug]);
-                }
-                else
-                {
-                    $tag = Tag::find($tag_id, ['id', 'name']);
-                    if($tag != null)
-                        array_push($tags, $tag);
-                }
-            }
-        }
-
-        $input = array_merge($input, $cat, ['new_tags' => $new_tags ], ['existed_tags' => $tags]);
+        list($input, $tags, $new_tags) = $this->prepareInput($input);
 
         $validator = Validator::make($input, [
             'title' => 'required|min:4',
             'slug' => 'required|min:4|unique:post,slug',
             'content' => 'required|min:40|max:2000',
-            'published_at' => 'required',
+            'published_at' => 'required|date_format:Y-m-d H:i:s',
             'status_id' => 'required|exists:post_status,id',
             'category_id' => 'exists:category,id',
             'new_tags.*.name' => 'required|min:4',
@@ -160,45 +127,7 @@ class PostsController extends Controller
                 ->withInput($input);
         }
 
-        $result = false;
-        DB::beginTransaction();
-        try
-        {
-            if($input['category_id'] == null)
-                $cat_id = Category::create(['name' => $input['category_name'], 'slug' => $input['category_slug']])->id;
-
-            $post = new Post($input);
-
-            foreach($new_tags as $tag)
-            {
-                $t = Tag::create($tag);
-                array_push($tags, $t);
-            }
-
-            $post->user_id = 1;//Auth::user()->id; // user_id = 1 for temporary development
-            $post->status_id = 1;
-            $post->category_id = $cat_id;
-            if($post->save())
-            {
-                $tags_id = [];
-                foreach($tags as $t)
-                    array_push($tags_id, $t->id);
-
-                $post->tags()->attach($tags_id);
-                DB::commit();
-                $result = true;
-            }
-            else
-            {
-                DB::rollBack();
-                $result = false;
-            }
-        }
-        catch (\Exception $e)
-        {
-            DB::rollBack();
-            $result = false;
-        }
+        list($result, $post) = $this->createTransaction($input, $new_tags, $tags);
 
         if($result)
             Flash::push("Thêm bài viết \\\"$post->title\\\" thành công", 'Hệ thống');
@@ -227,7 +156,21 @@ class PostsController extends Controller
      */
     public function edit($id)
     {
+        $post = Post::with([
+            'status',
+            'user' => function($query) {
+                $query->addSelect(['id', 'name']);
+            },
+            'tags' => function($query) {
+                $query->addSelect(['id', 'name']);
+            }
+        ])->findOrFail($id);
 
+        $categories = Category::all(['id', 'name']);
+        $post_status = PostStatus::all(['id', 'name']);
+        $post_status_default_id = 2;
+
+        return view('admin.post_edit', compact(['post', 'categories','post_status','post_status_default_id']));
     }
 
     /**
@@ -239,7 +182,38 @@ class PostsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $input = $request->all();
+
+        list($input, $tags, $new_tags) = $this->prepareInput($input);
+
+        $validator = Validator::make($input, [
+            'title' => 'required|min:4',
+            'slug' => 'required|min:4|unique:post,slug,' . $id,
+            'content' => 'required|min:40|max:2000',
+            'published_at' => 'required|date_format:Y-m-d H:i:s',
+            'status_id' => 'required|exists:post_status,id',
+            'category_id' => 'exists:category,id',
+            'new_tags.*.name' => 'required|min:4',
+            'new_tags.*.slug'=> 'required|min:4|unique:tag,slug',
+            'category_name' => 'required_without:category_id|min:4',
+            'category_slug' => 'required_without:category_id|min:4|unique:category,slug',
+        ]);
+
+        if($validator->fails())
+        {
+            return Redirect::back()
+                ->withErrors($validator)
+                ->withInput($input);
+        }
+
+        list($result, $post) = $this->updateTransaction($id, $input, $new_tags, $tags);
+
+        if($result)
+            Flash::push("Sửa bài viết \\\"$post->title\\\" thành công", 'Hệ thống');
+        else
+            Flash::push("Sửa bài viết thất bại", 'Hệ thống', "error");
+
+        return redirect()->back();
     }
 
     /**
@@ -343,5 +317,152 @@ class PostsController extends Controller
             $post->url = URL::action('PostsController@show', ['id' => $post->id]);
 
         return $posts;
+    }
+
+    /**
+     * @param $input
+     * @return array
+     */
+    protected function determineTags($input)
+    {
+        $tags = [];
+        $new_tags = [];
+        if (isset($input['tags'])) {
+            foreach ($input['tags'] as $tag_id) {
+                if (strrpos($tag_id, '*-', -strlen($tag_id)) !== FALSE) {
+                    $tag_id = substr($tag_id, 2);
+                    $tag_slug = str_slug($tag_id);
+                    array_push($new_tags, ['name' => $tag_id, 'slug' => $tag_slug]);
+                } else {
+                    $tag = Tag::find($tag_id, ['id', 'name']);
+                    if ($tag != null)
+                        array_push($tags, $tag);
+                }
+            }
+        }
+        return array($tags, $new_tags, $input);
+    }
+
+    /**
+     * @param $cat_id
+     * @param $input
+     * @return array
+     */
+    protected function determineCategory($cat_id, $input)
+    {
+        $cat = [];
+        if (strrpos($cat_id, '*-', -strlen($cat_id)) !== FALSE) {
+            $input['category_id'] = null;
+            $cat_id = substr($cat_id, 2);
+            $cat = [
+                'category_name' => $cat_id,
+                'category_slug' => str_slug($cat_id)
+            ];
+        }
+        return array($cat, $input);
+    }
+
+    /**
+     * @param $input
+     * @return array
+     */
+    protected function prepareInput($input)
+    {
+        list($cat, $input) = $this->determineCategory($input['category_id'], $input);
+
+        list($tags, $new_tags, $input) = $this->determineTags($input);
+
+        $input = array_merge($input, $cat, ['new_tags' => $new_tags], ['existed_tags' => $tags]);
+
+        return array($input, $tags, $new_tags);
+    }
+
+    /**
+     * @param $new_tags
+     * @return array
+     */
+    protected function createNewTags($new_tags, &$tags)
+    {
+        foreach ($new_tags as $tag) {
+            array_push($tags, Tag::create($tag));
+        }
+    }
+
+    /**
+     * @param $input
+     * @param $new_tags
+     * @param $tags
+     * @return array
+     */
+    protected function updateTransaction($id, $input, $new_tags, $tags)
+    {
+        $post = Post::findOrFail($id);
+
+        DB::beginTransaction();
+        try {
+            if ($input['category_id'] == null)
+                $input['category_id'] = Category::create(['name' => $input['category_name'], 'slug' => $input['category_slug']])->id;
+
+            $this->createNewTags($new_tags, $tags);
+
+            $post->user_id = \Auth::user()->id;
+            $post->status_id = $input['status_id'];
+            $post->category_id =  $input['category_id'];
+            $post->fill($input);
+
+            if ($post->save()) {
+                $post->tags()->sync(collect($tags)->pluck('id')->all());
+
+                DB::commit();
+                return array(true, $post);
+            }
+            else
+            {
+                DB::rollBack();
+                return array(false, $post);
+            }
+
+        } catch (Exception $e) {
+            DB::rollBack();
+            return array(false, null);
+        }
+    }
+
+    /**
+     * @param $input
+     * @param $new_tags
+     * @param $tags
+     * @return array
+     */
+    protected function createTransaction($input, $new_tags, $tags)
+    {
+        DB::beginTransaction();
+        try {
+            if ($input['category_id'] == null)
+                $input['category_id'] = Category::create(['name' => $input['category_name'], 'slug' => $input['category_slug']])->id;
+
+            $post = new Post($input);
+
+            $this->createNewTags($new_tags, $tags);
+
+            $post->user_id = \Auth::user()->id;
+            $post->status_id = $input['status_id'];
+            $post->category_id =  $input['category_id'];
+
+            if ($post->save()) {
+                $post->tags()->attach(collect($tags)->pluck('id')->all());
+                DB::commit();
+                return array(true, $post);
+            }
+            else
+            {
+                DB::rollBack();
+                return array(false, $post);
+            }
+
+        } catch (Exception $e) {
+            DB::rollBack();
+            return array(false, null);
+        }
     }
 }

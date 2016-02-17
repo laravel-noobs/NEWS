@@ -36,6 +36,7 @@ Route::get('/admin/posts','PostsController@index');
 Route::get('/admin/posts/create','PostsController@create');
 Route::post('/admin/posts','PostsController@store');
 Route::get('/admin/posts/{id}/edit', 'PostsController@edit');
+Route::post('/admin/posts/{id}/edit', 'PostsController@update');
 Route::get('/admin/posts/{id}/show', 'PostsController@show');
 Route::get('/admin/posts/getpermalink/{name}','PostsController@permalink');
 Route::get('/admin/posts/{post_id}/approve', 'PostsController@approve');
