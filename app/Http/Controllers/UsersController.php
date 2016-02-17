@@ -77,7 +77,7 @@ class UsersController extends Controller
         if($users->currentPage() != 1 && $users->count() == 0)
             return Redirect::action('UsersController@index');
 
-        $roles = Role::all(['id', 'name']);
+        $roles = Role::all(['id', 'label']);
 
         return view('admin.user_index', array_merge(compact('users', 'roles'), $configs));
     }

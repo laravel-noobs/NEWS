@@ -57,10 +57,10 @@ app('navigator')
                             <select id="role_id" name="role_id" class="role form-control">
                                 <option value="*">Tất cả vai trò</option>
                                 @foreach($roles as $role)
-                                    @if($filter_role == $role['id'])
-                                        <option value="{{ $role['id'] }}" selected="selected">{{ $role['name'] }}</option>
+                                    @if($filter_role == $role->id)
+                                        <option value="{{ $role->id }}" selected="selected">{{ $role->label }}</option>
                                     @else
-                                        <option value="{{ $role['id'] }}">{{ $role['name'] }}</option>
+                                        <option value="{{ $role->id }}">{{ $role->label }}</option>
                                     @endif
                                 @endforeach
                             </select>
@@ -127,7 +127,7 @@ app('navigator')
                              <td>{{ $user->name }}</td>
                              <td>{{ $user->last_name }} {{ $user->first_name }}</td>
                              <td>{{ $user->email }}</td>
-                             <td>{{ $user->role->name }}</td>
+                             <td>{{ $user->role->label }}</td>
                              <td>{{ $user->postsCount }}</td>
                              <td>{{ $user->feedbacksCount }}</td>
                              @if($filter_status_type != 'banned')
