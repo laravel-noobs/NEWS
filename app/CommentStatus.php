@@ -43,4 +43,19 @@ class CommentStatus extends Model
     {
         return $this->hasMany('App\Comment','status_id','id');
     }
+
+    public static function getStatusByName($name)
+    {
+        switch($name)
+        {
+            case 'pending':
+                return 1;
+            case 'approved':
+                return 2;
+            case 'trash':
+                return 3;
+            default:
+                return null;
+        }
+    }
 }

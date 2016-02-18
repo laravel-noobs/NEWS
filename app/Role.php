@@ -63,4 +63,19 @@ class Role extends Model
     {
         return $this->permissions()->save($permission);
     }
+
+    public static function getRoleIdByName($role)
+    {
+        switch($role)
+        {
+            case 'administrator':
+                return 1;
+            case 'editor':
+                return 2;
+            case 'collaborator':
+                return 3;
+            default:
+                return null;
+        }
+    }
 }

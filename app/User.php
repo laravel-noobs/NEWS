@@ -243,4 +243,9 @@ class User extends Model implements AuthenticatableContract,
 
         $this->save();
     }
+
+    public function isAdministrator()
+    {
+        return $this->role_id == Role::getRoleIdByName('administrator');
+    }
 }

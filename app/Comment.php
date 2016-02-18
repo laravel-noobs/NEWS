@@ -66,7 +66,7 @@ class Comment extends Model
     public function scopeHasStatus($query, $status)
     {
         if(is_string($status))
-            $status = self::getStatusByName($status);
+            $status = CommentStatus::getStatusByName($status);
 
         return $query->where('status_id', '=', $status);
     }
@@ -86,21 +86,18 @@ class Comment extends Model
 
     public function isStatus($name)
     {
-        return $this->status_id == self::getStatusByName($name);
+        return $this->status_id == CommentStatus::getStatusByName($name);
     }
 
-    public static function getStatusByName($name)
+    public function markAsSpam()
     {
-        switch($name)
-        {
-            case 'pending':
-                return 1;
-            case 'approved':
-                return 2;
-            case 'trash':
-                return 3;
-            default:
-                return null;
-        }
+        $this->spam = true;
+        return $this->save();
+    }
+
+    public function markAsNotSpam()
+    {
+        $this->spam = false;
+        return $this->save();
     }
 }

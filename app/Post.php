@@ -214,7 +214,7 @@ class Post extends Model
     public function scopeHasStatus($query, $status)
     {
         if(is_string($status))
-            $status = $this->getStatusByName($status);
+            $status = PostStatus::getStatusIdByName($status);
         return $query->where('status_id', '=', $status);
     }
 
@@ -231,26 +231,5 @@ class Post extends Model
     public function scopeHasTitleContains($query, $term)
     {
         return $query->where('title', 'like', '%' . $term . '%');
-    }
-
-    /**
-     * @param $name
-     * @return int|null
-     */
-    public static function getStatusByName($name)
-    {
-        switch($name)
-        {
-            case 'pending':
-                return 2;
-            case 'approved':
-                return 3;
-            case 'draft':
-                return 1;
-            case 'trash':
-                return 4;
-            default:
-                return null;
-        }
     }
 }
