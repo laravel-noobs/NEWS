@@ -199,6 +199,25 @@ class User extends Model implements AuthenticatableContract,
     }
 
     /**
+     * @param string $role
+     */
+    public function assignRole($role)
+    {
+        $this->role()->save(
+            Role::whereName($role)->firstOrFail()
+        );
+    }
+
+    /**
+     * @param array $roles
+     * @return bool
+     */
+    public function hasRole($roles)
+    {
+        return $roles->contains('name', $this->role->name);
+    }
+
+    /**
      *
      */
     public function verifyEmail()
