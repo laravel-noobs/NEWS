@@ -22,7 +22,7 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
         'verify_token' => !$verified ? str_random(10) : null,
         'banned' => $faker->boolean(25),
         'expired_at' => $faker->dateTimeBetween('+2 days', '+2 years'),
-        'password' => bcrypt(str_random(10)),
+        'password' => bcrypt('password'),
         'remember_token' => str_random(10),
     ];
 });
@@ -65,5 +65,9 @@ $factory->define(App\Feedback::class, function (Faker\Generator $faker) {
 });
 
 $factory->define(App\PostTag::class, function (Faker\Generator $faker) {
+    return [];
+});
+
+$factory->define(App\RolePermission::class, function (Faker\Generator $faker) {
     return [];
 });
