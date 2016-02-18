@@ -217,6 +217,11 @@ class User extends Model implements AuthenticatableContract,
         return $roles->contains('name', $this->role->name);
     }
 
+    public function owns($relation)
+    {
+        return $this->id == $relation->user_id;
+    }
+
     /**
      *
      */

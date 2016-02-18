@@ -15,16 +15,22 @@ class PermissionTableSeeder extends Seeder
         $permissions =
             [
                 [
-                    'name' => 'permission_1',
-                    'label'=> 'Permission 1'
+                    'name' => 'update',
+                    'label'=> 'Permission 1',
+                    'model' => 'App\Post',
+                    'policy' => 'App\Policies\PostPolicy'
                 ],
                 [
                     'name' => 'permission_2',
-                    'label'=> 'Permission 2'
+                    'label'=> 'Permission 2',
+                    'model' => null,
+                    'policy' => null
                 ],
                 [
                     'name' => 'permission_3',
-                    'label'=> 'Permission 3'
+                    'label'=> 'Permission 3',
+                    'model' => null,
+                    'policy' => null
                 ]
             ];
         DB::table('permission')->insert($permissions);

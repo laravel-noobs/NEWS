@@ -79,3 +79,9 @@ Route::get('/admin/comments/{comment_id}/delete', 'CommentsController@delete');
 Route::get('/admin/comments/{id}/edit', 'CommentsController@edit');
 Route::post('/admin/comments/{id}/edit', 'CommentsController@update');
 Route::post('/admin/comments/config', 'CommentsController@postConfig');
+
+Route::get('/debug', function(){
+    $post = App\Post::first();
+
+    return \Gate::allows('update', $post) ? 'true' : 'false';
+});
