@@ -18,6 +18,8 @@ class TagsController extends Controller
      */
     public function index(Request $request)
     {
+        $this->authorize('indexTag');
+
         $tags = Tag::with(['postsCount'])->orderBy('id', 'desc')->paginate(20);
         return view('admin.tag_index', compact('tags'));
     }
@@ -28,6 +30,8 @@ class TagsController extends Controller
      */
     public function queryTags(Request $request)
     {
+        $this->authorize('queryTag');
+
         $term = $request->request->get('query');
         if(strlen($term) < 3)
             return null;
@@ -41,6 +45,8 @@ class TagsController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('storeTag');
+
         $slug = $request->request->get('slug');
         $name = $request->request->get('name');
         if(empty($slug) && !empty($name))
@@ -71,6 +77,8 @@ class TagsController extends Controller
      */
     public function edit($id)
     {
+        $this->authorize('updateTag');
+
         $tag = Tag::with('posts', 'postsCount')->findOrFail($id);
         return view('admin.tag_edit', compact('tag'));
     }
@@ -82,6 +90,8 @@ class TagsController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $this->authorize('updateTag');
+
         $tag = Tag::with('posts', 'postsCount')->findOrFail($id);
 
         $this->validate($request, [
@@ -104,6 +114,8 @@ class TagsController extends Controller
      */
     public function destroy(Request $request)
     {
+        $this->authorize('destroyTag');
+
         $tag = Tag::findOrFail($request->request->get('tag_id'));
 
         $result = false;

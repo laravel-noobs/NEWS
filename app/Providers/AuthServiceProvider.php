@@ -37,6 +37,12 @@ class AuthServiceProvider extends ServiceProvider
                    return  $user->hasRole($permission->roles);
                 });
         }
+
+        $gate->before(function ($user, $ability) {
+            if ($user->isAdministrator()) {
+                return true;
+            }
+        });
     }
 
     protected function getPermissions()

@@ -15,23 +15,233 @@ class PermissionTableSeeder extends Seeder
         $permissions =
             [
                 [
-                    'name' => 'update',
-                    'label'=> 'Permission 1',
+                    'name' => 'indexUser',
+                    'label'=> 'Xem danh sách người dùng',
+                    'model' => null,
+                    'policy' => null
+                ],
+                [
+                    'name' => 'storeUser',
+                    'label'=> 'Thêm người dùng',
+                    'model' => null,
+                    'policy' => null
+                ],
+                [
+                    'name' => 'banUser',
+                    'label'=> 'Khóa người dùng',
+                    'model' => null,
+                    'policy' => null
+                ],
+                [
+                    'name' => 'updateUser',
+                    'label'=> 'Cập nhật người dùng',
+                    'model' => null,
+                    'policy' => null
+                ],
+                [
+                    'name' => 'queryUser',
+                    'label'=> 'Truy vấn người dùng',
+                    'model' => null,
+                    'policy' => null
+                ],
+                [
+                    'name' => 'destroyUser',
+                    'label'=> 'Xóa người dùng',
+                    'model' => null,
+                    'policy' => null
+                ],
+                [
+                    'name' => 'indexPost',
+                    'label'=> 'Thêm bài viết ở trạng thái đã duyệt',
+                    'model' => null,
+                    'policy' => null
+                ],
+                [
+                    'name' => 'storePendingPost',
+                    'label'=> 'Thêm bài viết ở trạng thái đã duyệt',
+                    'model' => null,
+                    'policy' => null
+                ],
+                [
+                    'name' => 'storeApprovedPost',
+                    'label'=> 'Thêm bài viết ở trạng thái đã duyệt',
+                    'model' => null,
+                    'policy' => null
+                ],
+                [
+                    'name' => 'storeTrashPost',
+                    'label'=> 'Thêm bài viết ở trạng thái đã duyệt',
+                    'model' => null,
+                    'policy' => null
+                ],
+                [
+                    'name' => 'storeDraftPost',
+                    'label'=> 'Thêm bài viết ở trạng thái nháp',
+                    'model' => null,
+                    'policy' => null
+                ],
+                [
+                    'name' => 'updatePostStatus',
+                    'label'=> 'Cập nhật trạng thái bài viết',
+                    'model' => null,
+                    'policy' => null
+                ],
+                [
+                    'name' => 'approvePost',
+                    'label'=> 'Duyệt bài viết',
+                    'model' => null,
+                    'policy' => null
+                ],
+                [
+                    'name' => 'unapprovePost',
+                    'label'=> 'Bỏ duyệt bài viết',
+                    'model' => null,
+                    'policy' => null
+                ],
+                [
+                    'name' => 'destroyPost',
+                    'label'=> 'Xóa bài viết',
+                    'model' => null,
+                    'policy' => null
+                ],
+                [
+                    'name' => 'trashPost',
+                    'label'=> 'Cho bài viết vào thùng rác',
+                    'model' => null,
+                    'policy' => null
+                ],
+                [
+                    'name' => 'trashOwn',
+                    'label'=> 'Cho bài viết của chính mình vào thùng rác',
                     'model' => 'App\Post',
                     'policy' => 'App\Policies\PostPolicy'
                 ],
                 [
-                    'name' => 'permission_2',
-                    'label'=> 'Permission 2',
+                    'name' => 'updatePost',
+                    'label'=> 'Cập nhật bài viết',
                     'model' => null,
                     'policy' => null
                 ],
                 [
-                    'name' => 'permission_3',
-                    'label'=> 'Permission 3',
+                    'name' => 'updateOwn',
+                    'label'=> 'Cập nhật bài viết của chính mình',
+                    'model' => 'App\Post',
+                    'policy' => 'App\Policies\PostPolicy'
+                ],
+                [
+                    'name' => 'indexCategory',
+                    'label'=> 'Xem danh sách chuyên mục',
                     'model' => null,
                     'policy' => null
-                ]
+                ],
+                [
+                    'name' => 'storeCategory',
+                    'label'=> 'Thêm bài viết',
+                    'model' => null,
+                    'policy' => null
+                ],
+                [
+                    'name' => 'updateCategory',
+                    'label'=> 'Cập nhật bài viết của chính mình',
+                    'model' => null,
+                    'policy' => null
+                ],
+                [
+                    'name' => 'destroyCategory',
+                    'label'=> 'Xóa bài viết',
+                    'model' => null,
+                    'policy' => null
+                ],
+                [
+                    'name' => 'indexFeedback',
+                    'label'=> 'Xem danh sách phản hồi',
+                    'model' => null,
+                    'policy' => null
+                ],
+                [
+                    'name' => 'checkFeedback',
+                    'label'=> 'Duyệt phản hồi',
+                    'model' => null,
+                    'policy' => null
+                ],
+                [
+                    'name' => 'indexTag',
+                    'label'=> 'Xem danh sách tag',
+                    'model' => null,
+                    'policy' => null
+                ],
+                [
+                    'name' => 'queryTag',
+                    'label'=> 'Truy vấn danh sách tag',
+                    'model' => null,
+                    'policy' => null
+                ],
+                [
+                    'name' => 'storeTag',
+                    'label'=> 'Thêm mới tag',
+                    'model' => null,
+                    'policy' => null
+                ],
+                [
+                    'name' => 'updateTag',
+                    'label'=> 'Sửa tag',
+                    'model' => null,
+                    'policy' => null
+                ],
+                [
+                    'name' => 'destroyTag',
+                    'label'=> 'Xóa tag',
+                    'model' => null,
+                    'policy' => null
+                ],
+                [
+                    'name' => 'indexComment',
+                    'label'=> 'Xem danh sách bình luận',
+                    'model' => null,
+                    'policy' => null
+                ],
+                [
+                    'name' => 'updateComment',
+                    'label'=> 'Sửa bình luận',
+                    'model' => null,
+                    'policy' => null
+                ],
+                [
+                    'name' => 'spamComment',
+                    'label'=> 'Đánh dấu spam bình luận',
+                    'model' => null,
+                    'policy' => null
+                ],
+                [
+                    'name' => 'unspamComment',
+                    'label'=> 'Bỏ đánh dấu spam bình luận',
+                    'model' => null,
+                    'policy' => null
+                ],
+                [
+                    'name' => 'approveComment',
+                    'label'=> 'Duyệt bình luận',
+                    'model' => null,
+                    'policy' => null
+                ],
+                [
+                    'name' => 'unapproveComment',
+                    'label'=> 'Bỏ duyệt bình luận',
+                    'model' => null,
+                    'policy' => null
+                ],
+                [
+                    'name' => 'trashComment',
+                    'label'=> 'Cho bình luận vào thùng rác',
+                    'model' => null,
+                    'policy' => null
+                ],
+                [
+                    'name' => 'destroyComment',
+                    'label'=> 'Xóa bình luận',
+                    'model' => null,
+                    'policy' => null
+                ],
             ];
         DB::table('permission')->insert($permissions);
     }

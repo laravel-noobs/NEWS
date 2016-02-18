@@ -16,7 +16,11 @@ class PostPolicy extends Policy
         parent::before($user, $ability);
     }
 
-    public function update(User $user, Post $post)
+    public function updateOwn(User $user, Post $post)
+    {
+        return $user->owns($post);
+    }
+    public function trashOwn(User $user, Post $post)
     {
         return $user->owns($post);
     }

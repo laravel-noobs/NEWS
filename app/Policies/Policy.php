@@ -21,6 +21,7 @@ abstract class Policy
     {
         if(!$this->permission)
             $this->permission = Permission::with(['roles'])->wherePolicy(static::class)->whereName($ability)->first();
+
         return $this->permission;
     }
 }

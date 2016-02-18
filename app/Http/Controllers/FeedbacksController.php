@@ -48,6 +48,8 @@ class FeedbacksController extends Controller
      */
     public function index(Request $request)
     {
+        $this->authorize('indexFeedback');
+
         $filter_show_checked = $this->read_config('filter.show_checked');
         $query = Feedback::with([
             'post' => function($query) {
@@ -73,6 +75,8 @@ class FeedbacksController extends Controller
      */
     public function listByPost($id)
     {
+        $this->authorize('indexFeedback');
+
         $filter_show_checked = $this->read_config('filter.show_checked');
 
         $post = Post::with([
@@ -97,6 +101,8 @@ class FeedbacksController extends Controller
      */
     public function listByUser($id)
     {
+        $this->authorize('indexFeedback');
+
         $filter_show_checked = $this->read_config('filter.show_checked');
 
         $user = User::with([
@@ -121,6 +127,8 @@ class FeedbacksController extends Controller
      */
     public function check(Request $request)
     {
+        $this->authorize('checkFeedback');
+
         $input = $request->input();
 
         $feedback = Feedback::with([

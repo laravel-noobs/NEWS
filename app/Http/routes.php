@@ -26,7 +26,7 @@ Route::post('/admin/categories/{id}/edit', 'CategoriesController@update');
 Route::get('admin/users', 'UsersController@index');
 Route::get('/admin/users/{id}/edit', 'UsersController@edit');
 Route::post('/admin/users/{id}/edit', 'UsersController@update');
-Route::get('/admin/users/{id}/delete', 'UsersController@delete');
+Route::get('/admin/users/{id}/delete', 'UsersController@destroy');
 Route::post('/admin/users/{id}/show', 'UsersController@show');
 Route::post('/admin/users/ban', 'UsersController@ban');
 Route::get('/admin/users/search', 'UsersController@queryUsers');
@@ -75,13 +75,7 @@ Route::get('/admin/comments/{comment_id}/notspam', 'CommentsController@notspam')
 Route::get('/admin/comments/{comment_id}/approve', 'CommentsController@approve');
 Route::get('/admin/comments/{comment_id}/unapprove', 'CommentsController@unapprove');
 Route::get('/admin/comments/{comment_id}/trash', 'CommentsController@trash');
-Route::get('/admin/comments/{comment_id}/delete', 'CommentsController@delete');
+Route::get('/admin/comments/{comment_id}/delete', 'CommentsController@destroy');
 Route::get('/admin/comments/{id}/edit', 'CommentsController@edit');
 Route::post('/admin/comments/{id}/edit', 'CommentsController@update');
 Route::post('/admin/comments/config', 'CommentsController@postConfig');
-
-Route::get('/debug', function(){
-    $post = App\Post::first();
-
-    return \Gate::allows('update', $post) ? 'true' : 'false';
-});
