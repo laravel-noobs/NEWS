@@ -92,12 +92,13 @@ class PostsController extends Controller
      */
     public function create()
     {
-        if(!Gate::allows('storePendingPost') && !Gate::allows('storeApprovedPost') && !Gate::allows('storeTrashPost'))
+        if(Gate::denies('storePending', new Post) && Gate::denies('storeApproved', new Post) && Gate::denies('storeTrash', new Post))
             abort(403);
+
+        $post_status_default_id = 2;
 
         $categories = Category::all(['id', 'name']);
         $post_status = PostStatus::all(['id', 'name']);
-        $post_status_default_id = 2;
         return view('admin.post_create', ['categories' => $categories, 'post_status' => $post_status, 'post_status_default_id' => $post_status_default_id]);
     }
 
@@ -111,19 +112,25 @@ class PostsController extends Controller
     {
         $input = $request->all();
 
-        if(Gate::denies('storePendingPost') && $input['status_id'] == PostStatus::getStatusIdByName('pending'))
+        if(Gate::denies('storePending', [new Post, $input['status_id']]))
             abort(403);
 
-        if(Gate::denies('storeApprovedPost') && $input['status_id'] == PostStatus::getStatusIdByName('approved'))
+        if(Gate::denies('storeApprovedPost', [new Post, $input['status_id']]))
             abort(403);
 
-        if(Gate::denies('storeDraftPost') && $input['status_id'] == PostStatus::getStatusIdByName('draft'))
+        if(Gate::denies('storeDraftPost', [new Post, $input['status_id']]))
             abort(403);
 
-        if(Gate::denies('storeTrashPost') && $input['status_id'] == PostStatus::getStatusIdByName('trash'))
+        if(Gate::denies('storeTrashPost', [new Post, $input['status_id']]))
             abort(403);
 
         list($input, $tags, $new_tags) = $this->prepareInput($input);
+
+        if(Gate::denies('storePostWithNewCategory') && (!empty($input['category_name']) || !!empty($input['category_slug'])))
+            abort(403);
+
+        if(Gate::denies('storePostWithNewTag') && !empty($new_tags))
+            abort(403);
 
         $validator = Validator::make($input, [
             'title' => 'required|min:4',
@@ -213,6 +220,12 @@ class PostsController extends Controller
             abort(403);
 
         list($input, $tags, $new_tags) = $this->prepareInput($input);
+
+        if(Gate::denies('updatePostWithNewCategory') && (!empty($input['category_name']) || !!empty($input['category_slug'])))
+            abort(403);
+
+        if(Gate::denies('updatePostWithNewTag') && !empty($new_tags))
+            abort(403);
 
         $validator = Validator::make($input, [
             'title' => 'required|min:4',

@@ -146,6 +146,8 @@ class UsersController extends Controller
      */
     public function edit($id)
     {
+        $this->authorize('updateUser');
+
         $user = User::findOrFail($id);
         return view('admin.user_edit', ['user' => $user]);
     }

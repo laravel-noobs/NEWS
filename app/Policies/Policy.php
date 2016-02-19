@@ -13,6 +13,7 @@ abstract class Policy
     public function before(User $user, $ability)
     {
         $permission = $this->getPermission($ability);
+
         if(!$user->hasRole($permission->roles))
             return false;
     }

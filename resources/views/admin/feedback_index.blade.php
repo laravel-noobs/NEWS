@@ -42,10 +42,18 @@ app('navigator')
                                 <td>{{ $feedback->created_at }}</td>
                                 <td>
                                     <div class="pull-right">
+                                    @can('checkFeedback')
                                         <a  href="#modal-feedback-check-prompt" data-user_email="{{ $feedback->user->email }}" data-feedback_id="{{ $feedback->id }}"class="btn-white btn btn-xs" data-toggle="modal">
                                             <i class="fa {{ $feedback->checked ? "fa-check-square-o" : "fa-square-o" }}"></i>
                                             <span> Phản hồi</span>
                                         </a>
+                                    @else
+                                        @if($feedback->checked)
+                                            <i class="fa fa-check-square-o"></i><span> Đã duyệt</span>
+                                        @else
+                                            <i class="fa fa-square-o"></i><span> Chưa duyệt</span>
+                                        @endif
+                                    @endcan
                                     </div>
                                 </td>
                             </tr>
@@ -63,7 +71,9 @@ app('navigator')
             </div>
         </div>
     </div>
-    @include('admin.partials._prompt_feedback_check')
+    @can('checkFeedback')
+        @include('admin.partials._prompt_feedback_check')
+    @endcan
 @endsection
 
 @section('footer-script')

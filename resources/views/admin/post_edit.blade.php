@@ -37,7 +37,7 @@ app('navigator')
                             <div class="form-group slug {{ count($errors->get('slug')) > 0 ? 'has-error' : '' }}">
                                 <div class="col-md-12">
                                     <strong>Liên kết tĩnh: </strong>{{ Request::root() }}/<span id="permalink" title="Đường dẫn tĩnh tạm thời. Ấn để sửa phần này.">{{ old('slug', $post->slug) }}</span>
-                                    <input placeholder="" id="slug" name="slug" value="{{ old('slug', $post->slug) }}" type="text" class="form-control" style="display: none">
+                                    <input id="slug" name="slug" value="{{ old('slug', $post->slug) }}" type="text" class="form-control" style="display: none">
                                     <button id="btn-editslug" onclick="editpermalink();" type="button" class="btn btn-default btn-xs">Sửa</button>
                                     <button id="btn-okslug" onclick="okpermalink();" type="button" class="btn btn-default btn-xs" style="display: none">Ok</button>
                                     @foreach($errors->get('slug') as $err)
@@ -76,6 +76,7 @@ app('navigator')
                                     </div>
                                 </div>
                             </div>
+                            @can('updatePostStatus')
                             <div class="form-group">
                                 <div class="col-md-12">
                                     <select id="status_id" name="status_id" class="form-control">
@@ -89,6 +90,7 @@ app('navigator')
                                     </select>
                                 </div>
                             </div>
+                            @endcan
                             <div class="hr-line-dashed"></div>
                             <div class="form-group">
                                 <div class="col-md-6">
@@ -200,10 +202,14 @@ app('navigator')
     <script>
         $(".category").select2({
             placeholder: "Chọn một chuyên mục",
+            @can('updatePostWithNewCategory')
             tags: true
+            @endcan
         }).trigger("change");
         $(".tags").select2({
+            @can('updatePostWithNewTag')
             tags: true
+            @endcan
         });
 
         var flag = true;

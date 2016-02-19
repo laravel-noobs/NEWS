@@ -80,10 +80,17 @@ app('navigator')
                                 <div class="col-md-12">
                                     <select id="status_id" name="status_id" class="form-control">
                                         @foreach($post_status as $status)
-                                            @if(old('status_id') == $status['id'] || ($status['id'] == $post_status_default_id && old('status_id') == null))
-                                                <option selected="selected" value="{{ $status['name'] }}">{{ $status['name'] }}</option>
-                                            @else
-                                                <option value="{{ $status['id'] }}">{{ $status['name'] }}</option>
+                                            @if(
+                                                Gate::allows('storeDraft', [new App\Post, $status])
+                                                || Gate::allows('storePending', [new App\Post, $status])
+                                                || Gate::allows('storeApproved', [new App\Post, $status])
+                                                || Gate::allows('storeTrash', [new App\Post, $status])
+                                            )
+                                                @if(old('status_id') == $status['id'] || ($status['id'] == $post_status_default_id && old('status_id') == null))
+                                                    <option selected="selected" value="{{ $status['id'] }}">{{ $status['name'] }}</option>
+                                                @else
+                                                    <option value="{{ $status['id'] }}">{{ $status['name'] }}</option>
+                                                @endif
                                             @endif
                                         @endforeach
                                     </select>
@@ -92,7 +99,9 @@ app('navigator')
                             <div class="hr-line-dashed"></div>
                             <div class="form-group">
                                 <div class="col-md-6">
-                                    <button class="btn btn-defaut" type="submit" value="draft">Nháp</button>
+                                    @can('storeDraftPost')
+                                        <button class="btn btn-defaut" type="submit" value="draft">Nháp</button>
+                                    @endcan
                                 </div>
                                 <div class="col-md-6">
                                     <button class="btn btn-primary pull-right" type="submit" value="save">Lưu thay đổi</button>
@@ -203,10 +212,14 @@ app('navigator')
     <script>
         $(".category").select2({
             placeholder: "Chọn một chuyên mục",
+            @can('storePostWithNewCategory')
             tags: true
+            @endcan
         }).trigger("change");
         $(".tags").select2({
+            @can('storePostWithNewTag')
             tags: true
+            @endcan
         });
 
         var flag = true;

@@ -10,52 +10,56 @@ app('navigator')
 
 @section('content')
     <div class="row">
+    @can('storeTag')
         <div class="col-sm-4">
-            <div class="ibox ">
-                <div class="ibox-content">
-                    <h3>Thêm mới tag</h3>
-                    <form method="POST" action="{{ URL::action('TagsController@store') }}">
-                        {{ csrf_field() }}
-                        <div class="form-group {{ count($errors->get('name')) > 0 ? 'has-error' : '' }}">
-                            <label class="">Tên</label>
-                            <input type="text" id="name" name="name" placeholder="" value="{{ old('name', '') }}" class="form-control">
-                            <span class="help-block m-b-none">Tên của tag được tạo sẽ dùng để hiển thị.</span>
-                            @foreach($errors->get('name') as $err)
-                                <label class="error" for="name">{{ $err }}</label>
-                            @endforeach
-                        </div>
+        <div class="ibox ">
+            <div class="ibox-content">
+                <h3>Thêm mới tag</h3>
+                <form method="POST" action="{{ URL::action('TagsController@store') }}">
+                    {{ csrf_field() }}
+                    <div class="form-group {{ count($errors->get('name')) > 0 ? 'has-error' : '' }}">
+                        <label class="">Tên</label>
+                        <input type="text" id="name" name="name" placeholder="" value="{{ old('name', '') }}" class="form-control">
+                        <span class="help-block m-b-none">Tên của tag được tạo sẽ dùng để hiển thị.</span>
+                        @foreach($errors->get('name') as $err)
+                            <label class="error" for="name">{{ $err }}</label>
+                        @endforeach
+                    </div>
 
-                        <div class="form-group {{ count($errors->get('slug')) > 0 ? 'has-error' : '' }}">
-                            <label>Slug</label>
-                            <input type="text" id="slug" name="slug" placeholder="" value="{{ old('slug', '') }}" class="form-control">
-                            <span class="help-block m-b-none">Chuỗi ký tự dùng để tạo đường dẫn thân thiện, thường chỉ bao gồm các ký tự từ aphabet không dấu, chữ số và dấu gạch ngang.</span>
-                            @foreach($errors->get('slug') as $err)
-                                <label class="error" for="slug">{{ $err }}</label>
-                            @endforeach
-                        </div>
+                    <div class="form-group {{ count($errors->get('slug')) > 0 ? 'has-error' : '' }}">
+                        <label>Slug</label>
+                        <input type="text" id="slug" name="slug" placeholder="" value="{{ old('slug', '') }}" class="form-control">
+                        <span class="help-block m-b-none">Chuỗi ký tự dùng để tạo đường dẫn thân thiện, thường chỉ bao gồm các ký tự từ aphabet không dấu, chữ số và dấu gạch ngang.</span>
+                        @foreach($errors->get('slug') as $err)
+                            <label class="error" for="slug">{{ $err }}</label>
+                        @endforeach
+                    </div>
 
-                        {{--
-                        <div class="form-group {{ count($errors->get('description')) > 0 ? 'has-error' : '' }}">
-                            <label>Mô tả</label>
-                            <textarea id="description" name="description" placeholder="" class="form-control" rows="5" cols="50">{{ old('description', '') }}</textarea>
-                            <span class="help-block m-b-none">Mô tả tag tùy thuộc vào themes mà có thể được hiển thị hay không.</span>
-                            @foreach($errors->get('description') as $err)
-                                <label class="error" for="description">{{ $err }}</label>
-                            @endforeach
+                    {{--
+                    <div class="form-group {{ count($errors->get('description')) > 0 ? 'has-error' : '' }}">
+                        <label>Mô tả</label>
+                        <textarea id="description" name="description" placeholder="" class="form-control" rows="5" cols="50">{{ old('description', '') }}</textarea>
+                        <span class="help-block m-b-none">Mô tả tag tùy thuộc vào themes mà có thể được hiển thị hay không.</span>
+                        @foreach($errors->get('description') as $err)
+                            <label class="error" for="description">{{ $err }}</label>
+                        @endforeach
+                    </div>
+                    --}}
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <div>
+                            <input class="btn btn-primary" type="submit" value="Thêm mới">
+                            <a href="{{ URL::action('TagsController@index') }}" class="btn btn-white"> Hủy</a>
                         </div>
-                        --}}
-                        <div class="hr-line-dashed"></div>
-                        <div class="form-group">
-                            <div>
-                                <input class="btn btn-primary" type="submit" value="Thêm mới">
-                                <a href="{{ URL::action('TagsController@index') }}" class="btn btn-white"> Hủy</a>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+                    </div>
+                </form>
             </div>
         </div>
+    </div>
         <div class="col-sm-8">
+    @else
+        <div class="col-sm-12">
+    @endcan
             <div class="ibox">
                 <div class="ibox-content">
                     <span class="text-muted small pull-right">Tổng cộng {{ $tags->total() }} tags</span>
@@ -77,10 +81,13 @@ app('navigator')
                                 <td>{{ $tag->postsCount }}</td>
                                 <td>
                                     <div class="btn-group pull-right">
+                                        @can('updateTag')
                                         <a href="{{ action('TagsController@edit', ['id' => $tag->id]) }}"  class="btn-white btn btn-xs">Sửa</a>
-                                        <a href="#" target="_blank" class="btn-white btn btn-xs">Xem</a>
+                                        @endcan
+                                        @can('destroyTag')
                                         {{-- <a href="{{ action('TagsController@destroy', ['id' => $tag->id]) }}" class="btn-white btn btn-xs">Xóa</a> --}}
                                         <a data-toggle="modal" href="#modal-tag-delete-prompt" data-tag_name="{{ $tag->name }}" data-tag_id="{{ $tag->id }}" class="btn-white btn btn-xs">Xóa</a>
+                                        @endcan
                                     </div>
                                 </td>
                             </tr>
@@ -99,17 +106,18 @@ app('navigator')
             </div>
         </div>
     </div>
-
-    @section('tag-delete_inputs')
-        <input name="tag_id" type="hidden"/>
-    @endsection
-    @include('admin.partials._prompt',[
-        'id' => 'tag-delete',
-        'method' => 'post',
-        'action' => URL::action('TagsController@destroy'),
-        'title' => 'Xác nhận',
-        'message' => 'Bạn có chắc chắn muốn xóa thẻ "<span class="tag_name">này</span>" hay không?',
-    ])
+    @can('destroyTag')
+        @section('tag-delete_inputs')
+            <input name="tag_id" type="hidden"/>
+        @endsection
+        @include('admin.partials._prompt',[
+            'id' => 'tag-delete',
+            'method' => 'post',
+            'action' => URL::action('TagsController@destroy'),
+            'title' => 'Xác nhận',
+            'message' => 'Bạn có chắc chắn muốn xóa thẻ "<span class="tag_name">này</span>" hay không?',
+        ])
+    @endcan
 
 @endsection
 

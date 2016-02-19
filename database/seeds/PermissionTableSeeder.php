@@ -57,26 +57,38 @@ class PermissionTableSeeder extends Seeder
                     'policy' => null
                 ],
                 [
-                    'name' => 'storePendingPost',
+                    'name' => 'storePending',
                     'label'=> 'Thêm bài viết ở trạng thái đã duyệt',
-                    'model' => null,
-                    'policy' => null
+                    'model' => 'App\Post',
+                    'policy' => 'App\Policies\PostPolicy'
                 ],
                 [
-                    'name' => 'storeApprovedPost',
+                    'name' => 'storeApproved',
                     'label'=> 'Thêm bài viết ở trạng thái đã duyệt',
-                    'model' => null,
-                    'policy' => null
+                    'model' => 'App\Post',
+                    'policy' => 'App\Policies\PostPolicy'
                 ],
                 [
-                    'name' => 'storeTrashPost',
+                    'name' => 'storeTrash',
                     'label'=> 'Thêm bài viết ở trạng thái đã duyệt',
-                    'model' => null,
-                    'policy' => null
+                    'model' => 'App\Post',
+                    'policy' => 'App\Policies\PostPolicy'
                 ],
                 [
-                    'name' => 'storeDraftPost',
+                    'name' => 'storeDraft',
                     'label'=> 'Thêm bài viết ở trạng thái nháp',
+                    'model' => 'App\Post',
+                    'policy' => 'App\Policies\PostPolicy'
+                ],
+                [
+                    'name' => 'storePostWithNewCategory',
+                    'label'=> 'Thêm category mới khi thêm post',
+                    'model' => null,
+                    'policy' => null
+                ],
+                [
+                    'name' => 'storePostWithNewTag',
+                    'label'=> 'Thêm tag mới khi thêm post',
                     'model' => null,
                     'policy' => null
                 ],
@@ -119,6 +131,18 @@ class PermissionTableSeeder extends Seeder
                 [
                     'name' => 'updatePost',
                     'label'=> 'Cập nhật bài viết',
+                    'model' => null,
+                    'policy' => null
+                ],
+                [
+                    'name' => 'updatePostWithNewCategory',
+                    'label'=> 'Thêm category mới khi sửa post',
+                    'model' => null,
+                    'policy' => null
+                ],
+                [
+                    'name' => 'updatePostWithNewTag',
+                    'label'=> 'Thêm tag mới khi sửa post',
                     'model' => null,
                     'policy' => null
                 ],

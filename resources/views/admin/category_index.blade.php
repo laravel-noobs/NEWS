@@ -10,6 +10,7 @@
 
 @section('content')
     <div class="row">
+    @can('storeCategory')
         <div class="col-sm-4">
             <div class="ibox ">
                 <div class="ibox-content">
@@ -69,6 +70,9 @@
             </div>
         </div>
         <div class="col-sm-8">
+    @else
+        <div class="col-sm-12">
+    @endcan
             <div class="ibox">
                 <div class="ibox-content">
                     <span class="text-muted small pull-right">{{ count($categories) }} chuyên mục</span>
@@ -94,9 +98,13 @@
                                 <td>{{ $cat->postsCount }}</td>
                                 <td>
                                     <div class="btn-group pull-right">
-                                        <a href="{{ action('CategoriesController@edit', ['id' => $cat->id]) }}"  class="btn-white btn btn-xs">Sửa</a>
+                                        @can('updateCategory')
+                                            <a href="{{ action('CategoriesController@edit', ['id' => $cat->id]) }}"  class="btn-white btn btn-xs">Sửa</a>
+                                        @endcan
                                         <a href="#" target="_blank" class="btn-white btn btn-xs">Xem</a>
-                                        <a data-toggle="modal" href="#modal-category-delete-prompt" data-cat_name="{{ $cat->name }}" data-cat_id="{{ $cat->id }}" class="btn-white btn btn-xs">Xóa</a>
+                                        @can('destroyCategory')
+                                            <a data-toggle="modal" href="#modal-category-delete-prompt" data-cat_name="{{ $cat->name }}" data-cat_id="{{ $cat->id }}" class="btn-white btn btn-xs">Xóa</a>
+                                        @endcan
                                     </div>
                                 </td>
                             </tr>
@@ -114,17 +122,18 @@
             </div>
         </div>
     </div>
-    @section('category-delete_inputs')
-        <input name="cat_id" type="hidden"/>
-    @endsection
-    @include('admin.partials._prompt',[
-        'id' => 'category-delete',
-        'method' => 'post',
-        'action' => URL::action('CategoriesController@destroy'),
-        'title' => 'Xác nhận',
-        'message' => 'Bạn có chắc chắn muốn xóa chuyên mục "<span class="cat_name">này</span>" hay không?',
-    ])
-
+    @can('destroyCategory')
+        @section('category-delete_inputs')
+            <input name="cat_id" type="hidden"/>
+        @endsection
+        @include('admin.partials._prompt',[
+            'id' => 'category-delete',
+            'method' => 'post',
+            'action' => URL::action('CategoriesController@destroy'),
+            'title' => 'Xác nhận',
+            'message' => 'Bạn có chắc chắn muốn xóa chuyên mục "<span class="cat_name">này</span>" hay không?',
+        ])
+    @endcan
 @endsection
 
 @section('footer-script')

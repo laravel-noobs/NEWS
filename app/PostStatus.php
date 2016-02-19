@@ -51,12 +51,12 @@ class PostStatus extends Model
     {
         switch($name)
         {
+            case 'draft':
+                return 1;
             case 'pending':
                 return 2;
             case 'approved':
                 return 3;
-            case 'draft':
-                return 1;
             case 'trash':
                 return 4;
             default:
