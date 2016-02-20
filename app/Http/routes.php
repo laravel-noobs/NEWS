@@ -33,6 +33,7 @@ Route::get('/admin/users/search', 'UsersController@queryUsers');
 Route::post('/admin/users/config', 'UsersController@postConfig');
 
 Route::get('/admin/posts','PostsController@index');
+Route::get('/admin/posts/owned','PostsController@listByAuthenticated');
 Route::get('/admin/posts/create','PostsController@create');
 Route::post('/admin/posts','PostsController@store');
 Route::get('/admin/posts/{id}/edit', 'PostsController@edit');

@@ -228,8 +228,23 @@ class Post extends Model
         return $query->where('category_id', '=', $category_id);
     }
 
+    /**
+     * @param $query
+     * @param $term
+     * @return mixed
+     */
     public function scopeHasTitleContains($query, $term)
     {
         return $query->where('title', 'like', '%' . $term . '%');
+    }
+
+    /**
+     * @param $query
+     * @param $user_id
+     * @return mixed
+     */
+    public function scopeOwnedBy($query, $user_id)
+    {
+        return $query->where('user_id', '=', $user_id);
     }
 }

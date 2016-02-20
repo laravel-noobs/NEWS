@@ -1,8 +1,14 @@
 <?php
-app('navigator')
-        ->activate('posts', 'index')
-        ->set_page_heading('Danh sách bài viết')
-        ->set_breadcrumb('admin', 'posts');
+if(isset($user))
+    app('navigator')
+            ->activate('posts', 'owned')
+            ->set_page_heading('Danh sách bài viết của ' . $user->name)
+            ->set_breadcrumb('admin', 'posts');
+else
+    app('navigator')
+            ->activate('posts', 'index')
+            ->set_page_heading('Danh sách bài viết')
+            ->set_breadcrumb('admin', 'posts');
 ?>
 
 @extends('partials.admin._layout')
@@ -202,7 +208,7 @@ app('navigator')
 
         $('input[name="status_type"]').on('ifChecked', function(event){
             $.ajax({
-                url: location.pathname + '/config',
+                url: '{{ URL::action('PostsController@postConfig') }}',
                 method: 'post',
                 data: { name: "filter.status_type", value: $(this).val() },
                 headers: {
@@ -216,7 +222,7 @@ app('navigator')
         $('select[name="category_id"]').on("select2:select", function (e) {
             cat_id = $(e.currentTarget).val();
             $.ajax({
-                url: location.pathname + '/config',
+                url: '{{ URL::action('PostsController@postConfig') }}',
                 method: 'post',
                 data: { name: "filter.category", value: cat_id === '*' ? 'NULL' : cat_id },
                 headers: {
@@ -230,7 +236,7 @@ app('navigator')
         $('.search-box button').on('click', function(){
             box = $(this).parents('.search-box');
             $.ajax({
-                url: location.pathname + '/config',
+                url: '{{ URL::action('PostsController@postConfig') }}',
                 method: 'post',
                 data: { name: "filter.search_term", value: box.find('#search-input').val() },
                 headers: {

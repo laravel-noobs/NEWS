@@ -21,6 +21,12 @@ class PermissionTableSeeder extends Seeder
                     'policy' => null
                 ],
                 [
+                    'name' => 'configUser',
+                    'label'=> 'Cấu hình cho UserController',
+                    'model' => null,
+                    'policy' => null
+                ],
+                [
                     'name' => 'storeUser',
                     'label'=> 'Thêm người dùng',
                     'model' => null,
@@ -53,6 +59,12 @@ class PermissionTableSeeder extends Seeder
                 [
                     'name' => 'indexPost',
                     'label'=> 'Thêm bài viết ở trạng thái đã duyệt',
+                    'model' => null,
+                    'policy' => null
+                ],
+                [
+                    'name' => 'listOwnedPost',
+                    'label'=> 'Xem danh sách bài viết người đăng nhập',
                     'model' => null,
                     'policy' => null
                 ],

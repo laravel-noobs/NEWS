@@ -6,6 +6,7 @@ use App\Category;
 use App\Post;
 use App\PostStatus;
 use App\Tag;
+use App\User;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -54,10 +55,10 @@ class PostsController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+ * Display a listing of the resource.
+ *
+ * @return \Illuminate\Http\Response
+ */
     public function index()
     {
         $this->authorize('indexPost');
@@ -83,6 +84,40 @@ class PostsController extends Controller
         $categories = Category::all(['id', 'name']);
 
         return view('admin.post_index', array_merge(compact('posts', 'categories'), $configs));
+    }
+
+    public function listByAuthenticated()
+    {
+        $this->authorize('listOwnedPost');
+
+        return $this->listByUser(Auth::user()->id);
+    }
+
+    protected function listByUser($id)
+    {
+        $user = User::findOrFail($id);
+
+        $configs = $this->read_configs(['filter.status_type', 'filter.category', 'filter.search_term']);
+
+        $posts = Post::with(['category', 'user', 'status', 'feedbacksCount', 'commentsCount'])
+            ->hasStatus($configs['filter_status_type'])->ownedBy($id);
+
+        if($configs['filter_category'] != '')
+            $posts->hasCategory($configs['filter_category']);
+
+        $term = trim($configs['filter_search_term']);
+
+        if($term != '' && strlen($term) >= 4)
+            $posts->hasTitleContains($term);
+
+        $posts = $posts->paginate(20);
+
+        if($posts->currentPage() != 1 && $posts->count() == 0)
+            return Redirect::action('PostController@listByUser', ['id' => $id]);
+
+        $categories = Category::all(['id', 'name']);
+
+        return view('admin.post_index', array_merge(compact('posts', 'categories', 'user'), $configs));
     }
 
     /**

@@ -23,7 +23,7 @@ class UserExampleTableSeeder extends Seeder
                 'email' => 'yahishima@gmail.com',
                 'first_name' => 'Kou',
                 'last_name' => 'Tsuneka',
-                'role_id' => $roles->first()->id,
+                'role_id' => 4,
                 'verified' => true,
                 'created_at' => Carbon::now()->timestamp,
                 'updated_at' => Carbon::now()->timestamp
