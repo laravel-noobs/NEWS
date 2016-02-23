@@ -19,7 +19,7 @@ class UsersController extends Controller
      */
     public function index()
     {
-        $users = User::all();
+        $users = User::orderBy('created_at', 'desc')->get();
         return view('admin.user_index', ['users' => $users]);
     }
 
@@ -58,7 +58,7 @@ class UsersController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'name' => 'required|min:4',
+            'name' => 'required|min:4|unique:user,name',
             'email' => 'required|email|unique:user,email',
             'password' => 'min:6|max:60'
         ]);
@@ -109,7 +109,7 @@ class UsersController extends Controller
     {
 
         $this->validate($request, [
-            'name' => 'required|min:4',
+            'name' => 'required|min:4|unique:user,name,' . $id,
             'email' => 'required|email|unique:user,email,' . $id,
             'password' => 'min:6|max:60',
         ]);

@@ -17,7 +17,7 @@ app('navigator')
                     <form method="POST" action="{{ URL::action('UsersController@store' ) }}">
                         {{ csrf_field() }}
                         <div class="form-group {{ count($errors->get('name')) > 0 ? 'has-error' : '' }}">
-                            <label class="">Tên Đăng Nhập Người Dùng</label>
+                            <label class="">Tên </label>
                             <input type="text" id="name" name="name" placeholder="" value="{{ old('name', '') }}" class="form-control">
                             <span class="help-block m-b-none">Tên của người dùng được tạo sẽ dùng để đăng nhập.</span>
                             @foreach($errors->get('name') as $err)
@@ -27,7 +27,7 @@ app('navigator')
 
                         <div class="form-group {{ count($errors->get('password')) > 0 ? 'has-error' : '' }}">
                             <label>Mật khẩu</label>
-                            <input type="password" id="password" name="password" placeholder="" value="" class="form-control">
+                            <input type="password" id="password" name="password" placeholder="" value="{{old('password','')}}" class="form-control">
                             <span class="help-block m-b-none">Mật khẩu của người dùng được tạo để đăng nhập và bảo mật cho người dùng.</span>
                             @foreach($errors->get('password') as $err)
                                 <label class="error" for="password">{{ $err }}</label>
@@ -45,16 +45,16 @@ app('navigator')
 
 
                         <div class="form-group {{ count($errors->get('first_name')) > 0 ? 'has-error' : '' }}">
-                            <label>Tên Thật Người Dùng</label>
+                            <label>Tên</label>
                             <input type="text" id="first_name" name="first_name" placeholder="" value="{{ old('first_name', '') }}" class="form-control">
-                            <span class="help-block m-b-none">Tên của người dùng.</span>
+                            <span class="help-block m-b-none">Tên người dùng.</span>
                             @foreach($errors->get('first_name') as $err)
                                 <label class="error" for="first_name">{{ $err }}</label>
                             @endforeach
                         </div>
 
                         <div class="form-group {{ count($errors->get('last_name')) > 0 ? 'has-error' : '' }}">
-                            <label>Họ</label>
+                            <label>Họ </label>
                             <input type="text" id="last_name" name="last_name" placeholder="" value="{{ old('last_name', '') }}" class="form-control">
                             <span class="help-block m-b-none">Họ của người dùng.</span>
                             @foreach($errors->get('last_name') as $err)
@@ -65,8 +65,7 @@ app('navigator')
                         <div class="hr-line-dashed"></div>
                         <div class="form-group">
                             <div>
-                                <input class="btn btn-primary" type="submit" value="Sửa">
-                                <a href="#" class="btn btn-white"> Hủy</a>
+                                <input class="btn btn-primary" type="submit" value="Thêm">
                             </div>
                         </div>
                     </form>
