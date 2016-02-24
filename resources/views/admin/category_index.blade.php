@@ -96,7 +96,7 @@
                                     <div class="btn-group pull-right">
                                         <a href="{{ action('CategoriesController@edit', ['id' => $cat->id]) }}"  class="btn-white btn btn-xs">Sửa</a>
                                         <a href="#" target="_blank" class="btn-white btn btn-xs">Xem</a>
-                                        <a href="{{ action('CategoriesController@destroy', ['id' => $cat->id]) }}" class="btn-white btn btn-xs">Xóa</a>
+                                        <a data-toggle="modal" href="#modal-category-delete-prompt" data-cat_name="{{ $cat->name }}" data-cat_id="{{ $cat->id }}" class="btn-white btn btn-xs">Xóa</a>
                                     </div>
                                 </td>
                             </tr>
@@ -111,16 +111,30 @@
                         </tfoot>
                     </table>
                 </div>
-
             </div>
         </div>
     </div>
+    @section('category-delete_inputs')
+        <input name="cat_id" type="hidden"/>
+    @endsection
+    @include('admin.partials._prompt',[
+        'id' => 'category-delete',
+        'method' => 'post',
+        'action' => URL::action('CategoriesController@destroy'),
+        'title' => 'Xác nhận',
+        'message' => 'Bạn có chắc chắn muốn xóa chuyên mục "<span class="cat_name">này</span>" hay không?',
+    ])
+
 @endsection
 
 @section('footer-script')
     <script>
         $(document).ready(function(){
             $('.footable').footable();
+        });
+        $('#modal-category-delete-prompt').on('show.bs.modal', function(e) {
+            $(e.currentTarget).find('input[name="cat_id"]').val($(e.relatedTarget).data('cat_id'));
+            $(e.currentTarget).find('span.cat_name').text($(e.relatedTarget).data('cat_name'));
         });
     </script>
 @endsection

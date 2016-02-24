@@ -4,7 +4,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-3 col-sm-6 column-one md-margin-bottom-50">
-                        <a href="index.html"><img class="footer-logo" src="unify/img/themes/logo-news-light-default.png" alt=""></a>
+                        <a href="index.html"><img class="footer-logo" src="/unify/img/themes/logo-news-light-default.png" alt=""></a>
                         <p class="margin-bottom-20">Unify is an ultra fully responsive template with modern and smart design.</p>
                         <span>Headquarters:</span>
                         <p>795 Folsom Ave, Suite 600, San Francisco, CA 94107</p>
@@ -50,7 +50,7 @@
                         <h2>Latest News</h2>
                         <!-- Latest News -->
                         <div class="latest-news margin-bottom-20">
-                            <img src="unify/img/thumb/img-thumb1.jpg" alt="">
+                            <img src="/unify/img/thumb/img-thumb1.jpg" alt="">
                             <h3><a href="#">Standard post with video.</a></h3>
                             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
                         </div>
@@ -58,7 +58,7 @@
                         <hr>
 
                         <div class="latest-news margin-bottom-20">
-                            <img src="unify/img/thumb/img-thumb2.jpg" alt="">
+                            <img src="/unify/img/thumb/img-thumb2.jpg" alt="">
                             <h3><a href="#">Standard post with video.</a></h3>
                             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
                         </div>
@@ -66,7 +66,7 @@
                         <hr>
 
                         <div class="latest-news">
-                            <img src="unify/img/thumb/img-thumb3.jpg" alt="">
+                            <img src="/unify/img/thumb/img-thumb3.jpg" alt="">
                             <h3><a href="#">Standard post with video.</a></h3>
                             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
                         </div>
@@ -87,7 +87,7 @@
                         <!-- End Form Group -->
 
                         <h2>Social Network</h2>
-                        <p><strong>Follow Us</strong> If you want to be kept up to date about what’s going on, minute by minute, then search for Grant and give us a follow!</p><br>
+                        <p><strong>Follow Us</strong> If you want to be kept up to date about whatï¿½s going on, minute by minute, then search for Grant and give us a follow!</p><br>
 
                         <!-- Social Icons -->
                         <ul class="social-icon-list margin-bottom-20">

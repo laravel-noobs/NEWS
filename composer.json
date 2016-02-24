@@ -8,6 +8,14 @@
       {
         "type": "vcs",
         "url": "https://github.com/laravel-noobs/flashmessage.git"
+      },
+      {
+        "type": "vcs",
+        "url": "https://github.com/laravel-noobs/navigation.git"
+      },
+      {
+        "type": "vcs",
+        "url": "https://github.com/laravel-noobs/userconfig.git"
       }
     ],
     "require": {
@@ -15,7 +23,9 @@
         "laravel/framework": "5.2.*",
         "barryvdh/laravel-ide-helper": "2.1.2",
         "laravelcollective/html": "^5.2",
-        "koutsuneka/flashmessage": "dev-master@dev"
+        "koutsuneka/flashmessage": "dev-master@dev",
+        "koutsuneka/navigation": "dev-master@dev",
+        "koutsuneka/userconfig": "dev-master@dev"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
@@ -23,7 +33,8 @@
         "phpunit/phpunit": "~4.0",
         "phpspec/phpspec": "~2.1",
         "symfony/dom-crawler": "~3.0",
-        "symfony/css-selector": "~3.0"
+        "symfony/css-selector": "~3.0",
+        "laravel/homestead": "^3.0"
     },
     "autoload": {
         "classmap": [

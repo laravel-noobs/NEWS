@@ -12,7 +12,7 @@
 
             <div class="navbar-brand">
                 <a href="index.html">
-                    <img src="unify/img/themes/logo-news-dark-default.png" alt="Logo">
+                    <img src="/unify/img/themes/logo-news-dark-default.png" alt="Logo">
                 </a>
             </div>
         </div><!--/end responsive container-->
@@ -106,7 +106,7 @@
                                                 <!-- Blog Thumb -->
                                                 <div class="blog-thumb margin-bottom-20">
                                                     <div class="blog-thumb-hover">
-                                                        <img src="unify/img/blog/img36.jpg" alt="">
+                                                        <img src="/unify/img/blog/img36.jpg" alt="">
                                                         <a class="hover-grad" href="blog_single.html"><i class="fa fa-video-camera"></i></a>
                                                     </div>
                                                     <div class="blog-thumb-desc">
@@ -122,7 +122,7 @@
                                                 <!-- Blog Thumb -->
                                                 <div class="blog-thumb margin-bottom-20">
                                                     <div class="blog-thumb-hover">
-                                                        <img src="unify/img/blog/img27.jpg" alt="">
+                                                        <img src="/unify/img/blog/img27.jpg" alt="">
                                                         <a class="hover-grad" href="blog_single.html"><i class="fa fa-photo"></i></a>
                                                     </div>
                                                     <div class="blog-thumb-desc">
@@ -138,7 +138,7 @@
                                                 <!-- Blog Thumb -->
                                                 <div class="blog-thumb">
                                                     <div class="blog-thumb-hover">
-                                                        <img src="unify/img/blog/img25.jpg" alt="">
+                                                        <img src="/unify/img/blog/img25.jpg" alt="">
                                                         <a class="hover-grad" href="blog_single.html"><i class="fa fa-volume-up"></i></a>
                                                     </div>
                                                     <div class="blog-thumb-desc">
@@ -155,7 +155,7 @@
                                                 <!-- Blog Thumb -->
                                                 <div class="blog-thumb margin-bottom-20">
                                                     <div class="blog-thumb-hover">
-                                                        <img src="unify/img/blog/img26.jpg" alt="">
+                                                        <img src="/unify/img/blog/img26.jpg" alt="">
                                                         <a class="hover-grad" href="blog_single.html"><i class="fa fa-volume-up"></i></a>
                                                     </div>
                                                     <div class="blog-thumb-desc">
@@ -171,7 +171,7 @@
                                                 <!-- Blog Thumb -->
                                                 <div class="blog-thumb margin-bottom-20">
                                                     <div class="blog-thumb-hover">
-                                                        <img src="unify/img/blog/img28.jpg" alt="">
+                                                        <img src="/unify/img/blog/img28.jpg" alt="">
                                                         <a class="hover-grad" href="blog_single.html"><i class="fa fa-photo"></i></a>
                                                     </div>
                                                     <div class="blog-thumb-desc">
@@ -187,7 +187,7 @@
                                                 <!-- Blog Thumb -->
                                                 <div class="blog-thumb margin-bottom-30">
                                                     <div class="blog-thumb-hover">
-                                                        <img src="unify/img/blog/img28.jpg" alt="">
+                                                        <img src="/unify/img/blog/img28.jpg" alt="">
                                                         <a class="hover-grad" href="blog_single.html"><i class="fa fa-photo"></i></a>
                                                     </div>
                                                     <div class="blog-thumb-desc">
@@ -233,7 +233,7 @@
                                             <div class="col-md-5 md-margin-bottom-30">
                                                 <!-- Blog Grid -->
                                                 <div class="blog-grid">
-                                                    <img class="img-responsive" src="unify/img/blog/img9.jpg" alt="">
+                                                    <img class="img-responsive" src="/unify/img/blog/img9.jpg" alt="">
                                                     <h3 class="blog-grid-title-sm"><a href="blog_single.html">Is this the end for fashion police?</a></h3>
                                                 </div>
                                                 <!-- End Blog Grid -->
@@ -242,11 +242,11 @@
                                                 <!-- Blog Thumb -->
                                                 <div class="blog-thumb margin-bottom-20">
                                                     <div class="blog-thumb-hover">
-                                                        <img src="unify/img/blog/img16.jpg" alt="">
+                                                        <img src="/unify/img/blog/img16.jpg" alt="">
                                                         <a class="hover-grad" href="blog_single.html"><i class="fa fa-video-camera"></i></a>
                                                     </div>
                                                     <div class="blog-thumb-desc">
-                                                        <h3><a href="blog_single.html">Nadège Vanhee-Cybulski makes Hermès debut</a></h3>
+                                                        <h3><a href="blog_single.html">Nadï¿½ge Vanhee-Cybulski makes Hermï¿½s debut</a></h3>
                                                         <ul class="blog-thumb-info">
                                                             <li>Mar 6, 2015</li>
                                                             <li><a href="blog_single.html"><i class="fa fa-comments"></i> 0</a></li>
@@ -258,7 +258,7 @@
                                                 <!-- Blog Thumb -->
                                                 <div class="blog-thumb margin-bottom-20">
                                                     <div class="blog-thumb-hover">
-                                                        <img src="unify/img/blog/img15.jpg" alt="">
+                                                        <img src="/unify/img/blog/img15.jpg" alt="">
                                                         <a class="hover-grad" href="blog_single.html"><i class="fa fa-photo"></i></a>
                                                     </div>
                                                     <div class="blog-thumb-desc">
@@ -274,7 +274,7 @@
                                                 <!-- Blog Thumb -->
                                                 <div class="blog-thumb margin-bottom-30">
                                                     <div class="blog-thumb-hover">
-                                                        <img src="unify/img/blog/img17.jpg" alt="">
+                                                        <img src="/unify/img/blog/img17.jpg" alt="">
                                                         <a class="hover-grad" href="blog_single.html"><i class="fa fa-photo"></i></a>
                                                     </div>
                                                     <div class="blog-thumb-desc">
@@ -377,7 +377,7 @@
                                         <div class="row">
                                             <div class="col-md-4 md-margin-bottom-30">
                                                 <div class="blog-grid">
-                                                    <img class="img-responsive" src="unify/img/blog/img6.jpg" alt="">
+                                                    <img class="img-responsive" src="/unify/img/blog/img6.jpg" alt="">
                                                     <h3 class="blog-grid-title-sm"><a href="blog_single.html">Malaika Firth tells all: 'I met my boyfriend through Twitter'</a></h3>
                                                 </div>
                                             </div>
@@ -385,7 +385,7 @@
                                                 <!-- Blog Thumb -->
                                                 <div class="blog-thumb margin-bottom-20">
                                                     <div class="blog-thumb-hover">
-                                                        <img src="unify/img/blog/img36.jpg" alt="">
+                                                        <img src="/unify/img/blog/img36.jpg" alt="">
                                                         <a class="hover-grad" href="blog_single.html"><i class="fa fa-video-camera"></i></a>
                                                     </div>
                                                     <div class="blog-thumb-desc">
@@ -401,7 +401,7 @@
                                                 <!-- Blog Thumb -->
                                                 <div class="blog-thumb margin-bottom-20">
                                                     <div class="blog-thumb-hover">
-                                                        <img src="unify/img/blog/img27.jpg" alt="">
+                                                        <img src="/unify/img/blog/img27.jpg" alt="">
                                                         <a class="hover-grad" href="blog_single.html"><i class="fa fa-photo"></i></a>
                                                     </div>
                                                     <div class="blog-thumb-desc">
@@ -417,7 +417,7 @@
                                                 <!-- Blog Thumb -->
                                                 <div class="blog-thumb md-margin-bottom-20">
                                                     <div class="blog-thumb-hover">
-                                                        <img src="unify/img/blog/img25.jpg" alt="">
+                                                        <img src="/unify/img/blog/img25.jpg" alt="">
                                                         <a class="hover-grad" href="blog_single.html"><i class="fa fa-volume-up"></i></a>
                                                     </div>
                                                     <div class="blog-thumb-desc">
@@ -434,7 +434,7 @@
                                                 <!-- Blog Thumb -->
                                                 <div class="blog-thumb margin-bottom-20">
                                                     <div class="blog-thumb-hover">
-                                                        <img src="unify/img/blog/img26.jpg" alt="">
+                                                        <img src="/unify/img/blog/img26.jpg" alt="">
                                                         <a class="hover-grad" href="blog_single.html"><i class="fa fa-volume-up"></i></a>
                                                     </div>
                                                     <div class="blog-thumb-desc">
@@ -450,7 +450,7 @@
                                                 <!-- Blog Thumb -->
                                                 <div class="blog-thumb margin-bottom-20">
                                                     <div class="blog-thumb-hover">
-                                                        <img src="unify/img/blog/img28.jpg" alt="">
+                                                        <img src="/unify/img/blog/img28.jpg" alt="">
                                                         <a class="hover-grad" href="blog_single.html"><i class="fa fa-photo"></i></a>
                                                     </div>
                                                     <div class="blog-thumb-desc">
@@ -466,7 +466,7 @@
                                                 <!-- Blog Thumb -->
                                                 <div class="blog-thumb md-margin-bottom-30">
                                                     <div class="blog-thumb-hover">
-                                                        <img src="unify/img/blog/img28.jpg" alt="">
+                                                        <img src="/unify/img/blog/img28.jpg" alt="">
                                                         <a class="hover-grad" href="blog_single.html"><i class="fa fa-photo"></i></a>
                                                     </div>
                                                     <div class="blog-thumb-desc">
@@ -499,25 +499,25 @@
                                         <div class="row">
                                             <div class="col-sm-3 md-margin-bottom-30">
                                                 <div class="blog-grid">
-                                                    <img class="img-responsive" src="unify/img/blog/img1.jpg" alt="">
+                                                    <img class="img-responsive" src="/unify/img/blog/img1.jpg" alt="">
                                                     <h3 class="blog-grid-title-sm"><a href="#">Learning as you're earning: The alternative to a degree</a></h3>
                                                 </div>
                                             </div>
                                             <div class="col-sm-3 md-margin-bottom-30">
                                                 <div class="blog-grid">
-                                                    <img class="img-responsive" src="unify/img/blog/img11.jpg" alt="">
-                                                    <h3 class="blog-grid-title-sm"><a href="#">Universities found to offer ‘unlawful’ terms to students</a></h3>
+                                                    <img class="img-responsive" src="/unify/img/blog/img11.jpg" alt="">
+                                                    <h3 class="blog-grid-title-sm"><a href="#">Universities found to offer ï¿½unlawfulï¿½ terms to students</a></h3>
                                                 </div>
                                             </div>
                                             <div class="col-sm-3 md-margin-bottom-30">
                                                 <div class="blog-grid">
-                                                    <img class="img-responsive" src="unify/img/blog/img10.jpg" alt="">
+                                                    <img class="img-responsive" src="/unify/img/blog/img10.jpg" alt="">
                                                     <h3 class="blog-grid-title-sm"><a href="#">Harvard tops list of world university rankings again</a></h3>
                                                 </div>
                                             </div>
                                             <div class="col-sm-3 sm-margin-bottom-30">
                                                 <div class="blog-grid">
-                                                    <img class="img-responsive" src="unify/img/blog/img21.jpg" alt="">
+                                                    <img class="img-responsive" src="/unify/img/blog/img21.jpg" alt="">
                                                     <h3 class="blog-grid-title-sm"><a href="#">New 5 star hotel in Sydney</a></h3>
                                                 </div>
                                             </div>

@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Routing\Router;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Route;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -27,6 +28,14 @@ class RouteServiceProvider extends ServiceProvider
         //
 
         parent::boot($router);
+
+        Route::bind('comment_id', function($comment_id){
+            return \App\Comment::findOrFail($comment_id, ['id']);
+        });
+
+        Route::bind('post_id', function($post_id){
+            return \App\Post::findOrFail($post_id, ['id', 'title']);
+        });
     }
 
     /**

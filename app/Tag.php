@@ -27,6 +27,9 @@ class Tag extends Model
      */
     protected $fillable = ['name', 'slug'];
 
+    /**
+     * @var bool
+     */
     public $timestamps = false;
     /**
      * The attributes excluded from the model's JSON form.
@@ -43,4 +46,26 @@ class Tag extends Model
         return $this->belongsToMany('App\Post');
     }
 
+    /**
+     * Count number of post have this tag
+     *
+     * @return mixed
+     */
+    public function postsCount()
+    {
+        return $this->belongsToMany('App\Post')->selectRaw('count(post.id) as aggregate')->groupBy('tag_id');
+    }
+
+    /**
+     * Count number of post have this tag
+     *
+     * @return int
+     */
+    public function getPostsCountAttribute()
+    {
+        if (!$this->relationLoaded('postsCount'))
+            $this->load('postsCount');
+        $related = $this->getRelation('postsCount')->first();
+        return ($related) ? (int) $related->aggregate : 0;
+    }
 }

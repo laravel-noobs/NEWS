@@ -1,3 +1,5 @@
+moment.locale('vi');
+
 toastr.options = {
     "closeButton": true,
     "debug": false,
@@ -13,7 +15,7 @@ toastr.options = {
     "hideEasing": "linear",
     "showMethod": "fadeIn",
     "hideMethod": "fadeOut"
-}
+};
 
 var navbarMinimize = function(){
     if(localStorage.getItem('navbar-minimalize') == 'true')
@@ -21,6 +23,4 @@ var navbarMinimize = function(){
     else
         $('body').removeClass('mini-navbar')
 };
-
-
 

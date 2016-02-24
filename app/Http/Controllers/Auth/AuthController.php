@@ -2,11 +2,16 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\AppMailers\AppMailerFacade as AppMailer;
+use App\Events\UserRegistered;
 use App\User;
+use Illuminate\Support\Facades\URL;
 use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -48,7 +53,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest', ['except' => 'logout']);
+        $this->middleware('guest', ['except' => ['logout', 'getLogout']]);
     }
 
     /**
@@ -63,7 +68,7 @@ class AuthController extends Controller
             'tos' => 'required',
             'first_name' => 'required|min:3|max:255',
             'last_name' => 'required|min:3|max:255',
-            'name' => 'required|max:255',
+            'name' => 'required|max:255|unique:user',
             'email' => 'required|email|max:255|unique:user',
             'password' => 'required|confirmed|min:6',
         ]);
@@ -83,6 +88,60 @@ class AuthController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
+            'verified' => 0,
+            'verify_token' => str_random(10)
         ]);
+    }
+
+    public function register(Request $request)
+    {
+        $validator = $this->validator($request->all());
+
+        if ($validator->fails()) {
+            $this->throwValidationException(
+                $request, $validator
+            );
+        }
+
+        $user = $this->create($request->all());
+
+        event(new UserRegistered($user));
+
+        //Auth::guard($this->getGuard())->login();
+
+        return redirect($this->redirectPath());
+    }
+
+    public function showRegistrationForm()
+    {
+        if (property_exists($this, 'registerView')) {
+            return view($this->registerView);
+        }
+
+        return view('auth.register');
+    }
+
+    /**
+     * Log the user out of the application.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getLogout(Request $request)
+    {
+        $ret = $this->logout();
+        $ref = $request->request->get('ref');
+        $redirect = $request->request->get('redirect');
+
+        if(!empty($redirect))
+            return redirect($redirect);
+
+        switch($ref) {
+            case 'admin':
+                return redirect()->action('AdminController@index');
+            case 'home':
+                return redirect()->action('HomeController@index');
+            default:
+                return $ret;
+        }
     }
 }

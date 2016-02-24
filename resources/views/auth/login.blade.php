@@ -20,15 +20,6 @@
                         <input type="password" placeholder="Mật khẩu" class="form-control" name="password">
                     </div>
 
-                    <div class="row">
-                        <div class="col-md-6 checkbox" name="remember">
-                            <label><input type="checkbox"> Nhớ tài khoản</label>
-                        </div>
-                        <div class="col-md-6">
-                            <button class="btn-u btn-u-default pull-right" type="submit">Đăng nhập</button>
-                        </div>
-                    </div>
-
                     @if (count($errors) > 0)
                         <div class="alert alert-danger">
                             <strong>Whoops!</strong> There were some problems with your input.<br><br>
@@ -39,6 +30,15 @@
                             </ul>
                         </div>
                     @endif
+
+                    <div class="row">
+                        <div class="col-md-6 checkbox" name="remember">
+                            <label><input type="checkbox"> Nhớ tài khoản</label>
+                        </div>
+                        <div class="col-md-6">
+                            <button class="btn-u btn-u-default pull-right" type="submit">Đăng nhập</button>
+                        </div>
+                    </div>
 
                     <hr>
 

@@ -14,6 +14,10 @@ class PostStatusTableSeeder extends Seeder
         DB::table('post_status')->delete();
         $post_status = [
             [
+                'name' => 'Nháp',
+                'slug' => str_slug('Nháp')
+            ],
+            [
                 'name' => 'Đợi duyệt',
                 'slug' => str_slug('Đợi duyệt')
             ],
@@ -22,8 +26,8 @@ class PostStatusTableSeeder extends Seeder
                 'slug' => str_slug('Đã duyệt')
             ],
             [
-                'name' => 'Đã đăng',
-                'slug' => str_slug('Đã đăng')
+                'name' => 'Rác',
+                'slug' => str_slug('Rác')
             ]
         ];
         DB::table('post_status')->insert($post_status);

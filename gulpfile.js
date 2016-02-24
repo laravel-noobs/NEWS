@@ -1,16 +1,5 @@
 var elixir = require('laravel-elixir');
 
-/*
- |--------------------------------------------------------------------------
- | Elixir Asset Management
- |--------------------------------------------------------------------------
- |
- | Elixir provides a clean, fluent API for defining some basic Gulp tasks
- | for your Laravel application. By default, we are compiling the Sass
- | file for our application, as well as publishing vendor resources.
- |
- */
-
 var bower = './bower_components/';
 
 var assets = {
@@ -25,48 +14,77 @@ var inspinia = {
  'css': './resources/assets/inspinia/css/',
  'sass': './resources/assets/inspinia/sass/',
  'img': './resources/assets/inspinia/img/'
-}
+};
 
 elixir(function(mix) {
-    mix.sass('app.scss');
-    mix.sass([
-        inspinia.sass + 'style.scss',
-        'style.scss'
-    ], 'public/css/style.css');
+    mix
+        .sass([
+            'core.scss',
+            inspinia.css + 'animate.css'
+        ], 'public/css/core.css')
+        .styles([
+            bower + 'footable/css/footable.core.css',
+            bower + 'toastr/toastr.css',
+            bower + 'select2/dist/css/select2.css',
+            bower + 'eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css',
+            bower + 'jqcloud2/dist/jqcloud.css',
+            bower + 'icheck/skins/square/green.css'
+        ], 'public/css/plugins.css')
+        .sass([
+            inspinia.sass + 'style.scss',
+            'style.scss'
+        ], 'public/css/app.css')
+});
+
+elixir(function(mix) {
+    mix
+        .scripts([
+            bower + 'jquery/dist/jquery.js',
+            bower + 'bootstrap-sass/assets/javascripts/bootstrap.js'
+        ], 'public/js/core.js')
+
+        .scripts([
+            bower + 'moment/moment.js',
+            bower + 'moment-timezone/builds/moment-timezone-with-data.js',
+            bower + 'moment/locale/vi.js',
+            bower + 'metisMenu/dist/metisMenu.js',
+            bower + 'pace/pace.js',
+            bower + 'slimscroll/jquery.slimscroll.js',
+            bower + 'footable/dist/footable.all.min.js',
+            bower + 'toastr/toastr.js',
+            bower + 'select2/dist/js/select2.full.min.js',
+            bower + 'eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
+            bower + 'jqcloud2/dist/jqcloud.js',
+            bower + 'icheck/icheck.js'
+        ], 'public/js/plugins.js')
+
+        .scripts([
+            inspinia.js + 'inspinia.js',
+            inspinia.js + 'custom.js'
+        ], 'public/js/app.js');
 });
 
 elixir(function(mix){
-   mix.styles([
-       bower + 'footable/css/footable.core.css',
-       bower + 'toastr/toastr.css'
-   ], 'public/css/plugins.css')
+    mix
+        .copy(bower + 'bootstrap-sass/assets/fonts/bootstrap/**', 'public/fonts')
+        .copy(bower + 'fontawesome/fonts/**', 'public/fonts')
+        .copy(bower + 'footable/css/fonts/**', 'public/fonts')
+        .copy(inspinia.img + 'patterns/**', 'public/css/patterns')
+        .copy(assets.unify + '**', 'public/unify')
+        .copy(inspinia.js + 'editor', 'public/js/editor')
+        .copy(assets.img  + '**', 'public/images')
+        .copy(bower + 'icheck/skins/square/green.png', 'public/css/icheck')
+        .copy(bower + 'icheck/skins/square/green@2x.png', 'public/css/icheck')
 });
 
-elixir(function(mix) {
-    mix.scripts([
-        bower + 'jquery/dist/jquery.js',
-        bower + 'bootstrap-sass/assets/javascripts/bootstrap.js'
-    ], 'public/js/core.js', './');
-
-    mix.scripts([
-        inspinia.js + 'inspinia.js',
-        inspinia.js + 'custom.js'
-    ], 'public/js/app.js', './');
-
-    mix.scripts([
-        bower + 'metisMenu/dist/metisMenu.js',
-        bower + 'pace/pace.js',
-        bower + 'slimscroll/jquery.slimscroll.js',
-        bower + 'footable/dist/footable.all.min.js',
-        bower + 'toastr/toastr.js'
-    ], 'public/js/plugins.js', './');
-});
-
-elixir(function(mix){
- mix.copy(bower + 'bootstrap-sass/assets/fonts/bootstrap/**', 'public/fonts')
-     .copy(bower + 'fontawesome/fonts/**', 'public/fonts')
-     .copy(bower + 'footable/css/fonts/**', 'public/fonts')
-     .copy(inspinia.css + "animate.css", 'public/css')
-     .copy(inspinia.img + 'patterns/**', 'public/css/patterns')
-     .copy(assets.unify+'**', 'public/unify')
-});
+elixir(function (mix) {
+    mix
+        .version([
+            'public/css/core.css',
+            'public/css/plugins.css',
+            'public/css/app.css',
+            'public/js/core.js',
+            'public/js/plugins.js',
+            'public/js/app.js'
+        ]);
+})

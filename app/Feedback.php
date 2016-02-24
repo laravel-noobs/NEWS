@@ -8,7 +8,6 @@
 
 namespace App;
 
-
 use Illuminate\Database\Eloquent\Model;
 
 class Feedback extends Model
@@ -52,4 +51,8 @@ class Feedback extends Model
         return $this->belongsTo('App\User');
     }
 
+    public function scopeNotChecked($query)
+    {
+        $query->where('checked', '=', false);
+    }
 }

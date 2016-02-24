@@ -37,15 +37,6 @@
                         <input type="password" placeholder="Xác nhận mật khẩu" class="form-control" name="password_confirmation">
                     </div>
 
-                    <div class="row">
-                        <div class="col-md-8 checkbox">
-                            <label><input type="checkbox" name="tos">Đồng ý với <a href="#tos">thỏa thuận</a>.</label>
-                        </div>
-                        <div class="col-md-4">
-                            <button class="btn-u btn-u-default pull-right" type="submit">Đăng ký</button>
-                        </div>
-                    </div>
-
                     @if (count($errors) > 0)
                         <div class="alert alert-danger">
                             <strong>Whoops!</strong> There were some problems with your input.<br><br>
@@ -56,6 +47,15 @@
                             </ul>
                         </div>
                     @endif
+
+                    <div class="row">
+                        <div class="col-md-8 checkbox">
+                            <label><input type="checkbox" name="tos">Đồng ý với <a href="#tos">thỏa thuận</a>.</label>
+                        </div>
+                        <div class="col-md-4">
+                            <button class="btn-u btn-u-default pull-right" type="submit">Đăng ký</button>
+                        </div>
+                    </div>
 
                     <hr>
                     <p>Vui lòng <a class="color-red" href="{{ action('Auth\AuthController@getLogin') }}">đăng nhập</a> nếu bạn đã có tài khoản.</p>

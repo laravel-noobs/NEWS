@@ -28,7 +28,7 @@ class User extends Model implements AuthenticatableContract,
      *
      * @var array
      */
-    protected $fillable = ['name', 'email', 'first_name', 'last_name'];
+    protected $fillable = ['name', 'email', 'first_name', 'last_name', 'password', 'verify_token'];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -36,6 +36,11 @@ class User extends Model implements AuthenticatableContract,
      * @var array
      */
     protected $hidden = ['password', 'remember_token'];
+
+    /**
+     * @var array
+     */
+    protected $dates = ['expired_at'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -61,8 +66,157 @@ class User extends Model implements AuthenticatableContract,
         return $this->hasMany('App\Comment');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function posts()
     {
         return $this->hasMany('App\Post');
+    }
+
+    /**
+     *
+     * Count number of posts belongs to this user
+     *
+     * @return mixed
+     */
+    public function postsCount()
+    {
+        return $this->hasOne('App\Post')
+            ->selectRaw('user_id, count(*) as aggregate')
+            ->groupBy('user_id');
+    }
+
+    /**
+     *
+     * postsCount attribute to count number of post belongs to this user
+     *
+     * @return int
+     */
+    public function getPostsCountAttribute()
+    {
+        if (!$this->relationLoaded('postsCount'))
+            $this->load('postsCount');
+        $related = $this->getRelation('postsCount');
+        return ($related) ? (int) $related->aggregate : 0;
+    }
+
+    /**
+     *
+     * Count number of posts belongs to this user
+     *
+     * @return mixed
+     */
+    public function feedbacksCount()
+    {
+        return $this->hasOne('App\Feedback')
+            ->selectRaw('user_id, count(*) as aggregate')
+            ->groupBy('user_id');
+    }
+
+    /**
+     *
+     * postsCount attribute to count number of post belongs to this user
+     *
+     * @return int
+     */
+    public function getFeedbacksCountAttribute()
+    {
+        if (!$this->relationLoaded('feedbacksCount'))
+            $this->load('feedbacksCount');
+        $related = $this->getRelation('feedbacksCount');
+        return ($related) ? (int) $related->aggregate : 0;
+    }
+
+    /**
+     * @param $query
+     * @return mixed
+     */
+    public function scopeVerified($query)
+    {
+        return $query->where('verified', '=', true);
+    }
+
+    /**
+     * @param $query
+     * @return mixed
+     */
+    public function scopeNotVerified($query)
+    {
+        return $query->where('verified', '=', false);
+    }
+    /**
+     * @param $query
+     * @return mixed
+     */
+    public function scopeBanned($query)
+    {
+        return $query->where('banned', '=', true);
+    }
+
+    /**
+     * @param $query
+     * @param $role_id
+     * @return mixed
+     */
+    public function scopeHasRole($query, $role_id)
+    {
+        return $query->where('role_id', '=', $role_id);
+    }
+
+    /**
+     * @param $query
+     * @param $term
+     * @return mixed
+     */
+    public function scopeSearchByTerm($query, $term)
+    {
+        return $query
+            ->orwhere('name', 'like', '%' . $term . '%')
+            ->orwhere('first_name', 'like', '%' . $term . '%')
+            ->orwhere('last_name', 'like', '%' . $term . '%')
+            ->orwhere('email', 'like', '%' . $term . '%');
+    }
+    
+    /**
+     * @param $query
+     * @param $status_name
+     * @return mixed
+     */
+    public function scopeHasStatus($query, $status_name)
+    {
+        switch($status_name)
+        {
+            case 'pending':
+                return $query->notVerified();
+            case 'verified':
+                return $query->verified();
+            case 'banned':
+                return $query->banned();
+            default:
+                return $query;
+        }
+    }
+
+    /**
+     *
+     */
+    public function verifyEmail()
+    {
+        $this->verify_token = null;
+        $this->verified = true;
+
+        $this->save();
+    }
+
+    /**
+     * @param null $expired_at
+     */
+    public function ban($expired_at = null)
+    {
+        $this->banned = true;
+        $this->expired_at = $expired_at;
+
+        $this->save();
     }
 }
