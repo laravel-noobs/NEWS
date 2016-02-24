@@ -72,7 +72,7 @@ class UsersController extends Controller
         if($configs['filter_search_term'])
             $users = $users->searchByTerm($configs['filter_search_term']);
 
-        $users = $users->paginate(20);
+        $users = $users->latest()->paginate(20);
 
         if($users->currentPage() != 1 && $users->count() == 0)
             return Redirect::action('UsersController@index');

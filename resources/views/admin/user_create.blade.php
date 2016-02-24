@@ -14,7 +14,7 @@ app('navigator')
             <div class="ibox ">
                 <div class="ibox-content">
                     <h3>Thêm Người Dùng</h3>
-                    <form method="POST" action="{{ URL::action('UsersController@store' ) }}">
+                    <form method="POST" action="{{ URL::action('UsersController@store') }}">
                         {{ csrf_field() }}
                         <div class="form-group {{ count($errors->get('name')) > 0 ? 'has-error' : '' }}">
                             <label class="">Tên </label>
