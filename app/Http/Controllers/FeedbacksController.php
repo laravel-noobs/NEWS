@@ -46,7 +46,7 @@ class FeedbacksController extends Controller
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
-    public function index(Request $request)
+    public function index()
     {
         $this->authorize('indexFeedback');
 
@@ -67,6 +67,38 @@ class FeedbacksController extends Controller
             return Redirect::action('FeedbacksController@index');
 
         return view('admin.feedback_index', compact(['feedbacks', 'filter_show_checked']));
+    }
+
+    public function listByPostAuthenticatedUser()
+    {
+        //$this->authorize('listOwnFeedback');
+        $user_id = Auth::user()->id;
+        return $this->listByPostUser(Auth::user());
+    }
+
+    protected function listByPostUser(User $user)
+    {
+        $user_id = $user->id;
+
+        $filter_show_checked = $this->read_config('filter.show_checked');
+        $query = Feedback::with([
+            'post' => function($p) use ($user_id) {
+                $p->where('user_id', '=', $user_id);
+            },
+            'user'
+        ])->whereHas('post', function ($q) use ($user_id) {
+            $q->where('user_id','=', $user_id);
+        });
+
+        if(!$filter_show_checked)
+            $query->notChecked();
+
+        $feedbacks = $query->paginate(8);
+
+        if($feedbacks->currentPage() != 1 && $feedbacks->count() == 0)
+            return Redirect::action('FeedbacksController@index');
+
+        return view('admin.feedback_index', array_merge(compact(['feedbacks', 'filter_show_checked'])), ['owned_post_user' => $user]);
     }
 
     /**

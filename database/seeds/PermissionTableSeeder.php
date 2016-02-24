@@ -15,6 +15,12 @@ class PermissionTableSeeder extends Seeder
         $permissions =
             [
                 [
+                    'name' => 'accessAdminPanel',
+                    'label'=> 'Truy cập trang admin',
+                    'model' => null,
+                    'policy' => null
+                ],
+                [
                     'name' => 'indexUser',
                     'label'=> 'Xem danh sách người dùng',
                     'model' => null,
@@ -69,25 +75,25 @@ class PermissionTableSeeder extends Seeder
                     'policy' => null
                 ],
                 [
-                    'name' => 'storePending',
+                    'name' => 'storePendingPost',
                     'label'=> 'Thêm bài viết ở trạng thái đã duyệt',
                     'model' => 'App\Post',
                     'policy' => 'App\Policies\PostPolicy'
                 ],
                 [
-                    'name' => 'storeApproved',
+                    'name' => 'storeApprovedPost',
                     'label'=> 'Thêm bài viết ở trạng thái đã duyệt',
                     'model' => 'App\Post',
                     'policy' => 'App\Policies\PostPolicy'
                 ],
                 [
-                    'name' => 'storeTrash',
+                    'name' => 'storeTrashPost',
                     'label'=> 'Thêm bài viết ở trạng thái đã duyệt',
                     'model' => 'App\Post',
                     'policy' => 'App\Policies\PostPolicy'
                 ],
                 [
-                    'name' => 'storeDraft',
+                    'name' => 'storeDraftPost',
                     'label'=> 'Thêm bài viết ở trạng thái nháp',
                     'model' => 'App\Post',
                     'policy' => 'App\Policies\PostPolicy'
@@ -112,9 +118,51 @@ class PermissionTableSeeder extends Seeder
                 ],
                 [
                     'name' => 'approvePost',
-                    'label'=> 'Duyệt bài viết',
+                    'label'=> 'Duyệt bất kỳ bài viết',
                     'model' => null,
                     'policy' => null
+                ],
+                [
+                    'name' => 'approveDraftPost',
+                    'label'=> 'Duyệt bài viết nháp của bản thân',
+                    'model' => 'App\Post',
+                    'policy' => 'App\Policies\PostPolicy'
+                ],
+                [
+                    'name' => 'approveOwnDraftPost',
+                    'label'=> 'Duyệt bài viết nháp của bản thân',
+                    'model' => 'App\Post',
+                    'policy' => 'App\Policies\PostPolicy'
+                ],
+                [
+                    'name' => 'approvePendingPost',
+                    'label'=> 'Duyệt bài viết đợi duyệt bất kỳ',
+                    'model' => 'App\Post',
+                    'policy' => 'App\Policies\PostPolicy'
+                ],
+                [
+                    'name' => 'approveOwnPendingPost',
+                    'label'=> 'Duyệt bài viết đợi duyệt của mình',
+                    'model' => 'App\Post',
+                    'policy' => 'App\Policies\PostPolicy'
+                ],
+                [
+                    'name' => 'approveCollaboratorPost',
+                    'label'=> 'Duyệt bài viết bất kỳ của cộng tác viên',
+                    'model' => 'App\Post',
+                    'policy' => 'App\Policies\PostPolicy'
+                ],
+                [
+                    'name' => 'approveCollaboratorDraftPost',
+                    'label'=> 'Duyệt bài viết nháp của cộng tác viên',
+                    'model' => 'App\Post',
+                    'policy' => 'App\Policies\PostPolicy'
+                ],
+                [
+                    'name' => 'approveCollaboratorPendingPost',
+                    'label'=> 'Duyệt bài viết đang chờ duyệt của cộng tác viên',
+                    'model' => 'App\Post',
+                    'policy' => 'App\Policies\PostPolicy'
                 ],
                 [
                     'name' => 'unapprovePost',
@@ -135,7 +183,7 @@ class PermissionTableSeeder extends Seeder
                     'policy' => null
                 ],
                 [
-                    'name' => 'trashOwn',
+                    'name' => 'trashOwnPost',
                     'label'=> 'Cho bài viết của chính mình vào thùng rác',
                     'model' => 'App\Post',
                     'policy' => 'App\Policies\PostPolicy'
@@ -159,7 +207,7 @@ class PermissionTableSeeder extends Seeder
                     'policy' => null
                 ],
                 [
-                    'name' => 'updateOwn',
+                    'name' => 'updateOwnPost',
                     'label'=> 'Cập nhật bài viết của chính mình',
                     'model' => 'App\Post',
                     'policy' => 'App\Policies\PostPolicy'
@@ -178,7 +226,7 @@ class PermissionTableSeeder extends Seeder
                 ],
                 [
                     'name' => 'updateCategory',
-                    'label'=> 'Cập nhật bài viết của chính mình',
+                    'label'=> 'Cập nhật bài viết bất kỳ',
                     'model' => null,
                     'policy' => null
                 ],
@@ -190,6 +238,12 @@ class PermissionTableSeeder extends Seeder
                 ],
                 [
                     'name' => 'indexFeedback',
+                    'label'=> 'Xem danh sách phản hồi',
+                    'model' => null,
+                    'policy' => null
+                ],
+                [
+                    'name' => 'listOwnedFeedback',
                     'label'=> 'Xem danh sách phản hồi',
                     'model' => null,
                     'policy' => null

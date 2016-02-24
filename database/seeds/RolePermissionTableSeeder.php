@@ -8,52 +8,80 @@ class RolePermissionTableSeeder extends Seeder
 {
 
     /**
+     * @var
+     */
+    private $permissions;
+    /**
+     * @var
+     */
+    private $role;
+
+    /**
      * Run the database seeds.
      *
      * @throws Exception
      */
     public function run()
     {
-//        DB::table('role_permission')->delete();
-//        $roles = Role::all();
-//        $permissions = Permission::all();
-//
-//        if($roles->count() < 3 || $permissions->count() < 3)
-//            throw new \Exception();
-//
-//        DB::table('role_permission')->insert([
-//            [
-//                'role_id' => 1,
-//                'permission_id' => 1
-//            ],
-//            [
-//                'role_id' => 1,
-//                'permission_id' => 2
-//            ],
-//            [
-//                'role_id' => 1,
-//                'permission_id' => 3
-//            ],
-//            [
-//                'role_id' => 2,
-//                'permission_id' => 2
-//            ],
-//            [
-//                'role_id' => 2,
-//                'permission_id' => 3
-//            ],
-//            [
-//                'role_id' => 3,
-//                'permission_id' => 3
-//            ]
-//        ]);
+        DB::table('role_permission')->delete();
+        $this->roles = Role::all();
+        $this->permissions = Permission::all();
 
-//        $roles[0]->givePermission($permissions[0]);
-//        $roles[0]->givePermission($permissions[1]);
-//        $roles[0]->givePermission($permissions[2]);
-//        $roles[1]->givePermission($permissions[1]);
-//        $roles[1]->givePermission($permissions[2]);
-//        $roles[2]->givePermission($permissions[2]);
+        $editor = $this->roles->find(Role::getRoleIdByName('editor'));
 
+        if($editor)
+        {
+            DB::table('role_permission')->insert($this->getArrayPermissionsToRole($editor,[
+                'accessAdminPanel',
+                'indexPost',
+                'listOwnedPost',
+                'storePendingPost',
+                'storeApprovedPost',
+                'storeDraftPost',
+                'storePostWithNewTag',
+                'updateOwnPost',
+                'approvePendingPost',
+                'approveOwnDraftPost',
+                'approveCollaboratorPendingPost',
+                'trashOwnPost',
+                'indexCategory',
+                'listOwnedFeedback'
+            ]));
+        }
+
+    }
+
+    /**
+     * @param $name
+     * @param null $policy
+     * @return mixed
+     */
+    private function getPermission($name, $policy = null)
+    {
+        return $this->permissions->where('name', $name)->pluck('id')->first();
+    }
+
+    /**
+     * @param $role
+     * @param $permissions
+     * @return array
+     * @throws Exception
+     */
+    private function getArrayPermissionsToRole($role, $permissions)
+    {
+        $role_permissions = [];
+        foreach($permissions as $permission)
+        {
+            $p = $this->getPermission($permission);
+            if(!$p)
+                throw new \Exception('Invalid permission was provided');
+
+            array_push($role_permissions,
+                [
+                    'role_id' => $role->id,
+                    'permission_id' => $p
+                ]);
+        }
+        return $role_permissions;
     }
 }

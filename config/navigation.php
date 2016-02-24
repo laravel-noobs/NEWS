@@ -41,7 +41,7 @@ return [
             'icon_class' => 'fa fa-pencil',
             'items' => [
                 'owned' => [
-                    'text' => 'Bài viết của tôi',
+                    'text' => 'Của tôi',
                     'action' => 'PostsController@listByAuthenticated',
                     'active' => false,
                     'order' => 1,
@@ -95,8 +95,19 @@ return [
             'icon_class' => 'fa fa-send-o',
             'order' => 4,
             'hidden' => function(){
-                return Gate::denies('indexFeedback');
-            }
+                return Gate::denies('indexFeedback') && Gate::denies('listOwnedFeedback');
+            },
+            'items' => [
+                'owned' => [
+                    'text' => 'Của bài viết của tôi',
+                    'action' => 'FeedbacksController@listByPostAuthenticatedUser',
+                    'active' => false,
+                    'order' => 1,
+                    'hidden' => function(){
+                        return Gate::denies('listOwnedFeedback');
+                    }
+                ],
+            ]
         ],
         'comments' => [
             'text' => 'Bình luận',

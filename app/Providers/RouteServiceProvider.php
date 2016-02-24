@@ -34,7 +34,7 @@ class RouteServiceProvider extends ServiceProvider
         });
 
         Route::bind('post_id', function($post_id){
-            return \App\Post::findOrFail($post_id, ['id', 'title', 'user_id']);
+            return \App\Post::with(['status', 'user.role'])->findOrFail($post_id, ['id', 'title', 'user_id', 'status_id']);
         });
     }
 

@@ -21,7 +21,11 @@ abstract class Policy
     protected function getPermission($ability)
     {
         if(!$this->permission)
+        {
             $this->permission = Permission::with(['roles'])->wherePolicy(static::class)->whereName($ability)->first();
+            if(!$this->permission)
+                throw new \Exception("permission \"" . $ability . "\" of " . static::class . "  not existed");
+        }
 
         return $this->permission;
     }

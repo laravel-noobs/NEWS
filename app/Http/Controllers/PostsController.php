@@ -217,8 +217,6 @@ class PostsController extends Controller
      */
     public function edit($id)
     {
-        $this->authorize('updatePost');
-
         $post = Post::with([
             'status',
             'user' => function($query) {
@@ -228,6 +226,9 @@ class PostsController extends Controller
                 $query->addSelect(['id', 'name']);
             }
         ])->findOrFail($id);
+
+        if(Gate::denies('updatePost') && Gate::denies('updateOwnPost', $post))
+            abort(403);
 
         $categories = Category::all(['id', 'name']);
         $post_status = PostStatus::all(['id', 'name']);
@@ -248,7 +249,7 @@ class PostsController extends Controller
         $post = Post::findOrFail($id);
         $input = $request->all();
 
-        if(Gate::denies('updatePost') && Gate::denies('updateOwn', $post))
+        if(Gate::denies('updatePost') && Gate::denies('updateOwnPost', $post))
             abort(403);
 
         if(Gate::denies('updatePostStatus') && array_has($input, 'status_id'))
@@ -298,9 +299,18 @@ class PostsController extends Controller
      */
     public function approve(Post $post_id)
     {
-        $this->authorize('approvePost');
+        if(Gate::denies('approvePost') &&
+            Gate::denies('approveDraftPost', $post_id) &&
+            Gate::denies('approveOwnDraftPost', $post_id) &&
+            Gate::denies('approvePendingPost', $post_id) &&
+            Gate::denies('approveOwnPendingPost', $post_id) &&
+            Gate::denies('approveCollaboratorPost', $post_id) &&
+            Gate::denies('approveCollaboratorDraftPost', $post_id) &&
+            Gate::denies('approveCollaboratorPendingPost', $post_id))
+            abort(403);
 
         $post_id->status_id = PostStatus::getStatusIdByName('approved');
+
         if($post_id->save())
             Flash::push("Duyệt bài viết \\\"$post_id->title\\\" thành công", 'Hệ thống');
         else
@@ -333,7 +343,7 @@ class PostsController extends Controller
      */
     public function trash(Post $post_id)
     {
-        if(Gate::denies('trashPost') && Gate::denies('trashOwn', $post_id))
+        if(Gate::denies('trashPost') && Gate::denies('trashOwnPost', $post_id))
             abort(403);
 
         $post_id->status_id = PostStatus::getStatusIdByName('trash');

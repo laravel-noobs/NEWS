@@ -95,8 +95,8 @@ else
                     <table class="footable table table-stripped toggle-arrow-tiny" data-page-navigation=".footable-pagination" data-page-size="{{ $posts->perPage() }}">
                         <thead>
                         <tr>
-                            <th data-sort-ignore="true" data-toggle="true" width="50%">Tiêu đề</th>
-                            <th data-sort-ignore="true" data-hide="all">Tác giả</th>
+                            <th data-sort-ignore="true" data-toggle="true" width="40%">Tiêu đề</th>
+                            <th data-sort-ignore="true">Tác giả</th>
                             <th data-sort-ignore="true">Chuyên mục</th>
                             <th data-sort-ignore="true" data-hide="phone">Phản hồi</th>
                             <th data-sort-ignore="true" data-hide="phone">Bình luận</th>
@@ -110,12 +110,19 @@ else
                                 <td>
                                     <strong>{{ $post->title }}</strong>
                                     <ul class="list-inline action" style="padding-top: 5px; margin-bottom: 0px;">
-                                        @can('approvePost')
+                                        @if(Gate::allows('approvePost') ||
+                                            Gate::allows('approveDraftPost', $post) ||
+                                            Gate::allows('approveOwnDraftPost', $post) ||
+                                            Gate::allows('approvePendingPost', $post) ||
+                                            Gate::allows('approveOwnPendingPost', $post) ||
+                                            Gate::allows('approveCollaboratorPost', $post) ||
+                                            Gate::allows('approveCollaboratorDraftPost', $post) ||
+                                            Gate::allows('approveCollaboratorPendingPost', $post))
                                             @if($filter_status_type == 'pending' || $filter_status_type == 'draft')
                                                 <li class=""><a href="{{ URL::action('PostsController@approve', ['id' => $post->id]) }}" class="text-success">Duyệt</a></li>
                                                 <li style="padding: 0px">|</li>
                                             @endif
-                                        @endcan
+                                        @endif
                                         @can('unapprovePost')
                                             @if($filter_status_type == 'approved'  || $filter_status_type == 'draft')
                                                 <li class=""><a href="{{ URL::action('PostsController@unapprove', ['id' => $post->id]) }}" class="text-success">Bỏ duyệt</a></li>
@@ -129,19 +136,17 @@ else
                                             <li class="pull-right" style="padding: 0px">|</li>
                                             @endcan
                                         @else
-                                            @can('trashPost')
+                                            @if(Gate::allows('trashPost') || Gate::allows('trashOwnPost', $post))
                                                 <li class=""><a href="{{ URL::action('PostsController@trash', ['id' => $post->id]) }}" class="text-danger">Rác</a></li>
-                                            @endcan
-                                            @can('trashOwn', $post)
-                                                <li class=""><a href="{{ URL::action('PostsController@trash', ['id' => $post->id]) }}" class="text-danger">Rác</a></li>
-                                            @endcan
+                                            @endif
                                         @endif
-                                        @can('updatePost')
+
+                                        @if(Gate::allows('updatePost') || Gate::allows('updateOwnPost', $post))
                                             <li class="pull-right"><a href="{{ URL::action('PostsController@edit', ['id' => $post->id]) }}">Sửa</a></li>
-                                        @endcan
+                                        @endif
                                     </ul>
                                 </td>
-                                <td>{{ $post->user->name }}</td>
+                                <td>{{ $post->user->role->label }} - {{ $post->user->name }}</td>
                                 <td>{{ $post->category != null ? $post->category->name : '' }}</td>
                                 <td>
                                     @can('indexFeedback')

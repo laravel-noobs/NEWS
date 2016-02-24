@@ -81,10 +81,10 @@ app('navigator')
                                     <select id="status_id" name="status_id" class="form-control">
                                         @foreach($post_status as $status)
                                             @if(
-                                                Gate::allows('storeDraft', [new App\Post, $status])
-                                                || Gate::allows('storePending', [new App\Post, $status])
-                                                || Gate::allows('storeApproved', [new App\Post, $status])
-                                                || Gate::allows('storeTrash', [new App\Post, $status])
+                                                Gate::allows('storeDraftPost', [new App\Post, $status])
+                                                || Gate::allows('storePendingPost', [new App\Post, $status])
+                                                || Gate::allows('storeApprovedPost', [new App\Post, $status])
+                                                || Gate::allows('storeTrashPost', [new App\Post, $status])
                                             )
                                                 @if(old('status_id') == $status['id'] || ($status['id'] == $post_status_default_id && old('status_id') == null))
                                                     <option selected="selected" value="{{ $status['id'] }}">{{ $status['name'] }}</option>
