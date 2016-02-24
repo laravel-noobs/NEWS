@@ -74,7 +74,7 @@ class UsersController extends Controller
         if($configs['filter_search_term'])
             $users = $users->searchByTerm($configs['filter_search_term']);
 
-        $users = $users->paginate(20);
+        $users = $users->latest()->paginate(20);
 
         if($users->currentPage() != 1 && $users->count() == 0)
             return Redirect::action('UsersController@index');
@@ -113,7 +113,7 @@ class UsersController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin/user_create');
     }
 
     /**
@@ -124,7 +124,22 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'name' => 'required|min:4|unique:user,name',
+            'email' => 'required|email|unique:user,email',
+            'password' => 'min:6|max:60'
+        ]);
+
+        $input = $request->all();
+
+        $user = new User($input);
+
+        if($user->save())
+            Flash::push("Thêm user \\\"$user->name\\\" thành công", 'Hệ thống');
+        else
+            Flash::push("Thêm user thất bại", 'Hệ thống', "error");
+
+        return redirect()->action('UsersController@index');
     }
 
     /**
@@ -164,7 +179,7 @@ class UsersController extends Controller
         $this->authorize('updateUser');
 
         $this->validate($request, [
-            'name' => 'required|min:4',
+            'name' => 'required|min:4|unique:user,name,' . $id,
             'email' => 'required|email|unique:user,email,' . $id,
             'password' => 'min:6|max:60',
         ]);

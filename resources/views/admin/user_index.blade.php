@@ -96,7 +96,7 @@ app('navigator')
                              <td>{{ $user->name }}</td>
                              <td>{{ $user->last_name }} {{ $user->first_name }}</td>
                              <td>{{ $user->email }}</td>
-                             <td>{{ $user->role->label }}</td>
+                             <td>{{ $user->role ? $user->role->label : '' }}</td>
                              <td>{{ $user->postsCount }}</td>
                              <td>{{ $user->feedbacksCount }}</td>
                              @if($filter_status_type != 'banned')

@@ -30,6 +30,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'accessAdminPanel'], function
 
     Route::group(['prefix' => 'users'], function() {
         Route::get('/', 'UsersController@index');
+        Route::get('/create', 'UsersController@create');
+        Route::post('/', 'UsersController@store');
         Route::get('{id}/edit', 'UsersController@edit');
         Route::post('{id}/edit', 'UsersController@update');
         Route::get('{id}/delete', 'UsersController@destroy');
@@ -89,8 +91,6 @@ Route::group(['prefix' => 'admin', 'middleware' => 'accessAdminPanel'], function
     });
 });
 
-
-
 Route::get('/dang-nhap', 'Auth\AuthController@getLogin');
 Route::post('/dang-nhap', 'Auth\AuthController@postLogin');
 Route::get('/dang-ky', 'Auth\AuthController@getRegister');
@@ -100,5 +100,3 @@ Route::get('/dang-xuat', 'Auth\AuthController@getLogout');
 Route::get('/xac-nhan/{verify_token}', 'UsersController@getVerifyEmailByLink');
 Route::get('/xac-nhan', 'UsersController@getVerifyEmail');
 Route::post('/xac-nhan', 'UsersController@postVerifyEmail');
-
-
