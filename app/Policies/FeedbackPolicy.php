@@ -2,19 +2,21 @@
 
 namespace App\Policies;
 
+use App\Feedback;
+use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class FeedbackPolicy
+class FeedbackPolicy extends Policy
 {
     use HandlesAuthorization;
 
     /**
-     * Create a new policy instance.
-     *
-     * @return void
+     * @param User $user
+     * @param $ability
+     * @return bool
      */
-    public function __construct()
+    public function before(User $user, $ability)
     {
-        //
+        return parent::before($user, $ability);
     }
 }

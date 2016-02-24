@@ -13,9 +13,7 @@ class AuthServiceProvider extends ServiceProvider
      *
      * @var array
      */
-    protected $policies = [
-        'App\Post' => 'App\Policies\PostPolicy'
-    ];
+    protected $policies = [];
 
     /**
      * Register any application authentication / authorization services.
@@ -29,9 +27,8 @@ class AuthServiceProvider extends ServiceProvider
 
         foreach($this->getPermissions() as $permission)
         {
-            if($permission->model && $permission->policy)
+            if($permission->model && $permission->policy && !isset($this->policies[$permission->model]))
                 $this->policies[$permission->model] = $permission->policy;
-
             else
                 $gate->define($permission->name, function($user) use ($permission) {
                    return  $user->hasRole($permission->roles);

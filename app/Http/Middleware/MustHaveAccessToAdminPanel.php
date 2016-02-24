@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Illuminate\Support\Facades\Gate;
 
 class MustHaveAccessToAdminPanel
 {
@@ -15,6 +16,9 @@ class MustHaveAccessToAdminPanel
      */
     public function handle($request, Closure $next)
     {
-        return $next($request);
+        if(Gate::allows('accessAdminPanel'))
+            return $next($request);
+
+        return abort(403);
     }
 }
