@@ -15,7 +15,7 @@ toastr.options = {
     "hideEasing": "linear",
     "showMethod": "fadeIn",
     "hideMethod": "fadeOut"
-}
+};
 
 var navbarMinimize = function(){
     if(localStorage.getItem('navbar-minimalize') == 'true')

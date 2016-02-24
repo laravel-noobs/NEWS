@@ -23,6 +23,7 @@ return [
                 ],
                 'create' => [
                     'text' => 'Thêm mới',
+                    'action'=>'UsersController@create',
                     'active' => false,
                     'order' => 2
                 ]
