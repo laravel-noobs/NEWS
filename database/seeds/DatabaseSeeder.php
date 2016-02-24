@@ -41,7 +41,7 @@ class DatabaseSeeder extends Seeder
         $posts = [];
 
         DB::table('post')->delete();
-        for($i = 0; $i < 50; $i++)
+        for($i = 0; $i < 200; $i++)
         {
             $post = factory('App\Post')->make([
                 'category_id' => $categories->random()->id,

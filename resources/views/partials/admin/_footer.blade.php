@@ -1,8 +1,8 @@
 <div class="footer">
     <div class="pull-right">
-        10GB of <strong>250GB</strong> Free.
+
     </div>
     <div>
-        <strong>Copyright</strong> Example Company &copy; 2014-2015
+        <strong>Copyright</strong> Laravel Noobs &copy; 2015-2020
     </div>
 </div>
