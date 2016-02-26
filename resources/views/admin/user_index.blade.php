@@ -8,37 +8,6 @@ app('navigator')
 
 @extends('partials.admin._layout')
 
-@section('user-ban_inputs')
-    <input name="user_id" type="hidden"/>
-    <div class="form-group">
-        <label class="">Lý do</label>
-        <input type="text" name="reason" placeholder="" value="" class="form-control">
-    </div>
-    <div class="form-group">
-        <label class="">Ngày hết hạn</label>
-        <div class="input-group m-b date">
-            <div class="input-group-btn">
-                <button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">Tùy chọn <span class="caret"></span></button>
-                <ul class="dropdown-menu">
-                    <li><a class="date-option" data-value="3"  data-unit="days">3 ngày</a></li>
-                    <li><a class="date-option" data-value="7" data-unit="days">7 ngày</a></li>
-                    <li><a class="date-option" data-value="1" data-unit="months">1 tháng</a></li>
-                    <li><a class="date-option" data-value="3" data-unit="months">3 tháng</a></li>
-                    <li><a class="date-option" data-value="6" data-unit="months">6 tháng</a></li>
-                    <li><a class="date-option" data-value="9" data-unit="months">9 tháng</a></li>
-                    <li><a class="date-option" data-value="1" data-unit="years">1 năm</a></li>
-                </ul>
-            </div>
-            <input type="hidden" name="expired_at" />
-            <input id="datetimepicker_expired_at" type='text' class="form-control" />
-        </div>
-    </div>
-    <div class="form-group" style="margin-bottom: 0px;">
-        <label>To:</label> <span class="user_email"></span>
-        <textarea class="form-control" style="width: 100%" rows="10" name="message"></textarea>
-    </div>
-@endsection
-
 @section('content')
     <div class="row">
         <div class="col-lg-12">
@@ -57,10 +26,10 @@ app('navigator')
                             <select id="role_id" name="role_id" class="role form-control">
                                 <option value="*">Tất cả vai trò</option>
                                 @foreach($roles as $role)
-                                    @if($filter_role == $role['id'])
-                                        <option value="{{ $role['id'] }}" selected="selected">{{ $role['name'] }}</option>
+                                    @if($filter_role == $role->id)
+                                        <option value="{{ $role->id }}" selected="selected">{{ $role->label }}</option>
                                     @else
-                                        <option value="{{ $role['id'] }}">{{ $role['name'] }}</option>
+                                        <option value="{{ $role->id }}">{{ $role->label }}</option>
                                     @endif
                                 @endforeach
                             </select>
@@ -127,7 +96,7 @@ app('navigator')
                              <td>{{ $user->name }}</td>
                              <td>{{ $user->last_name }} {{ $user->first_name }}</td>
                              <td>{{ $user->email }}</td>
-                             <td>{{ $user->role ? $user->role->name : '' }}</td>
+                             <td>{{ $user->role ? $user->role->label : '' }}</td>
                              <td>{{ $user->postsCount }}</td>
                              <td>{{ $user->feedbacksCount }}</td>
                              @if($filter_status_type != 'banned')
@@ -145,9 +114,13 @@ app('navigator')
                              @endif
                              <td>
                                  <div class="btn-group pull-right">
+                                     @can('updateUser')
                                      <a href="{{ action('UsersController@edit',['id'=>$user->id]) }}"  class="btn-white btn btn-xs">Sửa</a>
+                                     @endcan
                                      <a href="#" target="_blank" class="btn-white btn btn-xs">Xem</a>
+                                     @can('banUser')
                                      <a data-toggle="modal" href="#modal-user-ban-prompt" data-user_email="{{ $user->email }}" data-user_name="{{ $user->name }}" data-user_id="{{ $user->id }}" class="btn-white btn btn-xs">Khóa</a>
+                                     @endcan
                                  </div>
                              </td>
                          </tr>
@@ -165,14 +138,45 @@ app('navigator')
             </div>
         </div>
     </div>
-
-@include('admin.partials._prompt',[
-    'id' => 'user-ban',
-    'method' => 'post',
-    'action' => URL::action('UsersController@ban'),
-    'title' => 'Xác nhận',
-    'message' => 'Bạn có chắc chắn muốn khóa tài khoản "<span class="user_name">này</span>" hay không?',
-])
+    @can('banUser')
+        @section('user-ban_inputs')
+            <input name="user_id" type="hidden"/>
+            <div class="form-group">
+                <label class="">Lý do</label>
+                <input type="text" name="reason" placeholder="" value="" class="form-control">
+            </div>
+            <div class="form-group">
+                <label class="">Ngày hết hạn</label>
+                <div class="input-group m-b date">
+                    <div class="input-group-btn">
+                        <button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">Tùy chọn <span class="caret"></span></button>
+                        <ul class="dropdown-menu">
+                            <li><a class="date-option" data-value="3"  data-unit="days">3 ngày</a></li>
+                            <li><a class="date-option" data-value="7" data-unit="days">7 ngày</a></li>
+                            <li><a class="date-option" data-value="1" data-unit="months">1 tháng</a></li>
+                            <li><a class="date-option" data-value="3" data-unit="months">3 tháng</a></li>
+                            <li><a class="date-option" data-value="6" data-unit="months">6 tháng</a></li>
+                            <li><a class="date-option" data-value="9" data-unit="months">9 tháng</a></li>
+                            <li><a class="date-option" data-value="1" data-unit="years">1 năm</a></li>
+                        </ul>
+                    </div>
+                    <input type="hidden" name="expired_at" />
+                    <input id="datetimepicker_expired_at" type='text' class="form-control" />
+                </div>
+            </div>
+            <div class="form-group" style="margin-bottom: 0px;">
+                <label>To:</label> <span class="user_email"></span>
+                <textarea class="form-control" style="width: 100%" rows="10" name="message"></textarea>
+            </div>
+        @endsection
+        @include('admin.partials._prompt',[
+            'id' => 'user-ban',
+            'method' => 'post',
+            'action' => URL::action('UsersController@ban'),
+            'title' => 'Xác nhận',
+            'message' => 'Bạn có chắc chắn muốn khóa tài khoản "<span class="user_name">này</span>" hay không?',
+        ])
+    @endcan
 @endsection
 
 @section('footer-script')
@@ -244,6 +248,7 @@ app('navigator')
             });
         });
 
+        @can('banUser')
         $('#modal-user-ban-prompt').on('show.bs.modal', function(e) {
             user_id = $(e.relatedTarget).data('user_id');
             user_name = $(e.relatedTarget).data('user_name');
@@ -261,7 +266,7 @@ app('navigator')
         {
             $('input[name="expired_at"]').val($('#datetimepicker_expired_at').data("DateTimePicker").date().utc().format('YYYY-MM-DD hh:mm:ss'));
         });
-
+        @endcan
 
     </script>
 @endsection

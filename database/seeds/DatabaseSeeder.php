@@ -7,6 +7,7 @@ use App\Tag;
 use App\PostStatus;
 use App\User;
 use App\CommentStatus;
+use App\Permission;
 
 class DatabaseSeeder extends Seeder
 {
@@ -21,9 +22,12 @@ class DatabaseSeeder extends Seeder
 
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
-        $this->call(CategoryTableSeeder::class);
         $this->call(RoleTableSeeder::class);
+        $this->call(PermissionTableSeeder::class);
+        $this->call(RolePermissionTableSeeder::class);
         $this->call(UserExampleTableSeeder::class);
+
+        $this->call(CategoryTableSeeder::class);
         $this->call(PostStatusTableSeeder::class);
         $this->call(CommentStatusTableSeeder::class);
         $this->call(TagExampleTableSeeder::class);
@@ -32,11 +36,12 @@ class DatabaseSeeder extends Seeder
         $post_status = PostStatus::all(['id']);
         $categories = Category::all(['id']);
         $tag = Tag::all(['id']);
-        $posts = [];
         $comment_status = CommentStatus::all(['id']);
 
+        $posts = [];
+
         DB::table('post')->delete();
-        for($i = 0; $i < 50; $i++)
+        for($i = 0; $i < 200; $i++)
         {
             $post = factory('App\Post')->make([
                 'category_id' => $categories->random()->id,
@@ -55,7 +60,7 @@ class DatabaseSeeder extends Seeder
             $chance = random_int(0,100);
             $attributes = [
                 'post_id' => $posts[random_int(0, count($posts)-1)],
-                'status_id' => $post_status->random()->id
+                'status_id' => $comment_status->random()->id
             ];
             if($chance <= 20)
                 $attributes = array_merge($attributes, ['user_id' =>  $users->random()->id, 'name' => null, 'email' => null]);

@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePostStatusTable extends Migration
+class AlterRoleAddColumnLabel extends Migration
 {
     /**
      * Run the migrations.
@@ -12,11 +12,9 @@ class CreatePostStatusTable extends Migration
      */
     public function up()
     {
-        Schema::create('post_status', function (Blueprint $table) {
-            $table->smallIncrements('id');
-            $table->string('name', 25);
-            $table->string('label', 50);
-            $table->string('slug', 50)->unique();
+        Schema::table('role', function(Blueprint $table)
+        {
+            $table->string('label');
         });
     }
 
@@ -27,6 +25,9 @@ class CreatePostStatusTable extends Migration
      */
     public function down()
     {
-        Schema::drop('post_status');
+        Schema::table('role', function(Blueprint $table)
+        {
+            $table->dropColumn('label');
+        });
     }
 }

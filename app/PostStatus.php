@@ -25,7 +25,7 @@ class PostStatus extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'slug'];
+    protected $fillable = ['name', 'label', 'slug'];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -43,5 +43,24 @@ class PostStatus extends Model
         return $this->hasMany('App\Post','status_id','id');
     }
 
-
+    /**
+     * @param $name
+     * @return int|null
+     */
+    public static function getStatusIdByName($name)
+    {
+        switch($name)
+        {
+            case 'draft':
+                return 1;
+            case 'pending':
+                return 2;
+            case 'approved':
+                return 3;
+            case 'trash':
+                return 4;
+            default:
+                return null;
+        }
+    }
 }

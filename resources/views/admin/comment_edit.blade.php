@@ -117,9 +117,9 @@ app('navigator')
                                         <select style="height:36px" id="status_id" name="status_id" class="form-control">
                                             @foreach($comment_status as $status)
                                                 @if(old('status_id', $comment->status_id) == $status['id'])
-                                                    <option selected="selected" value="{{ $status->id }}">{{ $status->name }}</option>
+                                                    <option selected="selected" value="{{ $status->id }}">{{ $status->label }}</option>
                                                 @else
-                                                    <option value="{{ $status->id }}">{{ $status->name }}</option>
+                                                    <option value="{{ $status->id }}">{{ $status->label }}</option>
                                                 @endif
                                             @endforeach
                                         </select>

@@ -19,13 +19,19 @@ return [
                     'text' => 'Tất cả',
                     'action' => 'UsersController@index',
                     'active' => false,
-                    'order' => 1
+                    'order' => 1,
+                    'hidden' => function(){
+                        return Gate::denies('indexUser');
+                    }
                 ],
                 'create' => [
                     'text' => 'Thêm mới',
                     'action'=>'UsersController@create',
                     'active' => false,
-                    'order' => 2
+                    'order' => 2,
+                    'hidden' => function(){
+                        return Gate::denies('storeUser');
+                    }
                 ]
             ],
             'order' => 2
@@ -35,29 +41,54 @@ return [
             'active' => false,
             'icon_class' => 'fa fa-pencil',
             'items' => [
+                'owned' => [
+                    'text' => 'Của tôi',
+                    'action' => 'PostsController@listByAuthenticated',
+                    'active' => false,
+                    'order' => 1,
+                    'hidden' => function(){
+                        return Gate::denies('listOwnedPost');
+                    }
+                ],
                 'index' => [
                     'text' => 'Tất cả',
                     'action' => 'PostsController@index',
                     'active' => false,
-                    'order' => 1
+                    'order' => 2,
+                    'hidden' => function(){
+                        return Gate::denies('indexPost');
+                    }
                 ],
                 'create' => [
                     'text' => 'Thêm mới',
                     'action' => 'PostsController@create',
                     'active' => false,
-                    'order' => 2
+                    'order' => 3,
+                    'hidden' => function(){
+                        return Gate::denies('storePost') &&
+                        Gate::denies('storePendingPost') &&
+                        Gate::denies('storeApprovedPost') &&
+                        Gate::denies('storeDraftPost') &&
+                        Gate::denies('storeTrashPost');
+                    }
                 ],
                 'categories' => [
                     'text' => 'Chuyên mục',
                     'action' => 'CategoriesController@index',
                     'active' => false,
-                    'order' => 3
+                    'order' => 4,
+                    'hidden' => function(){
+                        return Gate::denies('indexCategory');
+                    }
                 ],
                 'tags' => [
                     'text' => 'Tags',
                     'action' => 'TagsController@index',
                     'active' => false,
-                    'order' => 4
+                    'order' => 5,
+                    'hidden' => function(){
+                        return Gate::denies('indexTag');
+                    }
                 ]
             ],
             'order' => 3
@@ -67,14 +98,50 @@ return [
             'action' => 'FeedbacksController@index',
             'active' => false,
             'icon_class' => 'fa fa-send-o',
-            'order' => 4
+            'order' => 4,
+            'hidden' => function(){
+                return Gate::denies('indexFeedback') && Gate::denies('listOwnedPostFeedback');
+            },
+            'items' => [
+                'index' => [
+                    'text' => 'Tất cả',
+                    'action' => 'FeedbacksController@index',
+                    'active' => false,
+                    'order' => 1,
+                    'hidden' => function(){
+                        return Gate::denies('indexFeedback');
+                    }
+                ],
+                'owned' => [
+                    'text' => 'Của bài viết của tôi',
+                    'action' => 'FeedbacksController@listByPostAuthenticatedUser',
+                    'active' => false,
+                    'order' => 2,
+                    'hidden' => function(){
+                        return Gate::denies('listOwnedPostFeedback');
+                    }
+                ],
+            ]
         ],
         'comments' => [
             'text' => 'Bình luận',
             'action' => 'CommentsController@index',
             'active' => false,
             'icon_class' => 'fa fa-comments',
-            'order' => 4
+            'order' => 5,
+            'hidden' => function(){
+                return Gate::denies('indexComment');
+            }
+        ],
+        'privileges' => [
+            'text' => 'Quyền hạn',
+            'action' => 'PrivilegesController@index',
+            'active' => false,
+            'icon_class' => 'fa fa-gavel',
+            'order' => 6,
+            'hidden' => function(){
+                return false;
+            }
         ],
     ],
 
@@ -147,13 +214,17 @@ return [
             'icon_class' => 'fa fa-comments',
             'action' => 'CommentsController@index'
         ],
-        'comment_edit' =>[
+        'comment_edit' => [
             'text' => 'Sửa',
             'icon_class' => 'fa fa-wrench'
         ],
         'search_result' => [
             'text' => 'Kết quả tìm kiếm',
             'icon_class' => 'fa fa-search',
+        ],
+        'privileges' => [
+            'text' => 'Quyền hạn',
+            'icon_class' => 'fa fa-gavel',
         ],
     ]
 ];

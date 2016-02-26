@@ -46,8 +46,10 @@ class FeedbacksController extends Controller
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
-    public function index(Request $request)
+    public function index()
     {
+        $this->authorize('indexFeedback');
+
         $filter_show_checked = $this->read_config('filter.show_checked');
         $query = Feedback::with([
             'post' => function($query) {
@@ -67,12 +69,48 @@ class FeedbacksController extends Controller
         return view('admin.feedback_index', compact(['feedbacks', 'filter_show_checked']));
     }
 
+    public function listByPostAuthenticatedUser()
+    {
+        $this->authorize('listOwnedPostFeedback');
+
+        $user_id = Auth::user()->id;
+        return $this->listByPostUser(Auth::user());
+    }
+
+    protected function listByPostUser(User $user)
+    {
+        $user_id = $user->id;
+
+        $filter_show_checked = $this->read_config('filter.show_checked');
+        $query = Feedback::with([
+            'post' => function($p) use ($user_id) {
+                $p->addSelect(['id', 'title', 'user_id']);
+                $p->where('user_id', '=', $user_id);
+            },
+            'user'
+        ])->whereHas('post', function ($q) use ($user_id) {
+            $q->where('user_id','=', $user_id);
+        });
+
+        if(!$filter_show_checked)
+            $query->notChecked();
+
+        $feedbacks = $query->paginate(8);
+
+        if($feedbacks->currentPage() != 1 && $feedbacks->count() == 0)
+            return Redirect::action('FeedbacksController@index');
+
+        return view('admin.feedback_index', array_merge(compact(['feedbacks', 'filter_show_checked'])), ['owned_post_user' => $user]);
+    }
+
     /**
      * @param $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function listByPost($id)
     {
+        $this->authorize('indexFeedback');
+
         $filter_show_checked = $this->read_config('filter.show_checked');
 
         $post = Post::with([
@@ -86,6 +124,10 @@ class FeedbacksController extends Controller
             {
                 $query->addSelect(['id', 'name', 'email']);
             },
+            'feedbacks.post' => function($query)
+            {
+                $query->addSelect(['id', 'user_id']);
+            }
         ])->findOrFail($id, ['id', 'title']);
 
         return view('admin.feedback_list_bypost', compact('post', 'filter_show_checked'));
@@ -97,6 +139,8 @@ class FeedbacksController extends Controller
      */
     public function listByUser($id)
     {
+        $this->authorize('indexFeedback');
+
         $filter_show_checked = $this->read_config('filter.show_checked');
 
         $user = User::with([
@@ -108,7 +152,7 @@ class FeedbacksController extends Controller
             },
             'feedbacks.post' => function($query)
             {
-                $query->addSelect(['id', 'title']);
+                $query->addSelect(['id', 'title', 'user_id']);
             },
         ])->findOrFail($id, ['id', 'name', 'email']);
 
@@ -129,6 +173,9 @@ class FeedbacksController extends Controller
             },
             'user'
         ])->findOrFail($input['feedback_id']);
+
+        if(Gate::denies('checkFeedback') && Gate::denies('checkOwnedPostFeedback', $feedback))
+            abort(403);
 
         if(!$feedback->checked)
         {

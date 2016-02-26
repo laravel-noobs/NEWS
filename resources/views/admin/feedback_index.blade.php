@@ -1,5 +1,12 @@
 <?php
-app('navigator')
+if(isset($owned_post_user))
+    app('navigator')
+        ->activate('feedbacks', 'owned')
+        ->set_page_heading('Danh sách phản hồi của bài viết của ' . $owned_post_user->name)
+        ->set_breadcrumb('admin', 'feedbacks')
+        ->set_page_title('Danh sách phản hồi của bài viết của ' . $owned_post_user->name);
+else
+    app('navigator')
         ->activate('feedbacks', 'index')
         ->set_page_heading('Danh sách phản hồi')
         ->set_breadcrumb('admin', 'feedbacks')
@@ -42,10 +49,18 @@ app('navigator')
                                 <td>{{ $feedback->created_at }}</td>
                                 <td>
                                     <div class="pull-right">
-                                        <a  href="#modal-feedback-check-prompt" data-user_email="{{ $feedback->user->email }}" data-feedback_id="{{ $feedback->id }}"class="btn-white btn btn-xs" data-toggle="modal">
+                                    @if(Gate::allows('checkFeedback') || Gate::allows('checkOwnedPostFeedback', $feedback))
+                                        <a  href="#modal-feedback-check-prompt" data-user_email="{{ $feedback->user->email }}" data-feedback_id="{{ $feedback->id }}" class="btn-white btn btn-xs" data-toggle="modal">
                                             <i class="fa {{ $feedback->checked ? "fa-check-square-o" : "fa-square-o" }}"></i>
                                             <span> Phản hồi</span>
                                         </a>
+                                    @else
+                                        @if($feedback->checked)
+                                            <i class="fa fa-check-square-o"></i><span> Đã duyệt</span>
+                                        @else
+                                            <i class="fa fa-square-o"></i><span> Chưa duyệt</span>
+                                        @endif
+                                    @endif
                                     </div>
                                 </td>
                             </tr>
@@ -63,7 +78,9 @@ app('navigator')
             </div>
         </div>
     </div>
+
     @include('admin.partials._prompt_feedback_check')
+
 @endsection
 
 @section('footer-script')
@@ -76,7 +93,7 @@ app('navigator')
             });
             $('input').on('ifToggled', function(event){
                 $.ajax({
-                    url: location.pathname + '/config',
+                    url: '{{ URL::action('FeedbacksController@postConfig') }}',
                     method: 'post',
                     data: { name: "filter.show_checked", value: $(this).attr('checked') == 'checked' ? 0 : 1 },
                     headers: {

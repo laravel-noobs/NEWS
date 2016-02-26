@@ -23,6 +23,8 @@ class CategoriesController extends Controller
      */
     public function index()
     {
+        $this->authorize('indexCategory');
+
         $categories = Category::with('postsCount')->orderBy('id','desc')->get();
         return view('admin.category_index', ['categories' => $categories]);
     }
@@ -35,6 +37,8 @@ class CategoriesController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('storeCategory');
+
         $slug = $request->request->get('slug');
         $name = $request->request->get('name');
         if(empty($slug) && !empty($name))
@@ -85,6 +89,8 @@ class CategoriesController extends Controller
      */
     public function edit($id)
     {
+        $this->authorize('updateCategory');
+
         $cat = Category::findOrFail($id);
         $categories = Category::where('id', '<>', $id)->get();
         return view('admin.category_edit', ['category' => $cat, 'categories' => $categories]);
@@ -99,6 +105,8 @@ class CategoriesController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $this->authorize('updateCategory');
+
         $slug = $request->request->get('slug');
         $name = $request->request->get('name');
         if(empty($slug) && !empty($name))
@@ -135,6 +143,8 @@ class CategoriesController extends Controller
      */
     public function destroy(Request $request)
     {
+        $this->authorize('destroyCategory');
+
         $id = $request->request->get('cat_id');
         if(empty($id))
             throw new BadRequestHttpException();

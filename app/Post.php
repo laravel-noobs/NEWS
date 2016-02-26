@@ -214,7 +214,7 @@ class Post extends Model
     public function scopeHasStatus($query, $status)
     {
         if(is_string($status))
-            $status = $this->getStatusByName($status);
+            $status = PostStatus::getStatusIdByName($status);
         return $query->where('status_id', '=', $status);
     }
 
@@ -228,29 +228,23 @@ class Post extends Model
         return $query->where('category_id', '=', $category_id);
     }
 
+    /**
+     * @param $query
+     * @param $term
+     * @return mixed
+     */
     public function scopeHasTitleContains($query, $term)
     {
         return $query->where('title', 'like', '%' . $term . '%');
     }
 
     /**
-     * @param $name
-     * @return int|null
+     * @param $query
+     * @param $user_id
+     * @return mixed
      */
-    public static function getStatusByName($name)
+    public function scopeOwnedBy($query, $user_id)
     {
-        switch($name)
-        {
-            case 'pending':
-                return 2;
-            case 'approved':
-                return 3;
-            case 'draft':
-                return 1;
-            case 'trash':
-                return 4;
-            default:
-                return null;
-        }
+        return $query->where('user_id', '=', $user_id);
     }
 }

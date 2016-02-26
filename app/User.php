@@ -199,6 +199,30 @@ class User extends Model implements AuthenticatableContract,
     }
 
     /**
+     * @param string $role
+     */
+    public function assignRole($role)
+    {
+        $this->role()->save(
+            Role::whereName($role)->firstOrFail()
+        );
+    }
+
+    /**
+     * @param array $roles
+     * @return bool
+     */
+    public function hasRole($roles)
+    {
+        return $roles->contains('name', $this->role->name);
+    }
+
+    public function owns($relation)
+    {
+        return $this->id == $relation->user_id;
+    }
+
+    /**
      *
      */
     public function verifyEmail()
@@ -218,5 +242,10 @@ class User extends Model implements AuthenticatableContract,
         $this->expired_at = $expired_at;
 
         $this->save();
+    }
+
+    public function isAdministrator()
+    {
+        return $this->role_id == Role::getRoleIdByName('administrator');
     }
 }

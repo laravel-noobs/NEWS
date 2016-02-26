@@ -81,7 +81,7 @@ app('navigator')
                             <tr  class="{{ $comment->spam ? 'warning' : '' }}">
                                 <td>
                                     @if($comment->user)
-                                    <a href="{{ URL::action('CommentsController@index', ['id' => $comment->user->id]) }}">
+                                    <a>
                                         {{ $comment->user->name }}
                                     </a>
                                     @else
@@ -93,27 +93,41 @@ app('navigator')
                                     {{ $comment->content }}
                                     <ul class="list-inline action" style="padding-top: 5px; margin-bottom: 0px;">
                                         @if($filter_status_type == 'pending')
+                                            @can('approveComment')
                                             <li><a href="{{ URL::action('CommentsController@approve', ['id' => $comment->id]) }}" class="text-success">Duyệt</a></li>
                                             <li style="padding: 0px">|</li>
+                                            @endcan
                                         @elseif($filter_status_type == 'approved')
+                                            @can('unapproveComment')
                                             <li><a href="{{ URL::action('CommentsController@unapprove', ['id' => $comment->id]) }}" class="text-success">Bỏ duyệt</a></li>
                                             <li style="padding: 0px">|</li>
+                                            @endcan
                                         @endif
                                         <li>
                                         @if($comment->spam)
-                                            <a href="{{ URL::action('CommentsController@notspam', ['id' => $comment->id]) }}" class="text-info">Không phải spam</a>
+                                            @can('unspamComment')
+                                                <a href="{{ URL::action('CommentsController@notspam', ['id' => $comment->id]) }}" class="text-info">Không phải spam</a>
+                                            @endcan
                                         @else
+                                            @can('spamComment')
                                             <a href="{{ URL::action('CommentsController@spam', ['id' => $comment->id]) }}" class="text-warning">Spam</a>
+                                            @endcan
                                         @endif
                                         </li>
                                         @if($filter_status_type == 'trash')
-                                            <li class="pull-right"><a href="{{ URL::action('CommentsController@delete', ['id' => $comment->id]) }}" class="text-danger">Xóa</a></li>
+                                            @can('destroyComment')
+                                            <li class="pull-right"><a href="{{ URL::action('CommentsController@destroy', ['id' => $comment->id]) }}" class="text-danger">Xóa</a></li>
                                             <li class="pull-right" style="padding: 0px">|</li>
+                                            @endcan
                                         @else
+                                            @can('trashComment')
                                             <li style="padding: 0px">|</li>
                                             <li><a href="{{ URL::action('CommentsController@trash', ['id' => $comment->id]) }}" class="text-danger">Rác</a></li>
+                                            @endcan
                                         @endif
-                                        <li class="pull-right"><a href="{{ URL::action('CommentsController@edit', ['id' => $comment->id]) }}">Sửa</a></li>
+                                        @can('updateComment')
+                                            <li class="pull-right"><a href="{{ URL::action('CommentsController@edit', ['id' => $comment->id]) }}">Sửa</a></li>
+                                        @endcan
                                     </ul>
                                 </td>
                                 <td><a href="{{ URL::action('PostsController@show', ['id' => $comment->post->id]) }}">{{$comment->post->title}}</a></td>

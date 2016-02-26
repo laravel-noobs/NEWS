@@ -61,6 +61,8 @@ class UsersController extends Controller
      */
     public function index()
     {
+        $this->authorize('indexUser');
+
         $configs = $this->read_configs(['filter.search_term', 'filter.status_type', 'filter.role']);
 
         $users = User::with('role', 'postsCount', 'feedbacksCount')
@@ -77,7 +79,7 @@ class UsersController extends Controller
         if($users->currentPage() != 1 && $users->count() == 0)
             return Redirect::action('UsersController@index');
 
-        $roles = Role::all(['id', 'name']);
+        $roles = Role::all(['id', 'label']);
 
         return view('admin.user_index', array_merge(compact('users', 'roles'), $configs));
     }
@@ -86,8 +88,10 @@ class UsersController extends Controller
      * @param $id
      * @return Redirect
      */
-    public function delete($id)
+    public function destroy($id)
     {
+        $this->authorize('deleteUser');
+
          try
         {
             if(User::destroy($id))
@@ -109,6 +113,8 @@ class UsersController extends Controller
      */
     public function create()
     {
+        $this->authorize('storeUser');
+
         return view('admin/user_create');
     }
 
@@ -120,6 +126,8 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('storeUser');
+
         $this->validate($request, [
             'name' => 'required|min:4|unique:user,name',
             'email' => 'required|email|unique:user,email',
@@ -157,6 +165,8 @@ class UsersController extends Controller
      */
     public function edit($id)
     {
+        $this->authorize('updateUser');
+
         $user = User::findOrFail($id);
         return view('admin.user_edit', ['user' => $user]);
     }
@@ -170,6 +180,7 @@ class UsersController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $this->authorize('updateUser');
 
         $this->validate($request, [
             'name' => 'required|min:4|unique:user,name,' . $id,
@@ -193,21 +204,12 @@ class UsersController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-
-    /**
      * @param Request $request
      */
     public function ban(Request $request)
     {
+        $this->authorize('banUser');
+
         $input = $request->input();
         if(empty($input['user_id']))
             throw new BadRequestHttpException();
@@ -251,7 +253,6 @@ class UsersController extends Controller
      */
     private function verifyEmail($verify_token)
     {
-
         $validator = Validator::make(['verify_token' => $verify_token], [
             'verify_token' => 'required|min:10|max:10'
         ]);
@@ -282,6 +283,8 @@ class UsersController extends Controller
      */
     public function queryUsers(Request $request)
     {
+        $this->authorize('queryUser');
+
         $term = $request->request->get('query');
         if(strlen($term) < 3)
             return null;

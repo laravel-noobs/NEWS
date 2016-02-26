@@ -50,6 +50,8 @@ class CommentsController extends Controller
      */
     public function index()
     {
+        $this->authorize('indexComment');
+
         $configs = $this->read_configs(['filter.status_type', 'filter.search_term', 'filter.hide_spam']);
 
         $comments = Comment::with([
@@ -79,6 +81,8 @@ class CommentsController extends Controller
 
     public function edit($id)
     {
+        $this->authorize('updateComment');
+
         $comment = Comment::with([
             'status',
             'user' => function($query) {
@@ -94,6 +98,8 @@ class CommentsController extends Controller
 
     public function update($id, Request $request)
     {
+        $this->authorize('updateComment');
+
         $comment = Comment::findOrFail($id);
 
         $this->validate($request, [
@@ -128,8 +134,9 @@ class CommentsController extends Controller
      */
     public function spam(Comment $comment_id)
     {
-        $comment_id->spam = true;
-        if($comment_id->save())
+        $this->authorize('spamComment');
+
+        if($comment_id->markAsSpam())
             Flash::push("Đánh dấu spam bình luận #$comment_id->id thành công", 'Hệ thống');
         else
             Flash::push("Đánh dấu spam bình luận #$comment_id->id thất bại", 'Hệ thống');
@@ -143,8 +150,9 @@ class CommentsController extends Controller
      */
     public function notspam(Comment $comment_id)
     {
-        $comment_id->spam = false;
-        if($comment_id->save())
+        $this->authorize('unspamComment');
+
+        if($comment_id->markAsNotSpam())
             Flash::push("Bỏ đánh dấu spam bình luận #$comment_id->id thành công", 'Hệ thống');
         else
             Flash::push("Bỏ đánh dấu spam bình luận #$comment_id->id thất bại", 'Hệ thống');
@@ -158,7 +166,10 @@ class CommentsController extends Controller
      */
     public function approve(Comment $comment_id)
     {
-        $comment_id->status_id = Comment::getStatusByName('approved');
+        if(Gate::denies('approveComment') && Gate::denies('approveOwnedPostComment'))
+            abort(403);
+
+        $comment_id->status_id = CommentStatus::getStatusByName('approved');
         if($comment_id->save())
             Flash::push("Duyệt bình luận #$comment_id->id thành công", 'Hệ thống');
         else
@@ -173,7 +184,9 @@ class CommentsController extends Controller
      */
     public function unapprove(Comment $comment_id)
     {
-        $comment_id->status_id = Comment::getStatusByName('pending');
+        $this->authorize('unapproveComment');
+
+        $comment_id->status_id = CommentStatus::getStatusByName('pending');
         $comment_id->save();
         if($comment_id->save())
             Flash::push("Bỏ duyệt bình luận #$comment_id->id thành công", 'Hệ thống');
@@ -189,7 +202,9 @@ class CommentsController extends Controller
      */
     public function trash(Comment $comment_id)
     {
-        $comment_id->status_id = Comment::getStatusByName('trash');
+        if(Gate::denies('trashComment') && Gate::denies('trashOwnedPostComment'))
+            abort(403);
+        $comment_id->status_id = CommentStatus::getStatusByName('trash');
         $comment_id->save();
 
         if($comment_id->save())
@@ -205,8 +220,10 @@ class CommentsController extends Controller
      * @return mixed
      * @throws \Exception
      */
-    public function delete(Comment $comment_id)
+    public function destroy(Comment $comment_id)
     {
+        $this->authorize('destroyComment');
+
         if($comment_id->delete())
             Flash::push("Xóa bình luận #$comment_id->id thành công", 'Hệ thống');
         else

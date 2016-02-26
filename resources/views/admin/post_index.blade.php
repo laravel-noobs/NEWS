@@ -1,15 +1,17 @@
 <?php
-app('navigator')
-        ->activate('posts', 'index')
-        ->set_page_heading('Danh sách bài viết')
-        ->set_breadcrumb('admin', 'posts');
+if(isset($user))
+    app('navigator')
+            ->activate('posts', 'owned')
+            ->set_page_heading('Danh sách bài viết của ' . $user->name)
+            ->set_breadcrumb('admin', 'posts');
+else
+    app('navigator')
+            ->activate('posts', 'index')
+            ->set_page_heading('Danh sách bài viết')
+            ->set_breadcrumb('admin', 'posts');
 ?>
 
 @extends('partials.admin._layout')
-
-@section('post-delete_inputs')
-    <input name="post_id" type="hidden"/>
-@endsection
 
 @section('content')
     <div class="row">
@@ -93,8 +95,8 @@ app('navigator')
                     <table class="footable table table-stripped toggle-arrow-tiny" data-page-navigation=".footable-pagination" data-page-size="{{ $posts->perPage() }}">
                         <thead>
                         <tr>
-                            <th data-sort-ignore="true" data-toggle="true" width="50%">Tiêu đề</th>
-                            <th data-sort-ignore="true" data-hide="all">Tác giả</th>
+                            <th data-sort-ignore="true" data-toggle="true" width="40%">Tiêu đề</th>
+                            <th data-sort-ignore="true">Tác giả</th>
                             <th data-sort-ignore="true">Chuyên mục</th>
                             <th data-sort-ignore="true" data-hide="phone">Phản hồi</th>
                             <th data-sort-ignore="true" data-hide="phone">Bình luận</th>
@@ -108,26 +110,48 @@ app('navigator')
                                 <td>
                                     <strong>{{ $post->title }}</strong>
                                     <ul class="list-inline action" style="padding-top: 5px; margin-bottom: 0px;">
-                                        @if($filter_status_type == 'pending' || $filter_status_type == 'draft')
-                                            <li class=""><a href="{{ URL::action('PostsController@approve', ['id' => $post->id]) }}" class="text-success">Duyệt</a></li>
-                                            <li style="padding: 0px">|</li>
+                                        @if(Gate::allows('approvePost') ||
+                                            Gate::allows('approveDraftPost', $post) ||
+                                            Gate::allows('approveOwnedDraftPost', $post) ||
+                                            Gate::allows('approvePendingPost', $post) ||
+                                            Gate::allows('approveOwnedPendingPost', $post) ||
+                                            Gate::allows('approveCollaboratorPost', $post) ||
+                                            Gate::allows('approveCollaboratorDraftPost', $post) ||
+                                            Gate::allows('approveCollaboratorPendingPost', $post))
+                                            @if($filter_status_type == 'pending' || $filter_status_type == 'draft')
+                                                <li class=""><a href="{{ URL::action('PostsController@approve', ['id' => $post->id]) }}" class="text-success">Duyệt</a></li>
+                                            @endif
                                         @endif
-                                        @if($filter_status_type == 'approved'  || $filter_status_type == 'draft')
-                                            <li class=""><a href="{{ URL::action('PostsController@unapprove', ['id' => $post->id]) }}" class="text-success">Bỏ duyệt</a></li>
-                                            <li style="padding: 0px">|</li>
-                                        @endif
+                                        @can('unapprovePost')
+                                            @if($filter_status_type == 'approved'  || $filter_status_type == 'draft')
+                                                <li class=""><a href="{{ URL::action('PostsController@unapprove', ['id' => $post->id]) }}" class="text-success">Bỏ duyệt</a></li>
+                                            @endif
+                                        @endcan
+
                                         @if($filter_status_type == 'trash')
+                                            @can('destroyPost')
                                             <li class="pull-right"><a data-toggle="modal" href="#modal-post-delete-prompt" data-post_title="{{ $post->title }}" data-post_id="{{ $post->id }}" class="text-danger">Xóa</a></li>
-                                            <li class="pull-right" style="padding: 0px">|</li>
+                                            @endcan
                                         @else
-                                            <li class=""><a href="{{ URL::action('PostsController@trash', ['id' => $post->id]) }}" class="text-danger">Rác</a></li>
+                                            @if(Gate::allows('trashPost') || Gate::allows('trashOwnedPost', $post))
+                                                <li class=""><a href="{{ URL::action('PostsController@trash', ['id' => $post->id]) }}" class="text-danger">Rác</a></li>
+                                            @endif
                                         @endif
-                                        <li class="pull-right"><a href="{{ URL::action('PostsController@edit', ['id' => $post->id]) }}">Sửa</a></li>
+
+                                        @if(Gate::allows('updatePost') || Gate::allows('updateOwnedPost', $post))
+                                            <li class="pull-right"><a href="{{ URL::action('PostsController@edit', ['id' => $post->id]) }}">Sửa</a></li>
+                                        @endif
                                     </ul>
                                 </td>
-                                <td>{{ $post->user->name }}</td>
+                                <td>{{ $post->user->role->label }} - {{ $post->user->name }}</td>
                                 <td>{{ $post->category != null ? $post->category->name : '' }}</td>
-                                <td><a href="{{ URL::action('FeedbacksController@listByPost', ['id' => $post->id]) }}"><span>{{ $post->feedbacksCount }}</span></a></td>
+                                <td>
+                                    @can('indexFeedback')
+                                        <a href="{{ URL::action('FeedbacksController@listByPost', ['id' => $post->id]) }}"><span>{{ $post->feedbacksCount }}</span></a>
+                                    @else
+                                        <span>{{ $post->feedbacksCount }}</span>
+                                    @endcan
+                                </td>
                                 <td>{{ $post->commentsCount }}</td>
                                 <td>{{ $post->view }}</td>
                                 <td>{{ $post->published_at }}</td>
@@ -136,7 +160,7 @@ app('navigator')
                         </tbody>
                         <tfoot>
                         <tr>
-                            <td colspan="5">
+                            <td colspan="7">
                                 <div class="pull-right">{!! $posts->links() !!}</div>
                             </td>
                         </tr>
@@ -146,14 +170,19 @@ app('navigator')
             </div>
         </div>
     </div>
-    @include('admin.partials._prompt',
-        [
-            'id' => 'post-delete',
-            'method' => 'post',
-            'action' => URL::action('PostsController@destroy'),
-            'title' => 'Xác nhận',
-            'message' => 'Bạn có chắc chắn muốn xóa bài viết "<span class="post_title">này</span>" hay không?',
-        ])
+    @can('destroyPost')
+        @section('post-delete_inputs')
+            <input name="post_id" type="hidden"/>
+        @endsection
+        @include('admin.partials._prompt',
+            [
+                'id' => 'post-delete',
+                'method' => 'post',
+                'action' => URL::action('PostsController@destroy'),
+                'title' => 'Xác nhận',
+                'message' => 'Bạn có chắc chắn muốn xóa bài viết "<span class="post_title">này</span>" hay không?',
+            ])
+    @endcan
 @endsection
 
 @section('footer-script')
@@ -181,7 +210,7 @@ app('navigator')
 
         $('input[name="status_type"]').on('ifChecked', function(event){
             $.ajax({
-                url: location.pathname + '/config',
+                url: '{{ URL::action('PostsController@postConfig') }}',
                 method: 'post',
                 data: { name: "filter.status_type", value: $(this).val() },
                 headers: {
@@ -195,7 +224,7 @@ app('navigator')
         $('select[name="category_id"]').on("select2:select", function (e) {
             cat_id = $(e.currentTarget).val();
             $.ajax({
-                url: location.pathname + '/config',
+                url: '{{ URL::action('PostsController@postConfig') }}',
                 method: 'post',
                 data: { name: "filter.category", value: cat_id === '*' ? 'NULL' : cat_id },
                 headers: {
@@ -209,7 +238,7 @@ app('navigator')
         $('.search-box button').on('click', function(){
             box = $(this).parents('.search-box');
             $.ajax({
-                url: location.pathname + '/config',
+                url: '{{ URL::action('PostsController@postConfig') }}',
                 method: 'post',
                 data: { name: "filter.search_term", value: box.find('#search-input').val() },
                 headers: {

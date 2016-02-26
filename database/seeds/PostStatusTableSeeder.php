@@ -14,19 +14,23 @@ class PostStatusTableSeeder extends Seeder
         DB::table('post_status')->delete();
         $post_status = [
             [
-                'name' => 'Nháp',
+                'name' => 'draft',
+                'label' => 'Nháp',
                 'slug' => str_slug('Nháp')
             ],
             [
-                'name' => 'Đợi duyệt',
+                'name' => 'pending',
+                'label' => 'Đợi duyệt',
                 'slug' => str_slug('Đợi duyệt')
             ],
             [
-                'name' => 'Đã duyệt',
+                'name' => 'approved',
+                'label' => 'Đã duyệt',
                 'slug' => str_slug('Đã duyệt')
             ],
             [
-                'name' => 'Rác',
+                'name' => 'trash',
+                'label' => 'Rác',
                 'slug' => str_slug('Rác')
             ]
         ];

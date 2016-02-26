@@ -6,10 +6,12 @@ use App\Category;
 use App\Post;
 use App\PostStatus;
 use App\Tag;
+use App\User;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Validator;
@@ -53,12 +55,14 @@ class PostsController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+ * Display a listing of the resource.
+ *
+ * @return \Illuminate\Http\Response
+ */
     public function index()
     {
+        $this->authorize('indexPost');
+
         $configs = $this->read_configs(['filter.status_type', 'filter.category', 'filter.search_term']);
 
         $posts = Post::with(['category', 'user', 'status', 'feedbacksCount', 'commentsCount'])
@@ -82,6 +86,40 @@ class PostsController extends Controller
         return view('admin.post_index', array_merge(compact('posts', 'categories'), $configs));
     }
 
+    public function listByAuthenticated()
+    {
+        $this->authorize('listOwnedPost');
+
+        return $this->listByUser(Auth::user()->id);
+    }
+
+    protected function listByUser($id)
+    {
+        $user = User::findOrFail($id);
+
+        $configs = $this->read_configs(['filter.status_type', 'filter.category', 'filter.search_term']);
+
+        $posts = Post::with(['category', 'user', 'status', 'feedbacksCount', 'commentsCount'])
+            ->hasStatus($configs['filter_status_type'])->ownedBy($id);
+
+        if($configs['filter_category'] != '')
+            $posts->hasCategory($configs['filter_category']);
+
+        $term = trim($configs['filter_search_term']);
+
+        if($term != '' && strlen($term) >= 4)
+            $posts->hasTitleContains($term);
+
+        $posts = $posts->paginate(20);
+
+        if($posts->currentPage() != 1 && $posts->count() == 0)
+            return Redirect::action('PostController@listByUser', ['id' => $id]);
+
+        $categories = Category::all(['id', 'name']);
+
+        return view('admin.post_index', array_merge(compact('posts', 'categories', 'user'), $configs));
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -89,9 +127,13 @@ class PostsController extends Controller
      */
     public function create()
     {
-        $categories = Category::all(['id', 'name']);
-        $post_status = PostStatus::all(['id', 'name']);
+        if(Gate::denies('storePendingPost', new Post) && Gate::denies('storeApprovedPost', new Post) && Gate::denies('storeTrashPost', new Post))
+            abort(403);
+
         $post_status_default_id = 2;
+
+        $categories = Category::all();
+        $post_status = PostStatus::all();
         return view('admin.post_create', ['categories' => $categories, 'post_status' => $post_status, 'post_status_default_id' => $post_status_default_id]);
     }
 
@@ -105,7 +147,20 @@ class PostsController extends Controller
     {
         $input = $request->all();
 
+        if(Gate::denies('storePendingPost', [new Post, $input['status_id']])
+            && Gate::denies('storeDraftPost', [new Post, $input['status_id']])
+            && Gate::denies('storeTrashPost', [new Post, $input['status_id']])
+            && Gate::denies('storeApprovedPost', [new Post, $input['status_id']])
+        )
+            abort(403);
+
         list($input, $tags, $new_tags) = $this->prepareInput($input);
+
+        if(Gate::denies('storePostWithNewCategory') && (!empty($input['category_name']) || !!empty($input['category_slug'])))
+            abort(403);
+
+        if(Gate::denies('storePostWithNewTag') && !empty($new_tags))
+            abort(403);
 
         $validator = Validator::make($input, [
             'title' => 'required|min:4',
@@ -126,6 +181,7 @@ class PostsController extends Controller
                 ->withErrors($validator)
                 ->withInput($input);
         }
+
 
         list($result, $post) = $this->createTransaction($input, $new_tags, $tags);
 
@@ -166,6 +222,9 @@ class PostsController extends Controller
             }
         ])->findOrFail($id);
 
+        if(Gate::denies('updatePost') && Gate::denies('updateOwnedPost', $post))
+            abort(403);
+
         $categories = Category::all(['id', 'name']);
         $post_status = PostStatus::all(['id', 'name']);
         $post_status_default_id = 2;
@@ -182,16 +241,29 @@ class PostsController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $post = Post::findOrFail($id);
         $input = $request->all();
 
+        if(Gate::denies('updatePost') && Gate::denies('updateOwnedPost', $post))
+            abort(403);
+
+        if(Gate::denies('updatePostStatus') && array_has($input, 'status_id'))
+            abort(403);
+
         list($input, $tags, $new_tags) = $this->prepareInput($input);
+
+        if(Gate::denies('updatePostWithNewCategory') && (!empty($input['category_name']) || !!empty($input['category_slug'])))
+            abort(403);
+
+        if(Gate::denies('updatePostWithNewTag') && !empty($new_tags))
+            abort(403);
 
         $validator = Validator::make($input, [
             'title' => 'required|min:4',
             'slug' => 'required|min:4|unique:post,slug,' . $id,
             'content' => 'required|min:40|max:2000',
             'published_at' => 'required|date_format:Y-m-d H:i:s',
-            'status_id' => 'required|exists:post_status,id',
+            'status_id' => 'exists:post_status,id',
             'category_id' => 'exists:category,id',
             'new_tags.*.name' => 'required|min:4',
             'new_tags.*.slug'=> 'required|min:4|unique:tag,slug',
@@ -206,7 +278,7 @@ class PostsController extends Controller
                 ->withInput($input);
         }
 
-        list($result, $post) = $this->updateTransaction($id, $input, $new_tags, $tags);
+        list($result, $post) = $this->updateTransaction($post, $input, $new_tags, $tags);
 
         if($result)
             Flash::push("Sửa bài viết \\\"$post->title\\\" thành công", 'Hệ thống');
@@ -217,12 +289,23 @@ class PostsController extends Controller
     }
 
     /**
-     * @param Post $comment_id
+     * @param Post $post_id
      * @return mixed
      */
     public function approve(Post $post_id)
     {
-        $post_id->status_id = Post::getStatusByName('approved');
+        if(Gate::denies('approvePost') &&
+            Gate::denies('approveDraftPost', $post_id) &&
+            Gate::denies('approveOwnedDraftPost', $post_id) &&
+            Gate::denies('approvePendingPost', $post_id) &&
+            Gate::denies('approveOwnedPendingPost', $post_id) &&
+            Gate::denies('approveCollaboratorPost', $post_id) &&
+            Gate::denies('approveCollaboratorDraftPost', $post_id) &&
+            Gate::denies('approveCollaboratorPendingPost', $post_id))
+            abort(403);
+
+        $post_id->status_id = PostStatus::getStatusIdByName('approved');
+
         if($post_id->save())
             Flash::push("Duyệt bài viết \\\"$post_id->title\\\" thành công", 'Hệ thống');
         else
@@ -232,12 +315,14 @@ class PostsController extends Controller
     }
 
     /**
-     * @param Post $comment_id
+     * @param Post $post_id
      * @return mixed
      */
     public function unapprove(Post $post_id)
     {
-        $post_id->status_id = Post::getStatusByName('pending');
+        $this->authorize('unapprovePost');
+
+        $post_id->status_id = PostStatus::getStatusIdByName('pending');
         $post_id->save();
         if($post_id->save())
             Flash::push("Bỏ duyệt bài viết \\\"$post_id->title\\\" thành công", 'Hệ thống');
@@ -248,12 +333,15 @@ class PostsController extends Controller
     }
 
     /**
-     * @param Post $comment_id
+     * @param Post $post_id
      * @return mixed
      */
     public function trash(Post $post_id)
     {
-        $post_id->status_id = Post::getStatusByName('trash');
+        if(Gate::denies('trashPost') && Gate::denies('trashOwnedPost', $post_id))
+            abort(403);
+
+        $post_id->status_id = PostStatus::getStatusIdByName('trash');
         $post_id->save();
 
         if($post_id->save())
@@ -272,6 +360,8 @@ class PostsController extends Controller
      */
     public function destroy(Request $request)
     {
+        $this->authorize('destroyPost');
+
         $id = $request->request->get('post_id');
         if(empty($id))
             throw new BadRequestHttpException();
@@ -296,6 +386,8 @@ class PostsController extends Controller
      */
     public function permalink($name)
     {
+        // @TODO
+
         $slug = str_slug($name);
         $link = array('permalink'=> $slug);
         return $link;
@@ -307,6 +399,8 @@ class PostsController extends Controller
      */
     public function queryPostsByTitle(Request $request)
     {
+        // @TODO
+
         $term = $request->request->get('query');
         if(strlen($term) < 3)
             return null;
@@ -394,11 +488,9 @@ class PostsController extends Controller
      * @param $tags
      * @return array
      */
-    protected function updateTransaction($id, $input, $new_tags, $tags)
+    protected function updateTransaction($post, $input, $new_tags, $tags)
     {
-        $post = Post::findOrFail($id);
-
-        DB::beginTransaction();
+      DB::beginTransaction();
         try {
             if ($input['category_id'] == null)
                 $input['category_id'] = Category::create(['name' => $input['category_name'], 'slug' => $input['category_slug']])->id;
@@ -406,7 +498,8 @@ class PostsController extends Controller
             $this->createNewTags($new_tags, $tags);
 
             $post->user_id = \Auth::user()->id;
-            $post->status_id = $input['status_id'];
+            if(array_has($input,'status_id'))
+                $post->status_id = $input['status_id'];
             $post->category_id =  $input['category_id'];
             $post->fill($input);
 
