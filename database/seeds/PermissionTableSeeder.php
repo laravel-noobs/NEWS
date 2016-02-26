@@ -27,12 +27,6 @@ class PermissionTableSeeder extends Seeder
                     'policy' => null
                 ],
                 [
-                    'name' => 'configUser',
-                    'label'=> 'Cấu hình cho UserController',
-                    'model' => null,
-                    'policy' => null
-                ],
-                [
                     'name' => 'storeUser',
                     'label'=> 'Thêm người dùng',
                     'model' => null,
@@ -70,7 +64,7 @@ class PermissionTableSeeder extends Seeder
                 ],
                 [
                     'name' => 'listOwnedPost',
-                    'label'=> 'Xem danh sách bài viết người đăng nhập',
+                    'label'=> 'Xem danh sách bài viết của bản thân',
                     'model' => null,
                     'policy' => null
                 ],
@@ -88,7 +82,7 @@ class PermissionTableSeeder extends Seeder
                 ],
                 [
                     'name' => 'storeTrashPost',
-                    'label'=> 'Thêm bài viết ở trạng thái đã duyệt',
+                    'label'=> 'Thêm bài viết ở trạng thái trong thùng rác',
                     'model' => 'App\Post',
                     'policy' => 'App\Policies\PostPolicy'
                 ],
@@ -100,7 +94,7 @@ class PermissionTableSeeder extends Seeder
                 ],
                 [
                     'name' => 'storePostWithNewCategory',
-                    'label'=> 'Thêm category mới khi thêm post',
+                    'label'=> 'Thêm chuyên mục mới khi thêm post',
                     'model' => null,
                     'policy' => null
                 ],
@@ -124,7 +118,7 @@ class PermissionTableSeeder extends Seeder
                 ],
                 [
                     'name' => 'approveDraftPost',
-                    'label'=> 'Duyệt bài viết nháp của bản thân',
+                    'label'=> 'Duyệt bài viết nháp bất kỳ',
                     'model' => 'App\Post',
                     'policy' => 'App\Policies\PostPolicy'
                 ],
@@ -196,7 +190,7 @@ class PermissionTableSeeder extends Seeder
                 ],
                 [
                     'name' => 'updatePostWithNewCategory',
-                    'label'=> 'Thêm category mới khi sửa post',
+                    'label'=> 'Thêm chuyên mục mới khi sửa post',
                     'model' => null,
                     'policy' => null
                 ],
@@ -208,7 +202,7 @@ class PermissionTableSeeder extends Seeder
                 ],
                 [
                     'name' => 'updateOwnedPost',
-                    'label'=> 'Cập nhật bài viết của ',
+                    'label'=> 'Cập nhật bài viết của bản thâm',
                     'model' => 'App\Post',
                     'policy' => 'App\Policies\PostPolicy'
                 ],
@@ -220,19 +214,19 @@ class PermissionTableSeeder extends Seeder
                 ],
                 [
                     'name' => 'storeCategory',
-                    'label'=> 'Thêm bài viết',
+                    'label'=> 'Thêm chuyên mục mới',
                     'model' => null,
                     'policy' => null
                 ],
                 [
                     'name' => 'updateCategory',
-                    'label'=> 'Cập nhật bài viết bất kỳ',
+                    'label'=> 'Cập nhật chuyên mục bất kỳ',
                     'model' => null,
                     'policy' => null
                 ],
                 [
                     'name' => 'destroyCategory',
-                    'label'=> 'Xóa bài viết',
+                    'label'=> 'Xóa chuyên mục',
                     'model' => null,
                     'policy' => null
                 ],
@@ -321,6 +315,12 @@ class PermissionTableSeeder extends Seeder
                     'policy' => null
                 ],
                 [
+                    'name' => 'approveOwnedPostComment',
+                    'label'=> 'Duyệt bình luận',
+                    'model' => 'App\Comment',
+                    'policy' => 'App\Policies\CommentPolicy'
+                ],
+                [
                     'name' => 'unapproveComment',
                     'label'=> 'Bỏ duyệt bình luận',
                     'model' => null,
@@ -331,6 +331,12 @@ class PermissionTableSeeder extends Seeder
                     'label'=> 'Cho bình luận vào thùng rác',
                     'model' => null,
                     'policy' => null
+                ],
+                [
+                    'name' => 'trashOwnedPostComment',
+                    'label'=> 'Duyệt bình luận',
+                    'model' => 'App\Comment',
+                    'policy' => 'App\Policies\CommentPolicy'
                 ],
                 [
                     'name' => 'destroyComment',

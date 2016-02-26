@@ -17,6 +17,9 @@ app('navigator')
                     <span class="text-muted small pull-right">{{ $role_permissions->count() }} quyền</span>
                 </div>
                 <div class="ibox-content">
+                    @if($is_administrator)
+                        <h5>Bạn là quản trị viên! Quyền hạn của bạn có thể không được liệt kê đầy đủ ở đây.</h5>
+                    @endif
                     <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="{{ $role_permissions->count() }}">
                         <thead>
                         <tr>

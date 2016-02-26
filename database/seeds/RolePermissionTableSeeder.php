@@ -41,17 +41,23 @@ class RolePermissionTableSeeder extends Seeder
                 'listOwnedPost',
                 'updatePost',
                 'approvePost',
+                'unapprovePost',
                 'trashPost',
                 'indexCategory',
                 'storeCategory',
                 'storePostWithNewCategory',
+                'updatePostWithNewCategory',
                 'indexFeedback',
                 'listOwnedPostFeedback',
                 'checkFeedback',
                 'indexComment',
                 'approveComment',
+                'unapproveComment',
+                'spamComment',
+                'unspamComment',
                 'storeTag',
                 'storePostWithNewTag',
+                'updatePostWithNewTag',
                 'queryTag'
             ]));
         }
@@ -59,6 +65,7 @@ class RolePermissionTableSeeder extends Seeder
         if($collaborator)
         {
             DB::table('role_permission')->insert($this->getArrayPermissionsToRole($collaborator,[
+                'accessAdminPanel',
                 'listOwnedPost',
                 'storePendingPost',
                 'storeDraftPost',
@@ -71,8 +78,8 @@ class RolePermissionTableSeeder extends Seeder
                 'storeTag',
                 'queryTag',
                 'storePostWithNewTag',
-//                'approveOnwedPostComment',
-//                'trashOnwedPostComment'
+                'approveOwnedPostComment',
+                'trashOwnedPostComment'
             ]));
         }
 

@@ -152,6 +152,7 @@ class PostsController extends Controller
             && Gate::denies('storeTrashPost', [new Post, $input['status_id']])
             && Gate::denies('storeApprovedPost', [new Post, $input['status_id']])
         )
+            abort(403);
 
         list($input, $tags, $new_tags) = $this->prepareInput($input);
 

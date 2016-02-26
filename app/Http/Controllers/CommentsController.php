@@ -166,7 +166,8 @@ class CommentsController extends Controller
      */
     public function approve(Comment $comment_id)
     {
-        $this->authorize('approveComment');
+        if(Gate::denies('approveComment') && Gate::denies('approveOwnedPostComment'))
+            abort(403);
 
         $comment_id->status_id = CommentStatus::getStatusByName('approved');
         if($comment_id->save())
@@ -201,8 +202,8 @@ class CommentsController extends Controller
      */
     public function trash(Comment $comment_id)
     {
-        $this->authorize('trashComment');
-
+        if(Gate::denies('trashComment') && Gate::denies('trashOwnedPostComment'))
+            abort(403);
         $comment_id->status_id = CommentStatus::getStatusByName('trash');
         $comment_id->save();
 
