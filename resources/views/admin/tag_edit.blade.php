@@ -70,7 +70,7 @@ app('navigator')
                                 <td>{{ $post->user->name }}</td>
                                 <td>{{ $post->category != null ? $post->category->name : '' }}</td>
                                 <td>{{ $post->published_at }}</td>
-                                <td>{{ $post->postStatus->name }}</td>
+                                <td>{{ $post->status->label }}</td>
                                 <td>{{ $post->view }}</td>
                                 <td>
                                     <div class="btn-group pull-right">

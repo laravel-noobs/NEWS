@@ -65,7 +65,11 @@ return [
                     'active' => false,
                     'order' => 3,
                     'hidden' => function(){
-                        return Gate::denies('storePost');
+                        return Gate::denies('storePost') &&
+                        Gate::denies('storePendingPost') &&
+                        Gate::denies('storeApprovedPost') &&
+                        Gate::denies('storeDraftPost') &&
+                        Gate::denies('storeTrashPost');
                     }
                 ],
                 'categories' => [
@@ -96,16 +100,25 @@ return [
             'icon_class' => 'fa fa-send-o',
             'order' => 4,
             'hidden' => function(){
-                return Gate::denies('indexFeedback') && Gate::denies('listOwnedFeedback');
+                return Gate::denies('indexFeedback') && Gate::denies('listOwnedPostFeedback');
             },
             'items' => [
+                'index' => [
+                    'text' => 'Tất cả',
+                    'action' => 'FeedbacksController@index',
+                    'active' => false,
+                    'order' => 1,
+                    'hidden' => function(){
+                        return Gate::denies('indexFeedback');
+                    }
+                ],
                 'owned' => [
                     'text' => 'Của bài viết của tôi',
                     'action' => 'FeedbacksController@listByPostAuthenticatedUser',
                     'active' => false,
-                    'order' => 1,
+                    'order' => 2,
                     'hidden' => function(){
-                        return Gate::denies('listOwnedFeedback');
+                        return Gate::denies('listOwnedPostFeedback');
                     }
                 ],
             ]
@@ -118,6 +131,16 @@ return [
             'order' => 5,
             'hidden' => function(){
                 return Gate::denies('indexComment');
+            }
+        ],
+        'privileges' => [
+            'text' => 'Quyền hạn',
+            'action' => 'PrivilegesController@index',
+            'active' => false,
+            'icon_class' => 'fa fa-gavel',
+            'order' => 6,
+            'hidden' => function(){
+                return false;
             }
         ],
     ],
@@ -191,13 +214,17 @@ return [
             'icon_class' => 'fa fa-comments',
             'action' => 'CommentsController@index'
         ],
-        'comment_edit' =>[
+        'comment_edit' => [
             'text' => 'Sửa',
             'icon_class' => 'fa fa-wrench'
         ],
         'search_result' => [
             'text' => 'Kết quả tìm kiếm',
             'icon_class' => 'fa fa-search',
+        ],
+        'privileges' => [
+            'text' => 'Quyền hạn',
+            'icon_class' => 'fa fa-gavel',
         ],
     ]
 ];

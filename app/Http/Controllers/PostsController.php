@@ -127,13 +127,13 @@ class PostsController extends Controller
      */
     public function create()
     {
-        if(Gate::denies('storePending', new Post) && Gate::denies('storeApproved', new Post) && Gate::denies('storeTrash', new Post))
+        if(Gate::denies('storePendingPost', new Post) && Gate::denies('storeApprovedPost', new Post) && Gate::denies('storeTrashPost', new Post))
             abort(403);
 
         $post_status_default_id = 2;
 
-        $categories = Category::all(['id', 'name']);
-        $post_status = PostStatus::all(['id', 'name']);
+        $categories = Category::all();
+        $post_status = PostStatus::all();
         return view('admin.post_create', ['categories' => $categories, 'post_status' => $post_status, 'post_status_default_id' => $post_status_default_id]);
     }
 
@@ -147,17 +147,11 @@ class PostsController extends Controller
     {
         $input = $request->all();
 
-        if(Gate::denies('storePending', [new Post, $input['status_id']]))
-            abort(403);
-
-        if(Gate::denies('storeApprovedPost', [new Post, $input['status_id']]))
-            abort(403);
-
-        if(Gate::denies('storeDraftPost', [new Post, $input['status_id']]))
-            abort(403);
-
-        if(Gate::denies('storeTrashPost', [new Post, $input['status_id']]))
-            abort(403);
+        if(Gate::denies('storePendingPost', [new Post, $input['status_id']])
+            && Gate::denies('storeDraftPost', [new Post, $input['status_id']])
+            && Gate::denies('storeTrashPost', [new Post, $input['status_id']])
+            && Gate::denies('storeApprovedPost', [new Post, $input['status_id']])
+        )
 
         list($input, $tags, $new_tags) = $this->prepareInput($input);
 
@@ -227,7 +221,7 @@ class PostsController extends Controller
             }
         ])->findOrFail($id);
 
-        if(Gate::denies('updatePost') && Gate::denies('updateOwnPost', $post))
+        if(Gate::denies('updatePost') && Gate::denies('updateOwnedPost', $post))
             abort(403);
 
         $categories = Category::all(['id', 'name']);
@@ -249,7 +243,7 @@ class PostsController extends Controller
         $post = Post::findOrFail($id);
         $input = $request->all();
 
-        if(Gate::denies('updatePost') && Gate::denies('updateOwnPost', $post))
+        if(Gate::denies('updatePost') && Gate::denies('updateOwnedPost', $post))
             abort(403);
 
         if(Gate::denies('updatePostStatus') && array_has($input, 'status_id'))
@@ -301,9 +295,9 @@ class PostsController extends Controller
     {
         if(Gate::denies('approvePost') &&
             Gate::denies('approveDraftPost', $post_id) &&
-            Gate::denies('approveOwnDraftPost', $post_id) &&
+            Gate::denies('approveOwnedDraftPost', $post_id) &&
             Gate::denies('approvePendingPost', $post_id) &&
-            Gate::denies('approveOwnPendingPost', $post_id) &&
+            Gate::denies('approveOwnedPendingPost', $post_id) &&
             Gate::denies('approveCollaboratorPost', $post_id) &&
             Gate::denies('approveCollaboratorDraftPost', $post_id) &&
             Gate::denies('approveCollaboratorPendingPost', $post_id))
@@ -343,7 +337,7 @@ class PostsController extends Controller
      */
     public function trash(Post $post_id)
     {
-        if(Gate::denies('trashPost') && Gate::denies('trashOwnPost', $post_id))
+        if(Gate::denies('trashPost') && Gate::denies('trashOwnedPost', $post_id))
             abort(403);
 
         $post_id->status_id = PostStatus::getStatusIdByName('trash');

@@ -28,24 +28,51 @@ class RolePermissionTableSeeder extends Seeder
         $this->permissions = Permission::all();
 
         $editor = $this->roles->find(Role::getRoleIdByName('editor'));
+        $collaborator = $this->roles->find(Role::getRoleIdByName('collaborator'));
 
         if($editor)
         {
             DB::table('role_permission')->insert($this->getArrayPermissionsToRole($editor,[
                 'accessAdminPanel',
                 'indexPost',
+                'storePendingPost',
+                'storeDraftPost',
+                'storeApprovedPost',
+                'listOwnedPost',
+                'updatePost',
+                'approvePost',
+                'trashPost',
+                'indexCategory',
+                'storeCategory',
+                'storePostWithNewCategory',
+                'indexFeedback',
+                'listOwnedPostFeedback',
+                'checkFeedback',
+                'indexComment',
+                'approveComment',
+                'storeTag',
+                'storePostWithNewTag',
+                'queryTag'
+            ]));
+        }
+
+        if($collaborator)
+        {
+            DB::table('role_permission')->insert($this->getArrayPermissionsToRole($collaborator,[
                 'listOwnedPost',
                 'storePendingPost',
-                'storeApprovedPost',
                 'storeDraftPost',
-                'storePostWithNewTag',
-                'updateOwnPost',
-                'approvePendingPost',
-                'approveOwnDraftPost',
-                'approveCollaboratorPendingPost',
-                'trashOwnPost',
+                'trashOwnedPost',
+                'updateOwnedPost',
                 'indexCategory',
-                'listOwnedFeedback'
+                'listOwnedPostFeedback',
+                'checkOwnedPostFeedback',
+                'indexTag',
+                'storeTag',
+                'queryTag',
+                'storePostWithNewTag',
+//                'approveOnwedPostComment',
+//                'trashOnwedPostComment'
             ]));
         }
 
@@ -74,7 +101,7 @@ class RolePermissionTableSeeder extends Seeder
         {
             $p = $this->getPermission($permission);
             if(!$p)
-                throw new \Exception('Invalid permission was provided');
+                throw new \Exception('Invalid permission was provided: ' . $permission);
 
             array_push($role_permissions,
                 [

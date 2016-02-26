@@ -28,7 +28,7 @@ class PostPolicy extends Policy
      * @param Post $post
      * @return bool
      */
-    public function updateOwnPost(User $user, Post $post)
+    public function updateOwnedPost(User $user, Post $post)
     {
         return $user->owns($post);
     }
@@ -38,7 +38,7 @@ class PostPolicy extends Policy
      * @param Post $post
      * @return bool
      */
-    public function trashOwnPost(User $user, Post $post)
+    public function trashOwnedPost(User $user, Post $post)
     {
         return $user->owns($post);
     }
@@ -127,7 +127,7 @@ class PostPolicy extends Policy
      * @param Post $post
      * @return bool
      */
-    public function approveOwnDraftPost(User $user, Post $post)
+    public function approveOwnedDraftPost(User $user, Post $post)
     {
         return $user->owns($post) && $post->status_id == PostStatus::getStatusIdByName('draft');
     }
@@ -148,7 +148,7 @@ class PostPolicy extends Policy
      * @param Post $post
      * @return bool
      */
-    public function approveOwnPendingPost(User $user, Post $post)
+    public function approveOwnedPendingPost(User $user, Post $post)
     {
         return $user->owns($post) && $post->status_id == PostStatus::getStatusIdByName('pending');
     }

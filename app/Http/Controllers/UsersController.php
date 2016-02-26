@@ -113,6 +113,8 @@ class UsersController extends Controller
      */
     public function create()
     {
+        $this->authorize('storeUser');
+
         return view('admin/user_create');
     }
 
@@ -124,6 +126,8 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('storeUser');
+
         $this->validate($request, [
             'name' => 'required|min:4|unique:user,name',
             'email' => 'required|email|unique:user,email',

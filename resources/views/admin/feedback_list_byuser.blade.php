@@ -1,6 +1,6 @@
 <?php
 app('navigator')
-        ->activate('feedbacks', 'index')
+        ->activate('feedbacks')
         ->set_page_heading('Phản hồi của người dùng')
         ->set_breadcrumb('admin', 'users', 'feedbacks', ['feedbacks_by_user' => ['text' => $user->name]])
         ->set_page_title($user->name . " - phản hồi" );

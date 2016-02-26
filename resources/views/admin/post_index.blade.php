@@ -112,36 +112,33 @@ else
                                     <ul class="list-inline action" style="padding-top: 5px; margin-bottom: 0px;">
                                         @if(Gate::allows('approvePost') ||
                                             Gate::allows('approveDraftPost', $post) ||
-                                            Gate::allows('approveOwnDraftPost', $post) ||
+                                            Gate::allows('approveOwnedDraftPost', $post) ||
                                             Gate::allows('approvePendingPost', $post) ||
-                                            Gate::allows('approveOwnPendingPost', $post) ||
+                                            Gate::allows('approveOwnedPendingPost', $post) ||
                                             Gate::allows('approveCollaboratorPost', $post) ||
                                             Gate::allows('approveCollaboratorDraftPost', $post) ||
                                             Gate::allows('approveCollaboratorPendingPost', $post))
                                             @if($filter_status_type == 'pending' || $filter_status_type == 'draft')
                                                 <li class=""><a href="{{ URL::action('PostsController@approve', ['id' => $post->id]) }}" class="text-success">Duyệt</a></li>
-                                                <li style="padding: 0px">|</li>
                                             @endif
                                         @endif
                                         @can('unapprovePost')
                                             @if($filter_status_type == 'approved'  || $filter_status_type == 'draft')
                                                 <li class=""><a href="{{ URL::action('PostsController@unapprove', ['id' => $post->id]) }}" class="text-success">Bỏ duyệt</a></li>
-                                                <li style="padding: 0px">|</li>
                                             @endif
                                         @endcan
 
                                         @if($filter_status_type == 'trash')
                                             @can('destroyPost')
                                             <li class="pull-right"><a data-toggle="modal" href="#modal-post-delete-prompt" data-post_title="{{ $post->title }}" data-post_id="{{ $post->id }}" class="text-danger">Xóa</a></li>
-                                            <li class="pull-right" style="padding: 0px">|</li>
                                             @endcan
                                         @else
-                                            @if(Gate::allows('trashPost') || Gate::allows('trashOwnPost', $post))
+                                            @if(Gate::allows('trashPost') || Gate::allows('trashOwnedPost', $post))
                                                 <li class=""><a href="{{ URL::action('PostsController@trash', ['id' => $post->id]) }}" class="text-danger">Rác</a></li>
                                             @endif
                                         @endif
 
-                                        @if(Gate::allows('updatePost') || Gate::allows('updateOwnPost', $post))
+                                        @if(Gate::allows('updatePost') || Gate::allows('updateOwnedPost', $post))
                                             <li class="pull-right"><a href="{{ URL::action('PostsController@edit', ['id' => $post->id]) }}">Sửa</a></li>
                                         @endif
                                     </ul>
@@ -163,7 +160,7 @@ else
                         </tbody>
                         <tfoot>
                         <tr>
-                            <td colspan="5">
+                            <td colspan="7">
                                 <div class="pull-right">{!! $posts->links() !!}</div>
                             </td>
                         </tr>

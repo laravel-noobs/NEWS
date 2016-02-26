@@ -89,6 +89,10 @@ Route::group(['prefix' => 'admin', 'middleware' => 'accessAdminPanel'], function
         Route::post('{id}/edit', 'CommentsController@update');
         Route::post('config', 'CommentsController@postConfig');
     });
+
+    Route::group(['prefix' => 'privileges'], function() {
+        Route::get('/', 'PrivilegesController@index');
+    });
 });
 
 Route::get('/dang-nhap', 'Auth\AuthController@getLogin');

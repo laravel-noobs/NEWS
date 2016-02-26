@@ -71,7 +71,8 @@ class FeedbacksController extends Controller
 
     public function listByPostAuthenticatedUser()
     {
-        //$this->authorize('listOwnFeedback');
+        $this->authorize('listOwnedPostFeedback');
+
         $user_id = Auth::user()->id;
         return $this->listByPostUser(Auth::user());
     }
@@ -83,6 +84,7 @@ class FeedbacksController extends Controller
         $filter_show_checked = $this->read_config('filter.show_checked');
         $query = Feedback::with([
             'post' => function($p) use ($user_id) {
+                $p->addSelect(['id', 'title', 'user_id']);
                 $p->where('user_id', '=', $user_id);
             },
             'user'
@@ -122,6 +124,10 @@ class FeedbacksController extends Controller
             {
                 $query->addSelect(['id', 'name', 'email']);
             },
+            'feedbacks.post' => function($query)
+            {
+                $query->addSelect(['id', 'user_id']);
+            }
         ])->findOrFail($id, ['id', 'title']);
 
         return view('admin.feedback_list_bypost', compact('post', 'filter_show_checked'));
@@ -146,7 +152,7 @@ class FeedbacksController extends Controller
             },
             'feedbacks.post' => function($query)
             {
-                $query->addSelect(['id', 'title']);
+                $query->addSelect(['id', 'title', 'user_id']);
             },
         ])->findOrFail($id, ['id', 'name', 'email']);
 
@@ -159,8 +165,6 @@ class FeedbacksController extends Controller
      */
     public function check(Request $request)
     {
-        $this->authorize('checkFeedback');
-
         $input = $request->input();
 
         $feedback = Feedback::with([
@@ -169,6 +173,9 @@ class FeedbacksController extends Controller
             },
             'user'
         ])->findOrFail($input['feedback_id']);
+
+        if(Gate::denies('checkFeedback') && Gate::denies('checkOwnedPostFeedback', $feedback))
+            abort(403);
 
         if(!$feedback->checked)
         {

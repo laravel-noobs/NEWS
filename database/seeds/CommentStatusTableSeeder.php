@@ -14,15 +14,18 @@ class CommentStatusTableSeeder extends Seeder
         DB::table('comment_status')->delete();
         $comment_status = [
             [
-                'name' => 'Đợi duyệt',
+                'name' => 'pending',
+                'label' => 'Đợi duyệt',
                 'slug' => str_slug('Đợi duyệt')
             ],
             [
-                'name' => 'Đã duyệt',
+                'name' => 'approved',
+                'label' => 'Đã duyệt',
                 'slug' => str_slug('Đã duyệt')
             ],
             [
-                'name' => 'Rác',
+                'name' => 'trash',
+                'label' => 'Rác',
                 'slug' => str_slug('Rác')
             ]
         ];

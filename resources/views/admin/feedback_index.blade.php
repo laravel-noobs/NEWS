@@ -49,8 +49,8 @@ else
                                 <td>{{ $feedback->created_at }}</td>
                                 <td>
                                     <div class="pull-right">
-                                    @can('checkFeedback')
-                                        <a  href="#modal-feedback-check-prompt" data-user_email="{{ $feedback->user->email }}" data-feedback_id="{{ $feedback->id }}"class="btn-white btn btn-xs" data-toggle="modal">
+                                    @if(Gate::allows('checkFeedback') || Gate::allows('checkOwnedPostFeedback', $feedback))
+                                        <a  href="#modal-feedback-check-prompt" data-user_email="{{ $feedback->user->email }}" data-feedback_id="{{ $feedback->id }}" class="btn-white btn btn-xs" data-toggle="modal">
                                             <i class="fa {{ $feedback->checked ? "fa-check-square-o" : "fa-square-o" }}"></i>
                                             <span> Phản hồi</span>
                                         </a>
@@ -60,7 +60,7 @@ else
                                         @else
                                             <i class="fa fa-square-o"></i><span> Chưa duyệt</span>
                                         @endif
-                                    @endcan
+                                    @endif
                                     </div>
                                 </td>
                             </tr>
@@ -78,9 +78,9 @@ else
             </div>
         </div>
     </div>
-    @can('checkFeedback')
-        @include('admin.partials._prompt_feedback_check')
-    @endcan
+
+    @include('admin.partials._prompt_feedback_check')
+
 @endsection
 
 @section('footer-script')

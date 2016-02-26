@@ -86,10 +86,10 @@ app('navigator')
                                                 || Gate::allows('storeApprovedPost', [new App\Post, $status])
                                                 || Gate::allows('storeTrashPost', [new App\Post, $status])
                                             )
-                                                @if(old('status_id') == $status['id'] || ($status['id'] == $post_status_default_id && old('status_id') == null))
-                                                    <option selected="selected" value="{{ $status['id'] }}">{{ $status['name'] }}</option>
+                                                @if(old('status_id') == $status->id || ($status->id == $post_status_default_id && old('status_id') == null))
+                                                    <option selected="selected" value="{{ $status->id }}">{{ $status->label }}</option>
                                                 @else
-                                                    <option value="{{ $status['id'] }}">{{ $status['name'] }}</option>
+                                                    <option value="{{ $status->id }}">{{ $status->label }}</option>
                                                 @endif
                                             @endif
                                         @endforeach

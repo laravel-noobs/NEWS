@@ -79,7 +79,7 @@
                     <h2>Danh sách</h2>
                     <input type="text" class="form-control input-sm m-b-xs" id="filter"
                            placeholder="Tìm kiếm">
-                    <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="15" data-filter=#filter>
+                    <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="15" data-filter="#filter">
                         <thead>
                         <tr>
                             <th>Tên</th>

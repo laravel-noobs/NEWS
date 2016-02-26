@@ -64,7 +64,7 @@ class PermissionTableSeeder extends Seeder
                 ],
                 [
                     'name' => 'indexPost',
-                    'label'=> 'Thêm bài viết ở trạng thái đã duyệt',
+                    'label'=> 'Xem danh sách tất cả các bài viết',
                     'model' => null,
                     'policy' => null
                 ],
@@ -76,7 +76,7 @@ class PermissionTableSeeder extends Seeder
                 ],
                 [
                     'name' => 'storePendingPost',
-                    'label'=> 'Thêm bài viết ở trạng thái đã duyệt',
+                    'label'=> 'Thêm bài viết ở trạng thái đợi duyệt',
                     'model' => 'App\Post',
                     'policy' => 'App\Policies\PostPolicy'
                 ],
@@ -129,7 +129,7 @@ class PermissionTableSeeder extends Seeder
                     'policy' => 'App\Policies\PostPolicy'
                 ],
                 [
-                    'name' => 'approveOwnDraftPost',
+                    'name' => 'approveOwnedDraftPost',
                     'label'=> 'Duyệt bài viết nháp của bản thân',
                     'model' => 'App\Post',
                     'policy' => 'App\Policies\PostPolicy'
@@ -141,8 +141,8 @@ class PermissionTableSeeder extends Seeder
                     'policy' => 'App\Policies\PostPolicy'
                 ],
                 [
-                    'name' => 'approveOwnPendingPost',
-                    'label'=> 'Duyệt bài viết đợi duyệt của mình',
+                    'name' => 'approveOwnedPendingPost',
+                    'label'=> 'Duyệt bài viết đợi duyệt của bản thân',
                     'model' => 'App\Post',
                     'policy' => 'App\Policies\PostPolicy'
                 ],
@@ -183,8 +183,8 @@ class PermissionTableSeeder extends Seeder
                     'policy' => null
                 ],
                 [
-                    'name' => 'trashOwnPost',
-                    'label'=> 'Cho bài viết của chính mình vào thùng rác',
+                    'name' => 'trashOwnedPost',
+                    'label'=> 'Cho bài viết của bản thân vào thùng rác',
                     'model' => 'App\Post',
                     'policy' => 'App\Policies\PostPolicy'
                 ],
@@ -207,8 +207,8 @@ class PermissionTableSeeder extends Seeder
                     'policy' => null
                 ],
                 [
-                    'name' => 'updateOwnPost',
-                    'label'=> 'Cập nhật bài viết của chính mình',
+                    'name' => 'updateOwnedPost',
+                    'label'=> 'Cập nhật bài viết của ',
                     'model' => 'App\Post',
                     'policy' => 'App\Policies\PostPolicy'
                 ],
@@ -243,8 +243,8 @@ class PermissionTableSeeder extends Seeder
                     'policy' => null
                 ],
                 [
-                    'name' => 'listOwnedFeedback',
-                    'label'=> 'Xem danh sách phản hồi',
+                    'name' => 'listOwnedPostFeedback',
+                    'label'=> 'Xem danh sách phản hồi của bài viết của tôi',
                     'model' => null,
                     'policy' => null
                 ],
@@ -253,6 +253,12 @@ class PermissionTableSeeder extends Seeder
                     'label'=> 'Duyệt phản hồi',
                     'model' => null,
                     'policy' => null
+                ],
+                [
+                    'name' => 'checkOwnedPostFeedback',
+                    'label'=> 'Duyệt phản hồi của bài viết của tôi',
+                    'model' => 'App\Feedback',
+                    'policy' => 'App\Policies\FeedbackPolicy'
                 ],
                 [
                     'name' => 'indexTag',
