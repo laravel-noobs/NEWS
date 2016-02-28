@@ -51,6 +51,11 @@ class Feedback extends Model
         return $this->belongsTo('App\User');
     }
 
+    public function feedbackable()
+    {
+        return $this->morphTo();
+    }
+
     public function scopeNotChecked($query)
     {
         $query->where('checked', '=', false);
