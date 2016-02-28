@@ -8,8 +8,6 @@
 /public/js
 /public/unify
 /public/images
-Homestead.yaml
-Homestead.json
 .env
 _ide_helper.php
 .phpstorm.meta.php
