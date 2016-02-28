@@ -1,39 +1,29 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Pham Van Hien
- * Date: 12/1/2015
- * Time: 10:03 PM
- */
 
 namespace App;
 
-
 use Illuminate\Database\Eloquent\Model;
 
-class PostTag extends Model
+class OrderProduct extends Model
 {
     /**
      * The database table used by the model.
      *
      * @var string
      */
-    protected $table = 'post_tag';
+    protected $table = 'order_product';
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = [];
+    protected $fillable = ['product_id', 'quantity'];
 
     /**
-     * @var bool
-     */
-    public $incrementing = false;
-
-    /**
-     * @var bool
+     * The attributes excluded from the model's JSON form.
+     *
+     * @var array
      */
     public $timestamps = false;
 

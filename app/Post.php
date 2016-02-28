@@ -45,7 +45,7 @@ class Post extends Model
      */
     public function feedbacks()
     {
-        return $this->hasMany('App\Feedback');
+        return $this->morphMany('App\Feedback', 'feedbackable');
     }
 
     /**
@@ -53,7 +53,15 @@ class Post extends Model
      */
     public function tags()
     {
-        return $this->belongsToMany('App\Tag');
+        return $this->morphToMany('App\Tag', 'taggable', 'taggable');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function rates()
+    {
+        return $this->belongsToMany('App\User', 'user_rate', 'post_id', 'user_id')->withPivot(['rate']);
     }
 
     /**
@@ -69,7 +77,7 @@ class Post extends Model
      */
     public function comments()
     {
-        return $this->hasMany('App\Comment');
+        return $this->morphMany('App\Comment', 'commentable');
     }
 
     /**
