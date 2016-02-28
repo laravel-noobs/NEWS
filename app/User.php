@@ -55,7 +55,7 @@ class User extends Model implements AuthenticatableContract,
      */
     public function feedbacks()
     {
-        return $this->hasMany('App\Feedback');
+        return $this->hasMany('App\Feedbackable');
     }
 
     /**
@@ -64,6 +64,22 @@ class User extends Model implements AuthenticatableContract,
     public function comments()
     {
         return $this->hasMany('App\Comment');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function reviews()
+    {
+        return $this->hasMany('App\ProductReview', 'user_id', 'id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function rates()
+    {
+        return $this->belongsToMany('App\Post', 'user_rate', 'user_id', 'post_id')->withPivot(['rate']);
     }
 
     /**
