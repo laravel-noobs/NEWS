@@ -24,6 +24,8 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
         'expired_at' => $faker->dateTimeBetween('+2 days', '+2 years'),
         'password' => bcrypt('password'),
         'remember_token' => str_random(10),
+        'delivery_address' => $faker->address,
+        'phone' => $faker->phoneNumber
     ];
 });
 
@@ -32,7 +34,9 @@ $factory->define(App\Comment::class, function (Faker\Generator $faker) {
         'content' => $faker->paragraph,
         'spam' => $faker->boolean(20),
         'name' => $faker->name,
-        'email' => $faker->email
+        'email' => $faker->email,
+        'created_at' => $faker->dateTimeBetween('-1 years'),
+        'updated_at' => $faker->dateTimeBetween('-2 months')
     ];
 });
 
@@ -59,8 +63,9 @@ $factory->define(App\Post::class, function (Faker\Generator $faker) {
 $factory->define(App\Feedback::class, function (Faker\Generator $faker) {
     return [
         'content' => $faker->paragraph,
-        'checked' => random_int(0,1),
-        'created_at' => $faker->dateTimeBetween('-1 years')
+        'checked' => $faker->boolean(),
+        'created_at' => $faker->dateTimeBetween('-1 years'),
+        'updated_at' => $faker->dateTimeBetween('-2 months')
     ];
 });
 
@@ -70,4 +75,61 @@ $factory->define(App\PostTag::class, function (Faker\Generator $faker) {
 
 $factory->define(App\RolePermission::class, function (Faker\Generator $faker) {
     return [];
+});
+
+$factory->define(App\Product::class, function (Faker\Generator $faker) {
+    $name = $faker->sentence(10);
+    return [
+        'name' => $name,
+        'slug' => str_slug($name),
+        'description' => $faker->paragraph,
+        'view' => random_int(0, 500000),
+        'package' => $faker->words(6, true),
+        'image' => $faker->imageUrl('270', '350'),
+        'price' => $faker->randomFloat(10, 100000, 50000000)
+    ];
+});
+
+
+$factory->define(App\Order::class, function (Faker\Generator $faker) {
+    $created_at = $faker->dateTimeBetween('-2 years', '-2 days');
+    $updated_at = $faker->dateTimeBetween($created_at);
+    $canceled_at = $faker->dateTimeBetween($updated_at);
+
+    return [
+        'delivery_address' => $faker->address,
+        'phone' => $faker->phoneNumber,
+        'customer_name' => $faker->firstName . ' ' . $faker->lastName,
+        'created_at' => $created_at,
+        'updated_at' => $updated_at,
+        'canceled_at' => $canceled_at
+    ];
+});
+
+$factory->define(App\Taggable::class, function (Faker\Generator $faker) {
+    return [];
+});
+
+$factory->define(App\UserRate::class, function (Faker\Generator $faker) {
+    return [
+        'rate' => $faker->randomFloat(4, 0, 100)
+    ];
+});
+
+$factory->define(App\ProductReview::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->name,
+        'email' => $faker->email,
+        'content' => $faker->paragraph,
+        'checked' => $faker->boolean(),
+        'rate' => $faker->randomFloat(5, 0, 100),
+        'created_at' => $faker->dateTimeBetween('-1 years')
+    ];
+});
+
+$factory->define(App\OrderProduct::class, function (Faker\Generator $faker) {
+    return [
+        'price' => $faker->randomFloat('10', 1000000, 90000000),
+        'quantity' => $faker->randomNumber(3)
+    ];
 });
