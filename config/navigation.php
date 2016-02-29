@@ -16,7 +16,7 @@ return [
             'icon_class' => 'fa fa-shopping-bag',
             'hidden' => function()
             {
-                return Gate::denies('indexProductCategory');
+                return Gate::denies('indexProductCategory') && Gate::denies('indexProductBrand');
             },
             'items' => [
                 'categories' => [
