@@ -28,6 +28,15 @@ return [
                         return Gate::denies('indexProductCategory');
                     }
                 ],
+                'brands' => [
+                    'text' => 'Nhãn hiệu',
+                    'action' => 'ProductBrandsController@index',
+                    'active' => false,
+                    'order' => 2,
+                    'hidden' => function(){
+                        return Gate::denies('indexProductBrand');
+                    }
+                ],
             ],
             'order' => 2
         ],
@@ -218,6 +227,15 @@ return [
             'action' => 'TagsController@index'
         ],
         'tag_edit' => [
+            'text' => 'Sửa',
+            'icon_class' => 'fa fa-wrench'
+        ],
+        'product_brands' => [
+            'text' => 'Nhãn hiệu sản phẩm',
+            'icon_class' => 'fa fa-copyright',
+            'action' => 'ProductBrandsController@index'
+        ],
+        'product_brand_edit' => [
             'text' => 'Sửa',
             'icon_class' => 'fa fa-wrench'
         ],
