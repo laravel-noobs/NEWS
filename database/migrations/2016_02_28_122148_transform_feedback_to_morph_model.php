@@ -31,6 +31,8 @@ class TransformFeedbackToMorphModel extends Migration
      */
     public function down()
     {
+        DB::delete("delete from feedback where feedbackable_type <> 'App\Post'");
+
         Schema::table('feedback', function(Blueprint $table){
             $table->renameColumn('feedbackable_id', 'post_id');
             $table->foreign('post_id')

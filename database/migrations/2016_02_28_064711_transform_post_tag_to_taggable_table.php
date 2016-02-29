@@ -12,9 +12,10 @@ class TransformPostTagToTaggableTable extends Migration
      */
     public function up()
     {
-        //        if(Schema::hasTable('post_tag'))
-//        {
+
         Schema::table('post_tag', function(Blueprint $table) {
+            $table->dropPrimary(['tag_id', 'post_id']);
+
             $table->dropForeign('post_tag_post_id_foreign');
 
             $table->renameColumn('post_id','taggable_id');
@@ -26,23 +27,11 @@ class TransformPostTagToTaggableTable extends Migration
 
         DB::statement('ALTER TABLE `post_tag` MODIFY `taggable_type` VARCHAR(255);');
 
+        Schema::table('post_tag', function (Blueprint $table) {
+            $table->primary(['tag_id', 'taggable_id', 'taggable_type']);
+        });
+
         Schema::rename('post_tag', 'taggable');
-//        }
-//        else
-//        {
-//            Schema::create('taggable', function (Blueprint $table){
-//                $table->unsignedInteger('tag_id')->index();
-//                $table->unsignedInteger('taggable_id')->index();
-//                $table->string('taggable_type')->index();
-//
-//                $table->foreign('tag_id')
-//                    ->references('id')->on('tag')
-//                    ->onDelete('cascade')
-//                    ->onUpdate('cascade');
-//
-//                $table->primary(['tag_id', 'taggable_id', 'taggable_type']);
-//            });
-//        }
 
     }
 
@@ -55,13 +44,19 @@ class TransformPostTagToTaggableTable extends Migration
     {
         if(Schema::hasTable('taggable'))
         {
+            DB::delete("delete from taggable where taggable_type <> 'App\Post'");
 
             Schema::table('taggable', function(Blueprint $table){
+                $table->dropPrimary('tag_id', 'taggable_id', 'taggable_type');
+
                 $table->renameColumn('taggable_id', 'post_id');
                 $table->foreign('post_id')
                     ->references('id')->on('post')
                     ->onDelete('cascade')
                     ->onUpdate('cascade');
+
+                $table->primary(['tag_id', 'post_id']);
+
                 $table->dropColumn('taggable_type');
             });
 
