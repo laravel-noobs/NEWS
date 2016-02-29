@@ -36,14 +36,14 @@ app('navigator')
                         </div>
 
                         <div class="form-group {{ count($errors->get('parent_id')) > 0 ? 'has-error' : '' }}">
-                            <label>Danh mục mẹ</label>
+                            <label>Danh mục cha</label>
                             <select type="text" id="parent_id" name="parent_id" placeholder="" class="form-control">
                                 <option value="">Không có</option>
                                 @foreach($categories as $cat)
                                     <option value="{{ $cat->id }}">{{ $cat->name }}</option>
                                 @endforeach
                             </select>
-                            <span class="help-block m-b-none">Danh mục mới có thể là danh mục con một danh mục khác. Chọn danh mục mẹ cho danh mục con sẽ được tạo.</span>
+                            <span class="help-block m-b-none">Danh mục mới có thể là danh mục con một danh mục khác. Chọn danh mục cha cho danh mục con sẽ được tạo.</span>
                             @foreach($errors->get('parent_id') as $err)
                                 <label class="error" for="{{ 'parent_id' }}">{{ $err }}</label>
                             @endforeach
@@ -98,7 +98,7 @@ app('navigator')
                                     <ul class="list-inline action" style="padding-top: 5px; margin-bottom: 0px;">
                                         @can('updateProductCategory')
                                         <li class="">
-                                            <a href="" class="text-success">Sửa</a>
+                                            <a href="{{ URL::action('ProductCategoriesController@edit', ['id' => $cat->id]) }}" class="text-success">Sửa</a>
                                         </li>
                                         @endcan
                                         @can('destroyProductCategory')
