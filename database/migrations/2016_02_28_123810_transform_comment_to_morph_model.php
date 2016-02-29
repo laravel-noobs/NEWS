@@ -31,6 +31,8 @@ class TransformCommentToMorphModel extends Migration
      */
     public function down()
     {
+        DB::delete("delete from comment where commentable_type <> 'App\Post'");
+
         Schema::table('comment', function(Blueprint $table){
             $table->renameColumn('commentable_id', 'post_id');
             $table->foreign('post_id')

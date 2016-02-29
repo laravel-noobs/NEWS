@@ -14,6 +14,8 @@ class CreateProductReviewTable extends Migration
     {
         Schema::create('product_review', function (Blueprint $table) {
             $table->smallIncrements('id');
+            $table->string('name');
+            $table->string('email');
             $table->text('content');
             $table->boolean('checked');
             $table->float('rate')->unsigned();
