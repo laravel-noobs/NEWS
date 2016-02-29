@@ -58,7 +58,12 @@ class RolePermissionTableSeeder extends Seeder
                 'storeTag',
                 'storePostWithNewTag',
                 'updatePostWithNewTag',
-                'queryTag'
+                'queryTag',
+
+                'indexProductCategory',
+                'storeProductCategory',
+                'updateProductCategory',
+                'destroyProductCategory',
             ]));
         }
 

@@ -10,7 +10,7 @@ app('navigator')
 
 @section('content')
     <div class="row">
-        @can('storeCategory')
+        @can('storeProductCategory')
         <div class="col-sm-4">
             <div class="ibox ">
                 <div class="ibox-content">
@@ -70,57 +70,61 @@ app('navigator')
             </div>
         </div>
         <div class="col-sm-8">
-            @else
-                <div class="col-sm-12">
-                    @endcan
-                    <div class="ibox">
-                        <div class="ibox-content">
-                            <span class="text-muted small pull-right">{{ count($categories) }} danh mục</span>
-                            <h2>Danh sách</h2>
-                            <input type="text" class="form-control input-sm m-b-xs" id="filter"
-                                   placeholder="Tìm kiếm">
-                            <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="15" data-filter="#filter">
-                                <thead>
-                                <tr>
-                                    <th>Tên</th>
-                                    <th data-hide="all">Slug</th>
-                                    <th>Mô tả</th>
-                                    <th data-hide="phone">Sản phẩm</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @foreach($categories as $cat)
-                                    <tr>
-                                        <td>{{ $cat->name }}</td>
-                                        <td>{{ $cat->slug }}</td>
-                                        <td>
-                                            {{ $cat->description }}
-                                            <ul class="list-inline action" style="padding-top: 5px; margin-bottom: 0px;">
-                                                <li class="">
-                                                    <a href=""  class="text-success">Sửa</a>
-                                                </li>
-                                                <li class="">
-                                                    <a data-toggle="modal" class="text-danger" href="#modal-category-delete-prompt" data-cat_name="{{ $cat->name }}" data-cat_id="{{ $cat->id }}">Xóa</a>
-                                                </li>
-                                            </ul>
-                                        </td>
-                                        <td>{{ $cat->productsCount }}</td>
-                                    </tr>
-                                @endforeach
-                                </tbody>
-                                <tfoot>
-                                <tr>
-                                    <td colspan="4">
-                                        <ul class="pagination pull-right"></ul>
-                                    </td>
-                                </tr>
-                                </tfoot>
-                            </table>
-                        </div>
-                    </div>
+        @else
+        <div class="col-sm-12">
+        @endcan
+            <div class="ibox">
+                <div class="ibox-content">
+                    <span class="text-muted small pull-right">{{ count($categories) }} danh mục</span>
+                    <h2>Danh sách</h2>
+                    <input type="text" class="form-control input-sm m-b-xs" id="filter"
+                           placeholder="Tìm kiếm">
+                    <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="15" data-filter="#filter">
+                        <thead>
+                        <tr>
+                            <th>Tên</th>
+                            <th data-hide="all">Slug</th>
+                            <th>Mô tả</th>
+                            <th data-hide="phone">Sản phẩm</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach($categories as $cat)
+                            <tr>
+                                <td>{{ $cat->name }}</td>
+                                <td>{{ $cat->slug }}</td>
+                                <td>
+                                    {{ $cat->description }}
+                                    <ul class="list-inline action" style="padding-top: 5px; margin-bottom: 0px;">
+                                        @can('updateProductCategory')
+                                        <li class="">
+                                            <a href="" class="text-success">Sửa</a>
+                                        </li>
+                                        @endcan
+                                        @can('destroyProductCategory')
+                                        <li class="">
+                                            <a data-toggle="modal" class="text-danger" href="#modal-category-delete-prompt" data-cat_name="{{ $cat->name }}" data-cat_id="{{ $cat->id }}">Xóa</a>
+                                        </li>
+                                        @endcan
+                                    </ul>
+                                </td>
+                                <td>{{ $cat->productsCount }}</td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <td colspan="4">
+                                <ul class="pagination pull-right"></ul>
+                            </td>
+                        </tr>
+                        </tfoot>
+                    </table>
                 </div>
+            </div>
         </div>
-        @can('accessAdminPanel')
+
+        @can('destroyProductCategory')
         @section('category-delete_inputs')
             <input name="cat_id" type="hidden"/>
         @endsection

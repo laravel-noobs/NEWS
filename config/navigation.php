@@ -14,6 +14,10 @@ return [
             'text' => 'Sản phẩm',
             'active' => false,
             'icon_class' => 'fa fa-shopping-bag',
+            'hidden' => function()
+            {
+                return Gate::denies('indexProductCategory');
+            },
             'items' => [
                 'categories' => [
                     'text' => 'Danh mục',
@@ -21,7 +25,7 @@ return [
                     'active' => false,
                     'order' => 1,
                     'hidden' => function(){
-                        return false;
+                        return Gate::denies('indexProductCategory');
                     }
                 ],
             ],
