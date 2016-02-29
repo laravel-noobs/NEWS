@@ -27,12 +27,14 @@ class PostStatus extends Model
      */
     protected $fillable = ['name', 'label', 'slug'];
 
+    public $timestamps = false;
+
     /**
      * The attributes excluded from the model's JSON form.
      *
      * @var array
      */
-    public $timestamps = false;
+
     protected $hidden = [];
 
     /**
