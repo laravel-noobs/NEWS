@@ -54,7 +54,7 @@ class ProductBrand extends Model
      */
     public function productsCount()
     {
-        return $this->hasOne('App\Product')
+        return $this->hasOne('App\Product', 'brand_id')
             ->selectRaw('brand_id, count(*) as aggregate')
             ->groupBy('brand_id');
     }
