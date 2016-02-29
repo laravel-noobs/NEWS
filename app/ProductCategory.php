@@ -65,7 +65,7 @@ class ProductCategory extends Model
      */
     public function productsCount()
     {
-        return $this->hasOne('App\Product')
+        return $this->hasOne('App\Product', 'category_id')
             ->selectRaw('category_id, count(*) as aggregate')
             ->groupBy('category_id');
     }
