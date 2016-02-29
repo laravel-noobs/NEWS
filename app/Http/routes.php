@@ -32,6 +32,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'accessAdminPanel'], function
         Route::get('/', 'ProductCategoriesController@index');
         Route::post('/', 'ProductCategoriesController@store');
         Route::post('delete', 'ProductCategoriesController@destroy');
+        Route::get('{id}/edit', 'ProductCategoriesController@edit');
+        Route::post('{id}/edit', 'ProductCategoriesController@update');
     });
 
     Route::group(['prefix' => 'users'], function() {

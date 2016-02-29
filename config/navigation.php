@@ -226,6 +226,10 @@ return [
             'icon_class' => 'fa fa-archive',
             'action' => 'ProductCategoriesController@index'
         ],
+        'product_category_edit' => [
+            'text' => 'Sửa',
+            'icon_class' => 'fa fa-wrench'
+        ],
         'categories' => [
             'text' => 'Chuyên mục',
             'icon_class' => 'fa fa-archive',
