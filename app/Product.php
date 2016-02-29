@@ -11,7 +11,7 @@ class Product extends Model
      *
      * @var string
      */
-    protected $table = 'post';
+    protected $table = 'product';
 
     /**
      * The attributes that are mass assignable.
@@ -48,6 +48,14 @@ class Product extends Model
     public function status()
     {
         return $this->belongsTo('App\ProductStatus', 'status_id', 'id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function brand()
+    {
+        return $this->belongsTo('App\ProductBrand', 'brand_id', 'id');
     }
 
     /**
