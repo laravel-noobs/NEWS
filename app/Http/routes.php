@@ -28,6 +28,12 @@ Route::group(['prefix' => 'admin', 'middleware' => 'accessAdminPanel'], function
 
     });
 
+    Route::group(['prefix' => 'product/categories'], function(){
+        Route::get('/', 'ProductCategoriesController@index');
+        Route::post('/', 'ProductCategoriesController@store');
+        Route::post('delete', 'ProductCategoriesController@destroy');
+    });
+
     Route::group(['prefix' => 'users'], function() {
         Route::get('/', 'UsersController@index');
         Route::get('/create', 'UsersController@create');

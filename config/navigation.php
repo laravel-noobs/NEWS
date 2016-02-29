@@ -10,6 +10,27 @@ return [
             'icon_class' => 'fa fa-th-large',
             'order' => 1
         ],
+        'products' => [
+            'text' => 'Sản phẩm',
+            'active' => false,
+            'icon_class' => 'fa fa-shopping-bag',
+            'hidden' => function()
+            {
+                return Gate::denies('indexProductCategory');
+            },
+            'items' => [
+                'categories' => [
+                    'text' => 'Danh mục',
+                    'action' => 'ProductCategoriesController@index',
+                    'active' => false,
+                    'order' => 1,
+                    'hidden' => function(){
+                        return Gate::denies('indexProductCategory');
+                    }
+                ],
+            ],
+            'order' => 2
+        ],
         'users' => [
             'text' => 'Người dùng',
             'active' => false,
@@ -199,6 +220,11 @@ return [
         'tag_edit' => [
             'text' => 'Sửa',
             'icon_class' => 'fa fa-wrench'
+        ],
+        'product_categories' => [
+            'text' => 'Danh mục sản phẩm',
+            'icon_class' => 'fa fa-archive',
+            'action' => 'ProductCategoriesController@index'
         ],
         'categories' => [
             'text' => 'Chuyên mục',
