@@ -19,11 +19,20 @@ return [
                 return Gate::denies('indexProductCategory') && Gate::denies('indexProductBrand');
             },
             'items' => [
+                'reviews' => [
+                    'text' => 'Đánh giá',
+                    'action' => 'ProductReviewsController@index',
+                    'active' => false,
+                    'order' => 1,
+                    'hidden' => function(){
+                        return Gate::denies('indexProductReview');
+                    }
+                ],
                 'categories' => [
                     'text' => 'Danh mục',
                     'action' => 'ProductCategoriesController@index',
                     'active' => false,
-                    'order' => 1,
+                    'order' => 2,
                     'hidden' => function(){
                         return Gate::denies('indexProductCategory');
                     }
@@ -32,11 +41,11 @@ return [
                     'text' => 'Nhãn hiệu',
                     'action' => 'ProductBrandsController@index',
                     'active' => false,
-                    'order' => 2,
+                    'order' => 3,
                     'hidden' => function(){
                         return Gate::denies('indexProductBrand');
                     }
-                ],
+                ]
             ],
             'order' => 2
         ],
@@ -227,6 +236,15 @@ return [
             'action' => 'TagsController@index'
         ],
         'tag_edit' => [
+            'text' => 'Sửa',
+            'icon_class' => 'fa fa-wrench'
+        ],
+        'product_reviews' => [
+            'text' => 'Đánh giá sản phẩm',
+            'icon_class' => 'fa fa-star-o',
+            'action' => 'ProductReviewsController@index'
+        ],
+        'product_review_edit' => [
             'text' => 'Sửa',
             'icon_class' => 'fa fa-wrench'
         ],

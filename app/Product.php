@@ -72,4 +72,9 @@ class Product extends Model
     {
         return $this->belongsToMany('App\Order', 'order_product', 'product_id', 'order_id')->withPivot(['price', 'quantity']);
     }
+
+    public function scopeSearchInName($query, $term)
+    {
+        return $query->where('name', 'like', "%{$term}%");
+    }
 }
