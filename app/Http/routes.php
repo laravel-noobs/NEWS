@@ -28,12 +28,27 @@ Route::group(['prefix' => 'admin', 'middleware' => 'accessAdminPanel'], function
 
     });
 
+    Route::group(['prefix' => 'products'], function(){
+        Route::get('search', 'ProductsController@queryProducts');
+        Route::get('/{slug}', 'ProductsController@show');
+    });
+
     Route::group(['prefix' => 'product/categories'], function(){
         Route::get('/', 'ProductCategoriesController@index');
         Route::post('/', 'ProductCategoriesController@store');
         Route::post('delete', 'ProductCategoriesController@destroy');
         Route::get('{id}/edit', 'ProductCategoriesController@edit');
         Route::post('{id}/edit', 'ProductCategoriesController@update');
+    });
+
+    Route::group(['prefix' => 'product/reviews'], function(){
+        Route::get('/', 'ProductReviewsController@index');
+        Route::post('/', 'ProductReviewsController@store');
+        Route::post('delete', 'ProductReviewsController@destroy');
+        Route::get('{id}/edit', 'ProductReviewsController@edit');
+        Route::post('{id}/edit', 'ProductReviewsController@update');
+        Route::get('{product_review_id}/check', 'ProductReviewsController@check');
+        Route::post('config', 'ProductReviewsController@postConfig');
     });
 
     Route::group(['prefix' => 'product/brands'], function(){
@@ -43,6 +58,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'accessAdminPanel'], function
         Route::get('{id}/edit', 'ProductBrandsController@edit');
         Route::post('{id}/edit', 'ProductBrandsController@update');
     });
+
     Route::group(['prefix' => 'users'], function() {
         Route::get('/', 'UsersController@index');
         Route::get('/create', 'UsersController@create');

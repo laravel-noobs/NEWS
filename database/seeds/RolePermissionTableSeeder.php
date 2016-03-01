@@ -34,6 +34,8 @@ class RolePermissionTableSeeder extends Seeder
         {
             DB::table('role_permission')->insert($this->getArrayPermissionsToRole($editor,[
                 'accessAdminPanel',
+                'queryUser',
+
                 'indexPost',
                 'storePendingPost',
                 'storeDraftPost',
@@ -69,6 +71,11 @@ class RolePermissionTableSeeder extends Seeder
                 'storeProductBrand',
                 'updateProductBrand',
                 'destroyProductBrand',
+
+                'indexProductReview',
+                'updateProductReview',
+                'checkProductReview',
+                'destroyProductReview',
             ]));
         }
 

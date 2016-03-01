@@ -44,4 +44,26 @@ class ProductReview extends Model
     {
         return $this->belongsTo('App\Product');
     }
+
+    public function scopeHasChecked($query)
+    {
+        return $query->where('checked', '=', true);
+    }
+
+    public function scopeHasNotChecked($query)
+    {
+        return $query->where('checked', '=', false);
+    }
+
+    public function scopeSearchByTerm($query, $term)
+    {
+        // @TODO
+        return $query->where('content', 'like', "%{$term}%");
+    }
+
+    public function check()
+    {
+        $this->checked = true;
+        return $this->save();
+    }
 }

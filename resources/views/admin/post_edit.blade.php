@@ -206,11 +206,6 @@ app('navigator')
             tags: true
             @endcan
         }).trigger("change");
-        $(".tags").select2({
-            @can('updatePostWithNewTag')
-            tags: true
-            @endcan
-        });
 
         var flag = true;
         $('#title').on('change', function () {
@@ -261,7 +256,9 @@ app('navigator')
         });
 
         $("#tags").select2({
+            @can('updatePostWithNewTag')
             tags: true,
+            @endcan
             ajax: {
                 url: '{{ URL::action('TagsController@queryTags') }}',
                 dataType: 'json',
