@@ -37,7 +37,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'accessAdminPanel'], function
         Route::post('config', 'ProductsController@postConfig');
         Route::get('{id}/edit', 'ProductsController@edit');
         Route::post('{id}/edit', 'ProductsController@update');
-        //Route::get('/{slug}', 'ProductsController@show');
+        Route::get('/{slug}', 'ProductsController@show');
     });
 
     Route::group(['prefix' => 'product/categories'], function(){
