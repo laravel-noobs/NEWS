@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Product extends Model
 {
@@ -33,6 +34,20 @@ class Product extends Model
      * @var array
      */
     protected $dates = [];
+
+    public function tags()
+    {
+        return $this->morphToMany('App\Tag', 'taggable', 'taggable');
+    }
+
+    public function tagsCount()
+    {
+        DB::enableQueryLog();
+        return $this->hasMany('App\Taggable', 'taggable_id')
+            ->selectRaw('taggable_id, count(*) as aggregate')
+            ->whereRaw("taggable_type = '" . str_replace('\\', '\\\\', static::class) . "'")
+            ->groupBy('taggable_id');
+    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
