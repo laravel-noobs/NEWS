@@ -19,7 +19,7 @@ class FeedbackExampleSeeder extends Seeder
         $products = Product::all(['id']);
         $users = User::all(['id']);
         DB::table('feedback')->delete();
-        for($i = 0; $i < 100; $i++)
+        for($i = 0; $i < 500; $i++)
         {
             $feedbackable = random_int(0,1) ? $posts->random() : $products->random();
             factory('App\Feedback')->create([

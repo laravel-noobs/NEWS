@@ -104,9 +104,10 @@ class Post extends Model
      */
     public function commentsCount()
     {
-        return $this->hasOne('App\Comment')
-            ->selectRaw('post_id, count(*) as aggregate')
-            ->groupBy('post_id');
+        return $this->hasOne('App\Comment', 'commentable_id')
+            ->selectRaw('commentable_id, count(*) as aggregate')
+            ->whereRaw("commentable_type = '" . str_replace('\\', '\\\\', static::class) . "'")
+            ->groupBy('commentable_id');
     }
 
     /**
@@ -131,9 +132,10 @@ class Post extends Model
      */
     public function feedbacksCount()
     {
-        return $this->hasOne('App\Feedback')
-            ->selectRaw('post_id, count(*) as aggregate')
-            ->groupBy('post_id');
+        return $this->hasOne('App\Feedback', 'feedbackable_id')
+            ->selectRaw('feedbackable_id, count(*) as aggregate')
+            ->whereRaw("feedbackable_type = '" . str_replace('\\', '\\\\', static::class) . "'")
+            ->groupBy('feedbackable_id');
     }
 
     /**
