@@ -52,8 +52,12 @@ class ProductStatus extends Model
     {
         switch($name)
         {
-            case 'UNKNOWN':
+            case 'outofstock':
                 return 1;
+            case 'available':
+                return 2;
+            case 'disabled':
+                return 3;
             default:
                 return null;
         }

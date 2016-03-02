@@ -23,6 +23,11 @@ class ProductStatusTableSeeder extends Seeder
                 'label' => 'Còn hàng',
                 'slug' => str_slug('Còn hàng')
             ],
+            [
+                'name' => 'disabled',
+                'label' => 'Vô hiệu',
+                'slug' => str_slug('Vô hiệu')
+            ],
         ];
         DB::table('product_status')->insert($post_status);
     }

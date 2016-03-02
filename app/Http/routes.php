@@ -29,8 +29,15 @@ Route::group(['prefix' => 'admin', 'middleware' => 'accessAdminPanel'], function
     });
 
     Route::group(['prefix' => 'products'], function(){
+        Route::get('/', 'ProductsController@index');
         Route::get('search', 'ProductsController@queryProducts');
-        Route::get('/{slug}', 'ProductsController@show');
+        Route::post('delete', 'ProductsController@destroy');
+        Route::post('enable', 'ProductsController@enable');
+        Route::post('disable', 'ProductsController@disable');
+        Route::post('config', 'ProductsController@postConfig');
+        Route::get('{id}/edit', 'ProductsController@edit');
+        Route::post('{id}/edit', 'ProductsController@update');
+        //Route::get('/{slug}', 'ProductsController@show');
     });
 
     Route::group(['prefix' => 'product/categories'], function(){

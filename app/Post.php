@@ -98,7 +98,7 @@ class Post extends Model
 
     /**
      *
-     * Count number of posts belongs to this user
+     * Count number of posts belongs to this post
      *
      * @return mixed
      */

@@ -284,6 +284,27 @@ class PermissionTableSeeder extends Seeder
                 [
                     'name' => 'destroyProductReview',
                     'label' => 'Xóa đánh giá sản phẩm'
+                ],
+
+                [
+                    'name' => 'indexProduct',
+                    'label' => 'Xem danh sách sản phẩm'
+                ],
+                [
+                    'name' => 'updateProduct',
+                    'label' => 'Sửa sản phẩm'
+                ],
+                [
+                    'name' => 'disableProduct',
+                    'label' => 'Vô hiệu sản phẩm'
+                ],
+                [
+                    'name' => 'enableProduct',
+                    'label' => 'Cho phép sản phẩm'
+                ],
+                [
+                    'name' => 'destroyProduct',
+                    'label' => 'Xóa sản phẩm'
                 ]
             ];
         DB::table('permission')->insert($permissions);

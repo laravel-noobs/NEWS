@@ -85,7 +85,7 @@ $factory->define(App\Product::class, function (Faker\Generator $faker) {
         'description' => $faker->paragraph,
         'view' => random_int(0, 500000),
         'package' => $faker->words(6, true),
-        'image' => $faker->imageUrl('270', '350'),
+        'image' => $faker->imageUrl('370', '555'),
         'price' => $faker->randomFloat(10, 100000, 50000000)
     ];
 });
