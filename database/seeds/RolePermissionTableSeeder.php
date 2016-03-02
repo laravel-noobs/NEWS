@@ -76,6 +76,12 @@ class RolePermissionTableSeeder extends Seeder
                 'updateProductReview',
                 'checkProductReview',
                 'destroyProductReview',
+
+                'indexProduct',
+                'updateProduct',
+                'disableProduct',
+                'enableProduct',
+                'destroyProduct'
             ]));
         }
 
