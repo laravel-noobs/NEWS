@@ -133,3 +133,23 @@ $factory->define(App\OrderProduct::class, function (Faker\Generator $faker) {
         'quantity' => $faker->randomNumber(3)
     ];
 });
+
+$factory->define(App\Collection::class, function (Faker\Generator $faker) {
+    $label = $faker->words(8, true);
+    $created_at = $faker->dateTimeBetween('-2 years');
+    return [
+        'name' => $faker->uuid,
+        'label' => $label,
+        'slug' => str_slug($label),
+        'enabled' => $faker->boolean(60),
+        'description' => $faker->boolean(50) ? $faker->paragraph : null,
+        'image' => $faker->boolean(50) ? $faker->imageUrl('555', '370') : null,
+        'expired_at' => $faker->boolean(50) ? $faker->dateTimeBetween($created_at, '+2 months') : null,
+        'created_at' => $created_at,
+        'updated_at' => $faker->dateTimeBetween($created_at)
+    ];
+});
+
+$factory->define(App\ProductCollection::class, function (Faker\Generator $faker) {
+    return [];
+});
