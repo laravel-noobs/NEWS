@@ -81,7 +81,11 @@ class RolePermissionTableSeeder extends Seeder
                 'updateProduct',
                 'disableProduct',
                 'enableProduct',
-                'destroyProduct'
+                'destroyProduct',
+
+                'indexCollection',
+                'updateCollection',
+                'destroyCollection'
             ]));
         }
 

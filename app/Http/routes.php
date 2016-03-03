@@ -25,7 +25,6 @@ Route::group(['prefix' => 'admin', 'middleware' => 'accessAdminPanel'], function
         Route::post('delete', 'CategoriesController@destroy');
         Route::get('{id}/edit', 'CategoriesController@edit');
         Route::post('{id}/edit', 'CategoriesController@update');
-
     });
 
     Route::group(['prefix' => 'products'], function(){
@@ -38,6 +37,14 @@ Route::group(['prefix' => 'admin', 'middleware' => 'accessAdminPanel'], function
         Route::get('{id}/edit', 'ProductsController@edit');
         Route::post('{id}/edit', 'ProductsController@update');
         Route::get('/{slug}', 'ProductsController@show');
+    });
+
+    Route::group(['prefix' => 'collections'], function(){
+        Route::get('/', 'CollectionsController@index');
+        Route::post('/', 'CollectionsController@store');
+        Route::post('delete', 'CollectionsController@destroy');
+        Route::get('{id}/edit', 'CollectionsController@edit');
+        Route::post('{id}/edit', 'CollectionsController@update');
     });
 
     Route::group(['prefix' => 'product/categories'], function(){
