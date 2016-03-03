@@ -19,6 +19,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'accessAdminPanel'], function
 
     Route::get('/', 'AdminController@index');
 
+    Route::get('utils/permalink/{name?}','AdminController@permalink');
+
     Route::group(['prefix' => 'categories'], function(){
         Route::get('/', 'CategoriesController@index');
         Route::post('/', 'CategoriesController@store');
@@ -87,7 +89,6 @@ Route::group(['prefix' => 'admin', 'middleware' => 'accessAdminPanel'], function
         Route::get('{id}/edit', 'PostsController@edit');
         Route::post('{id}/edit', 'PostsController@update');
         Route::get('{id}/show', 'PostsController@show');
-        Route::get('getpermalink/{name}','PostsController@permalink');
         Route::get('{post_id}/approve', 'PostsController@approve');
         Route::get('{post_id}/unapprove', 'PostsController@unapprove');
         Route::get('{post_id}/trash', 'PostsController@trash');

@@ -113,6 +113,13 @@ app('navigator')
                                 <td>
                                     {{ $product->description }}
                                     <div>
+                                        <ul class="list-inline">
+                                            @foreach($product->tags as $tag)
+                                                <li><span class="badge">{{ $tag->name }}</span></li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                    <div>
                                         <ul class="list-inline action" style="padding-top: 5px; margin-bottom: 0px;">
                                             @if($product->status->name != 'disabled')
                                                 @can('disableProduct')
@@ -133,6 +140,7 @@ app('navigator')
                                             @endcan
                                         </ul>
                                     </div>
+
                                 </td>
                                 <td>
                                     <div>{{ $product->category != null ? $product->category->name : '' }}</div>

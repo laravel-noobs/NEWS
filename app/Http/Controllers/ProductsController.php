@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\ProductBrand;
 use App\ProductStatus;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -54,7 +55,16 @@ class ProductsController extends Controller
     {
         $configs = $this->read_configs(['filter.status_type', 'filter.category', 'filter.search_term']);
 
-        $products  = Product::with(['category', 'status', 'feedbacksCount', 'commentsCount', 'reviewsCount'])
+        $products  = Product::with([
+            'category',
+            'status',
+            'feedbacksCount',
+            'commentsCount',
+            'reviewsCount',
+            'tags' => function($query) {
+                $query->addSelect(['id', 'name']);
+            }
+        ])
             ->hasStatus($configs['filter_status_type']);
 
         $categories = ProductCategory::all(['id', 'name']);
@@ -76,6 +86,26 @@ class ProductsController extends Controller
     public function show($slug)
     {
         dd($slug);
+    }
+
+    public function edit($id)
+    {
+        $product = Product::with([
+            'status',
+            'brand',
+            'category',
+            'tags' => function($query) {
+                $query->addSelect(['id', 'name']);
+            }
+        ])->findOrFail($id);
+
+        $categories = ProductCategory::all(['id', 'name']);
+
+        $product_status = ProductStatus::all(['id', 'label']);
+
+        $brands = ProductBrand::all(['id', 'name']);
+
+        return view('admin.shop.product_edit', compact('product', 'categories', 'brands', 'product_status'));
     }
 
     /**
