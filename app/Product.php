@@ -87,6 +87,35 @@ class Product extends Model
         return $this->belongsToMany('App\Order', 'order_product', 'product_id', 'order_id')->withPivot(['price', 'quantity']);
     }
 
+    public function collections()
+    {
+        return $this->belongsToMany('App\Collection', 'product_collection');
+    }
+
+    /**
+     * Count number of collections this product belongs to
+     *
+     * @return mixed
+     */
+    public function collectionsCount()
+    {
+        return $this->hasOne('App\ProductCollection')
+            ->selectRaw('collection_id, count(*) as aggregate')
+            ->groupBy('collection_id');
+    }
+    /**
+     * Count number of collections this product belongs to
+     *
+     * @return int
+     */
+    public function getCollectionsCountAttribute()
+    {
+        if (!$this->relationLoaded('productsCount'))
+            $this->load('productsCount');
+        $related = $this->getRelation('productsCount')->first();
+        return ($related) ? (int) $related->aggregate : 0;
+    }
+
     /**
      *
      * Count number of comments belongs to this product
