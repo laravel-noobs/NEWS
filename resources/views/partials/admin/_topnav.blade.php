@@ -10,7 +10,7 @@
         </div>
         <ul class="nav navbar-top-links navbar-right">
             @if($authenticated)
-                <li><a> {{ $user_email }} </a></li>
+                <li class="hidden-xs"><a> {{ $user_email }} </a></li>
                 <li><a href="{{ URL::action('Auth\AuthController@getLogout', ['ref' => 'admin']) }}"><i class="fa fa-sign-out"></i> Log out</a></li>
             @endif
         </ul>

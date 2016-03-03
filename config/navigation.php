@@ -28,6 +28,15 @@ return [
                         return Gate::denies('indexProduct');
                     }
                 ],
+                'collections' => [
+                    'text' => 'Nhóm',
+                    'action' => 'CollectionsController@index',
+                    'active' => false,
+                    'order' => 1,
+                    'hidden' => function(){
+                        return Gate::denies('indexCollection');
+                    }
+                ],
                 'reviews' => [
                     'text' => 'Đánh giá',
                     'action' => 'ProductReviewsController@index',
@@ -279,6 +288,11 @@ return [
         'product_category_edit' => [
             'text' => 'Sửa',
             'icon_class' => 'fa fa-wrench'
+        ],
+        'collections' => [
+            'text' => 'Nhóm sản phẩm',
+            'icon_class' => 'fa fa-th-large',
+            'action' => 'CollectionsController@index'
         ],
         'categories' => [
             'text' => 'Chuyên mục',

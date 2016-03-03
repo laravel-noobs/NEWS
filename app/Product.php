@@ -112,7 +112,7 @@ class Product extends Model
     {
         if (!$this->relationLoaded('productsCount'))
             $this->load('productsCount');
-        $related = $this->getRelation('productsCount')->first();
+        $related = $this->getRelation('productsCount');
         return ($related) ? (int) $related->aggregate : 0;
     }
 
