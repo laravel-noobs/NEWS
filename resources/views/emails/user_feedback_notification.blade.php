@@ -21,7 +21,12 @@
     <p>Chào {{ $first_name }} {{ $last_name }},</p>
 
     <p>
-        Bạn gửi một phản hồi tại bài viết <a href="{{ URL::action('PostsController@show', ['id' => $feedback->post->id]) }}">{{ $feedback->post->title }}</a>.<br/>
+
+        @if(get_class($feedback->feedbackable) == \App\Post::class)
+            Bạn gửi một phản hồi về bài viết <a href="{{ URL::action('PostsController@show', ['id' => $feedback->feedbackable->id]) }}">{{ $feedback->feedbackable->title }}</a>.<br/>
+        @elseif(get_class($feedback->feedbackable) == \App\Product::class)
+            Bạn gửi một phản hồi về bài viết <a href="{{ URL::action('ProductsController@show', ['slug' => $feedback->feedbackable->slug]) }}">{{ $feedback->feedbackable->name }}</a>.<br/>
+        @endif
         Quản trị viên {{ $staff->first_name }} {{ $staff->last_name }} đã tiếp nhận và đọc phản hồi của bạn.<br/>
     </p>
 

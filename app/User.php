@@ -55,7 +55,7 @@ class User extends Model implements AuthenticatableContract,
      */
     public function feedbacks()
     {
-        return $this->hasMany('App\Feedbackable');
+        return $this->hasMany('App\Feedback');
     }
 
     /**

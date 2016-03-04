@@ -55,6 +55,25 @@ class Feedback extends Model
         return $this->morphTo();
     }
 
+
+    public function scopeBelongToFeedbackable($query, $class)
+    {
+        return $query->where('feedbackable_type', '=', $class);
+    }
+
+
+    public function scopeBelongToPost($query)
+    {
+        return $this->belongToFeedbackable(\App\Post::class);
+    }
+
+
+    public function scopeBelongToProduct($query)
+    {
+        return $this->belongToFeedbackable(\App\Product::class);
+    }
+
+
     /**
      * @param $query
      */

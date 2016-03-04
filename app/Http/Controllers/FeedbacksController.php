@@ -9,6 +9,7 @@ use App\User;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 
@@ -24,14 +25,18 @@ class FeedbacksController extends Controller
      */
     protected $configs = [
         'filter' => [
-            'show_checked' => false
+            'search_term' => null,
+            'show_checked' => false,
+            'feedbackable_type' => 'post'
         ]
     ];
     /**
      * @var array
      */
     protected $configs_validate = [
-        'filter.show_checked' => 'boolean'
+        'filter.search_term' => 'min:4|max:255',
+        'filter.show_checked' => 'boolean',
+        'filter.feedbackable_type' => 'in:post,product'
     ];
 
     /**
@@ -50,23 +55,50 @@ class FeedbacksController extends Controller
     {
         $this->authorize('indexFeedback');
 
-        $filter_show_checked = $this->read_config('filter.show_checked');
+        $configs = $this->read_configs(['filter.show_checked', 'filter.feedbackable_type', 'filter.search_term']);
+
         $query = Feedback::with([
-            'post' => function($query) {
-                $query->addSelect(['id', 'title', 'slug']);
+            'user' => function($query) {
+                $query->addSelect(['id', 'name', 'email']);
             },
-            'user'
         ]);
 
-        if(!$filter_show_checked)
+        if(!$configs['filter_show_checked'])
             $query->notChecked();
 
-        $feedbacks = $query->paginate(8);
+
+        $feedbacks = $this->loadLazyEagerFeedbackable($query, $configs['filter_feedbackable_type'], 8, [
+            'post' => ['id', 'title'],
+            'product' => ['id', 'name']
+        ]);
 
         if($feedbacks->currentPage() != 1 && $feedbacks->count() == 0)
             return Redirect::action('FeedbacksController@index');
 
-        return view('admin.feedback_index', compact(['feedbacks', 'filter_show_checked']));
+        return view('admin.feedback_index', array_merge(compact(['feedbacks']), $configs));
+    }
+
+    protected function loadLazyEagerFeedbackable($query, $type, $paginate = null, $attributes = null)
+    {
+        switch($type)
+        {
+            case 'post':
+                $query = $query->belongToPost();
+                break;
+            case 'product':
+                $query = $query->belongToProduct();
+                break;
+        }
+        if($paginate)
+            $feedbacks = $query->paginate($paginate);
+
+        $feedbacks = $query->paginate(8);
+
+        $feedbacks->load(['feedbackable' => function ($query) use ($attributes, $type) {
+            if($attributes)
+                $query->addSelect($attributes[$type]);
+        }]);
+        return $feedbacks;
     }
 
     public function listByPostAuthenticatedUser()
@@ -83,12 +115,12 @@ class FeedbacksController extends Controller
 
         $filter_show_checked = $this->read_config('filter.show_checked');
         $query = Feedback::with([
-            'post' => function($p) use ($user_id) {
+            'feedbackable' => function($p) use ($user_id) {
                 $p->addSelect(['id', 'title', 'user_id']);
                 $p->where('user_id', '=', $user_id);
             },
             'user'
-        ])->whereHas('post', function ($q) use ($user_id) {
+        ])->belongToPost()->whereHas('feedbackable', function ($q) use ($user_id) {
             $q->where('user_id','=', $user_id);
         });
 
@@ -150,10 +182,7 @@ class FeedbacksController extends Controller
                     $query->notChecked();
                 $query->orderBy('created_at', 'desc');
             },
-            'feedbacks.post' => function($query)
-            {
-                $query->addSelect(['id', 'title', 'user_id']);
-            },
+            'feedbacks.feedbackable',
         ])->findOrFail($id, ['id', 'name', 'email']);
 
         return view('admin.feedback_list_byuser', compact('user', 'filter_show_checked'));
