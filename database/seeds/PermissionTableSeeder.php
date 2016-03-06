@@ -15,6 +15,10 @@ class PermissionTableSeeder extends Seeder
         $permissions =
             [
                 [
+                    'name' => 'grantPermission',
+                    'label'=> 'Cấp phép'
+                ],
+                [
                     'name' => 'accessAdminPanel',
                     'label'=> 'Truy cập trang admin'
                 ],
