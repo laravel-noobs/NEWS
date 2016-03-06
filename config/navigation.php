@@ -176,10 +176,31 @@ return [
             'active' => false,
             'icon_class' => 'fa fa-gavel',
             'order' => 6,
-            'hidden' => function(){
-                return false;
-            }
+            'hidden' => false,
+            'items' => [
+                'index' => [
+                    'text' => 'Của tôi',
+                    'action' => 'PrivilegesController@index',
+                    'active' => false,
+                    'icon_class' => 'fa fa-gavel',
+                    'order' => 6,
+                    'hidden' => function(){
+                        return Gate::denies('grantPermission');
+                    }
+                ],
+                'grant' => [
+                    'text' => 'Cấp quyền',
+                    'action' => 'PrivilegesController@grant',
+                    'active' => false,
+                    'icon_class' => 'fa fa-magic',
+                    'order' => 6,
+                    'hidden' => function(){
+                        return Gate::denies('grantPermission');
+                    }
+                ]
+            ]
         ],
+
     ],
 
     /*
@@ -298,7 +319,13 @@ return [
         ],
         'privileges' => [
             'text' => 'Quyền hạn',
+            'action' => 'PrivilegesController@index',
             'icon_class' => 'fa fa-gavel',
+        ],
+        'privilege_grant' => [
+            'text' => 'Cấp quyền',
+            'action' => 'PrivilegesController@index',
+            'icon_class' => 'fa fa-magic',
         ],
     ]
 ];

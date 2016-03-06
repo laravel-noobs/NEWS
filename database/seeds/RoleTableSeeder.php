@@ -15,7 +15,7 @@ class RoleTableSeeder extends Seeder
         $role =
         [
             [
-                'name' => 'admin',
+                'name' => 'administrator',
                 'label'=> 'Quản trị viên',
                 'slug' => str_slug('Quản trị viên')
             ],

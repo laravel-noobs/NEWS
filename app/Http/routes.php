@@ -136,6 +136,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'accessAdminPanel'], function
 
     Route::group(['prefix' => 'privileges'], function() {
         Route::get('/', 'PrivilegesController@index');
+        Route::get('/grant', 'PrivilegesController@grant');
+        Route::post('/grant', 'PrivilegesController@grantToRole');
+        Route::post('config', 'PrivilegesController@postConfig');
     });
 });
 
