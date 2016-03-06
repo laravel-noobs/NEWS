@@ -22,7 +22,7 @@ app('navigator')
                         <thead>
                         <tr>
                             <th data-sort-ignore="true" width="40%">Nội dung</th>
-                            <th width="30%" data-sort-ignore="true">Mục tiêu</th>
+                            <th width="30%" data-sort-ignore="true">Đối tượng</th>
                             <th data-sort-ignore="true">Ngày nhận</th>
                             <th data-sort-ignore="true">
                                 <div class="i-checks pull-right">

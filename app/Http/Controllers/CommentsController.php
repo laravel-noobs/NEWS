@@ -26,7 +26,8 @@ class CommentsController extends Controller
         'filter' => [
             'status_type' => 'approved',
             'hide_spam' => 0,
-            'search_term' => null
+            'search_term' => null,
+            'commentable_type' => 'post'
         ]
     ];
     /**
@@ -34,7 +35,9 @@ class CommentsController extends Controller
      */
     protected $configs_validate = [
         'filter.search_term' => 'min:4,max:255',
-        'filter.hide_spam' => 'boolean'
+        'filter.hide_spam' => 'boolean',
+        'filter.commentable_type' => 'in:post,product',
+        'filter.status_type' => 'in:pending,approved,trash'
     ];
 
     /**
@@ -52,27 +55,38 @@ class CommentsController extends Controller
     {
         $this->authorize('indexComment');
 
-        $configs = $this->read_configs(['filter.status_type', 'filter.search_term', 'filter.hide_spam']);
+        $configs = $this->read_configs(['filter.status_type', 'filter.search_term', 'filter.hide_spam', 'filter.commentable_type']);
 
-        $comments = Comment::with([
+        $query = Comment::with([
             'status',
-            'user' => function($query) use($configs) {
-                $query->addSelect(['id', 'name']);
-            },
-            'post' => function($query) {
-                $query->addSelect(['id', 'title', 'slug']);
-            }
+            'user'
         ]);
 
-        $comments->hasStatus($configs['filter_status_type']);
-
-        if($configs['filter_search_term'])
-            $comments->searchByTerm($configs['filter_search_term']);
+        if($configs['filter_status_type'])
+            $query->hasStatus($configs['filter_status_type']);
 
         if($configs['filter_hide_spam'])
-            $comments->notSpam();
+            $query->notSpam();
 
-        $comments = $comments->orderBy('created_at','desc')->paginate(8);
+        if($configs['filter_search_term'])
+            $query->searchByTerm($configs['filter_search_term']);
+
+        switch($configs['filter_commentable_type'])
+        {
+            case 'post':
+                $query->belongToPost();
+                break;
+            case 'product':
+                $query->belongToProduct();
+                break;
+        }
+
+        $query->orderBy('created_at','desc');
+
+        $comments = $query->paginate(8);
+
+        $comments->load(['commentable']);
+
         if($comments->currentPage() != 1 && $comments->count() == 0)
             return Redirect::action('CommentsController@index');
 
@@ -85,14 +99,14 @@ class CommentsController extends Controller
 
         $comment = Comment::with([
             'status',
+            'commentable',
             'user' => function($query) {
                 $query->addSelect(['id', 'name']);
-            },
-            'post' => function($query) {
-                $query->addSelect(['id', 'title', 'slug']);
             }
         ])->findOrFail($id);
-        $comment_status = CommentStatus::all(['id', 'name']);
+
+        $comment_status = CommentStatus::all(['id',  'label']);
+
         return view('admin.comment_edit', compact('comment', 'comment_status'));
     }
 
@@ -106,7 +120,8 @@ class CommentsController extends Controller
             'user_id' => 'required_without:name,email|exists:user,id',
             'name' => 'required_without:user_id|min:4|max:20',
             'email' => 'required_without:user_id|email',
-            'post_id' => 'required|exists:post,id',
+            'commentable_type' => 'required|in:App\Post,App\Product',
+            'commentable_id' => 'required|' . ($request->get('commentable_type') == 'App\Post' ? 'exists:post,id' : 'exists:product,id'),
             'status_id' => 'required|exists:comment_status,id',
             'spam' => 'boolean',
             'created_at' => 'date_format:Y-m-d H:i:s'
@@ -115,7 +130,8 @@ class CommentsController extends Controller
         $input = $request->input();
         $comment->spam = isset($input['spam']) ? true : false;
         $comment->created_at = $input['created_at'];
-        $comment->post_id = $input['post_id'];
+        $comment->commentable_type = $input['commentable_type'];
+        $comment->commentable_id = $input['commentable_id'];
         $comment->status_id = $input['status_id'];
         $comment->user_id = isset($input['user_id']) ? $input['user_id'] : null;
         $comment->fill($input);
@@ -125,7 +141,7 @@ class CommentsController extends Controller
         else
             Flash::push("Sửa bình luận #$comment->id thất bại", 'Hệ thống');
 
-        return Redirect::action('CommentsController@index');
+        return Redirect::action('CommentsController@edit', ['id' => $comment->id]);
     }
 
     /**

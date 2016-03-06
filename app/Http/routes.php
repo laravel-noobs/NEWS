@@ -115,7 +115,6 @@ Route::group(['prefix' => 'admin', 'middleware' => 'accessAdminPanel'], function
     Route::group(['prefix' => 'feedbacks'], function() {
         Route::get('/', 'FeedbacksController@index');
         Route::post('/', 'FeedbacksController@check');
-        Route::get('owned','FeedbacksController@listByPostAuthenticatedUser');
         Route::post('config', 'FeedbacksController@postConfig');
     });
     Route::get('posts/{id}/feedbacks', 'FeedbacksController@listByPost');

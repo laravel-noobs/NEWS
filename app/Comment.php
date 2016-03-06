@@ -42,9 +42,41 @@ class Comment extends Model
         return $this->belongsTo('App\User');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
+     */
     public function commentable()
     {
         return $this->morphTo();
+    }
+
+    /**
+     * @param $query
+     * @param $class
+     * @return mixed
+     */
+    public function scopeBelongToCommentable($query, $class)
+    {
+        return $query->where('commentable_type', '=', $class);
+    }
+
+
+    /**
+     * @param $query
+     * @return mixed
+     */
+    public function scopeBelongToPost($query)
+    {
+        return $this->belongToCommentable(\App\Post::class);
+    }
+
+    /**
+     * @param $query
+     * @return mixed
+     */
+    public function scopeBelongToProduct($query)
+    {
+        return $this->belongToCommentable(\App\Product::class);
     }
 
     /**
@@ -55,11 +87,20 @@ class Comment extends Model
         return $this->belongsTo('App\CommentStatus', 'status_id', 'id');
     }
 
+    /**
+     * @param $query
+     * @return mixed
+     */
     public function scopeNotSpam($query)
     {
         return $query->where('spam', '=', false);
     }
 
+    /**
+     * @param $query
+     * @param $status
+     * @return mixed
+     */
     public function scopeHasStatus($query, $status)
     {
         if(is_string($status))
@@ -68,30 +109,50 @@ class Comment extends Model
         return $query->where('status_id', '=', $status);
     }
 
+    /**
+     * @param $query
+     * @param $term
+     */
     public function scopeOrContentContains($query, $term)
     {
-        $query->orwhere('content', 'like', '%'. $term . '%');
+        return $query->orWhere('content', 'like', '%'. $term . '%');
     }
 
-    public function scopeSearchByTerm(Builder $query, $term)
+
+    /**
+     * @param Builder $query
+     * @param $term
+     * @return Builder|static
+     */
+    public function scopeSearchByTerm($query, $term)
     {
-        $query->orWhereHas('user', function($query) use($term) {
+        // @TODO search by user not working
+        return $query->orWhereHas('user', function($query) use($term) {
             $query->searchByTerm($term);
-        });
-        $query->orContentContains($term);
+        })->orContentContains($term);
     }
 
+    /**
+     * @param $name
+     * @return bool
+     */
     public function isStatus($name)
     {
         return $this->status_id == CommentStatus::getStatusByName($name);
     }
 
+    /**
+     * @return bool
+     */
     public function markAsSpam()
     {
         $this->spam = true;
         return $this->save();
     }
 
+    /**
+     * @return bool
+     */
     public function markAsNotSpam()
     {
         $this->spam = false;

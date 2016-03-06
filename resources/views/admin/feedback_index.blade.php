@@ -1,11 +1,4 @@
 <?php
-if(isset($owned_post_user))
-    app('navigator')
-        ->activate('feedbacks', 'owned')
-        ->set_page_heading('Danh sách phản hồi của bài viết của ' . $owned_post_user->name)
-        ->set_breadcrumb('admin', 'feedbacks')
-        ->set_page_title('Danh sách phản hồi của bài viết của ' . $owned_post_user->name);
-else
     app('navigator')
         ->activate('feedbacks', 'index')
         ->set_page_heading('Danh sách phản hồi')
@@ -97,7 +90,7 @@ else
                                 <td>{{ $feedback->created_at }}</td>
                                 <td>
                                     <div class="pull-right">
-                                    @if(Gate::allows('checkFeedback') || Gate::allows('checkOwnedPostFeedback', $feedback))
+                                    @can('checkFeedback')
                                         <a  href="#modal-feedback-check-prompt" data-user_email="{{ $feedback->user->email }}" data-feedback_id="{{ $feedback->id }}" class="btn-white btn btn-xs" data-toggle="modal">
                                             <i class="fa {{ $feedback->checked ? "fa-check-square-o" : "fa-square-o" }}"></i>
                                             <span> Phản hồi</span>
@@ -108,7 +101,7 @@ else
                                         @else
                                             <i class="fa fa-square-o"></i><span> Chưa duyệt</span>
                                         @endif
-                                    @endif
+                                    @endcan
                                     </div>
                                 </td>
                             </tr>

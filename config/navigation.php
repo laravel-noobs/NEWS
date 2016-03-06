@@ -157,28 +157,8 @@ return [
             'icon_class' => 'fa fa-send-o',
             'order' => 4,
             'hidden' => function(){
-                return Gate::denies('indexFeedback') && Gate::denies('listOwnedPostFeedback');
-            },
-            'items' => [
-                'index' => [
-                    'text' => 'Tất cả',
-                    'action' => 'FeedbacksController@index',
-                    'active' => false,
-                    'order' => 1,
-                    'hidden' => function(){
-                        return Gate::denies('indexFeedback');
-                    }
-                ],
-                'owned' => [
-                    'text' => 'Của bài viết của tôi',
-                    'action' => 'FeedbacksController@listByPostAuthenticatedUser',
-                    'active' => false,
-                    'order' => 2,
-                    'hidden' => function(){
-                        return Gate::denies('listOwnedPostFeedback');
-                    }
-                ],
-            ]
+                return Gate::denies('indexFeedback');
+            }
         ],
         'comments' => [
             'text' => 'Bình luận',

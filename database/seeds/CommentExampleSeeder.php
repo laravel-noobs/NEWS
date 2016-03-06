@@ -22,7 +22,7 @@ class CommentExampleSeeder extends Seeder
         $status = CommentStatus::all(['id']);
 
         DB::table('comment')->delete();
-        for($i = 0; $i < 100; $i++)
+        for($i = 0; $i < 500; $i++)
         {
             $chance = random_int(0,100);
             $commentable = random_int(0,1) ? $posts->random() : $products->random();
