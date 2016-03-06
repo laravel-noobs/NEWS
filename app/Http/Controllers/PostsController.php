@@ -42,6 +42,7 @@ class PostsController extends Controller
      * @var array
      */
     protected $configs_validate = [
+        'filter.status_type' => 'in:pending,approved,draft,trash',
         'filter.search_term' => 'min:4,max:255',
         'filter.category' => 'exists:category,id'
     ];

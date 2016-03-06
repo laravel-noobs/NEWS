@@ -163,16 +163,8 @@ class PermissionTableSeeder extends Seeder
                     'label'=> 'Xem danh sách phản hồi'
                 ],
                 [
-                    'name' => 'listOwnedPostFeedback',
-                    'label'=> 'Xem danh sách phản hồi của bài viết của tôi'
-                ],
-                [
                     'name' => 'checkFeedback',
                     'label'=> 'Duyệt phản hồi'
-                ],
-                [
-                    'name' => 'checkOwnedPostFeedback',
-                    'label'=> 'Duyệt phản hồi của bài viết của tôi'
                 ],
                 [
                     'name' => 'indexTag',

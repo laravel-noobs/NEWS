@@ -60,27 +60,13 @@ class FeedbacksController extends Controller
         $query = Feedback::with([
             'user' => function($query) {
                 $query->addSelect(['id', 'name', 'email']);
-            },
+            }
         ]);
 
         if(!$configs['filter_show_checked'])
             $query->notChecked();
 
-
-        $feedbacks = $this->loadLazyEagerFeedbackable($query, $configs['filter_feedbackable_type'], 8, [
-            'post' => ['id', 'title'],
-            'product' => ['id', 'name']
-        ]);
-
-        if($feedbacks->currentPage() != 1 && $feedbacks->count() == 0)
-            return Redirect::action('FeedbacksController@index');
-
-        return view('admin.feedback_index', array_merge(compact(['feedbacks']), $configs));
-    }
-
-    protected function loadLazyEagerFeedbackable($query, $type, $paginate = null, $attributes = null)
-    {
-        switch($type)
+        switch($configs['filter_feedbackable_type'])
         {
             case 'post':
                 $query = $query->belongToPost();
@@ -89,50 +75,15 @@ class FeedbacksController extends Controller
                 $query = $query->belongToProduct();
                 break;
         }
-        if($paginate)
-            $feedbacks = $query->paginate($paginate);
 
         $feedbacks = $query->paginate(8);
 
-        $feedbacks->load(['feedbackable' => function ($query) use ($attributes, $type) {
-            if($attributes)
-                $query->addSelect($attributes[$type]);
-        }]);
-        return $feedbacks;
-    }
-
-    public function listByPostAuthenticatedUser()
-    {
-        $this->authorize('listOwnedPostFeedback');
-
-        $user_id = Auth::user()->id;
-        return $this->listByPostUser(Auth::user());
-    }
-
-    protected function listByPostUser(User $user)
-    {
-        $user_id = $user->id;
-
-        $filter_show_checked = $this->read_config('filter.show_checked');
-        $query = Feedback::with([
-            'feedbackable' => function($p) use ($user_id) {
-                $p->addSelect(['id', 'title', 'user_id']);
-                $p->where('user_id', '=', $user_id);
-            },
-            'user'
-        ])->belongToPost()->whereHas('feedbackable', function ($q) use ($user_id) {
-            $q->where('user_id','=', $user_id);
-        });
-
-        if(!$filter_show_checked)
-            $query->notChecked();
-
-        $feedbacks = $query->paginate(8);
+        $feedbacks->load('feedbackable');
 
         if($feedbacks->currentPage() != 1 && $feedbacks->count() == 0)
             return Redirect::action('FeedbacksController@index');
 
-        return view('admin.feedback_index', array_merge(compact(['feedbacks', 'filter_show_checked'])), ['owned_post_user' => $user]);
+        return view('admin.feedback_index', array_merge(compact(['feedbacks']), $configs));
     }
 
     /**
@@ -203,7 +154,7 @@ class FeedbacksController extends Controller
             'user'
         ])->findOrFail($input['feedback_id']);
 
-        if(Gate::denies('checkFeedback') && Gate::denies('checkOwnedPostFeedback', $feedback))
+        if(Gate::denies('checkFeedback'))
             abort(403);
 
         if(!$feedback->checked)

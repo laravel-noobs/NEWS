@@ -36,7 +36,8 @@ class ProductsController extends Controller
      */
     protected $configs_validate = [
         'filter.search_term' => 'min:4,max:255',
-        'filter.category' => 'exists:category,id'
+        'filter.category' => 'exists:category,id',
+        'filter.status_type' => 'in:all,outofstock,available,disabled'
     ];
 
     /**
