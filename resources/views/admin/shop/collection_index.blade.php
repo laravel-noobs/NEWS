@@ -10,6 +10,54 @@ app('navigator')
 
 @section('content')
     <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox" style="margin-bottom: 5px">
+                <div class="ibox-content" style="padding: 10px 15px 5px 15px">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="form-inline" style="padding-top: 3px">
+                                <div class="form-group" style="margin-right:5px">
+                                    <div class="i-checks">
+                                        <label>
+                                            <input type="radio" name="collection_status" {{ $filter_collection_status == 'all' ? 'checked' : '' }} value="all"> Tất cả
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group" style="margin-right:5px">
+                                    <div class="i-checks">
+                                        <label>
+                                            <input type="radio" name="collection_status" {{ $filter_collection_status == 'showing' ? 'checked' : '' }} value="showing"> Đang hiển thị
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group" style="margin-right:5px">
+                                    <div class="i-checks">
+                                        <label>
+                                            <input type="radio" name="collection_status" {{  $filter_collection_status == 'hidden' ? 'checked' : '' }} value="hidden"> Đã ẩn
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group" style="margin-right:5px">
+                                    <div class="i-checks">
+                                        <label>
+                                            <input type="checkbox" name="hide_expired" {{ $filter_hide_expired ? 'checked' : '' }}> Ẩn hết hạn
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+
+                        </div>
+                        <div class="col-md-4">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-md-12">
             <div class="ibox">
                 <div class="ibox-title">
@@ -86,5 +134,36 @@ app('navigator')
         $(document).ready(function(){
             $('.footable').footable();
         });
+
+        $('.i-checks').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green'
+        });
+
+        $('input[name="hide_expired"]').on('ifToggled', function(event){
+            $.ajax({
+                url: '{{ URL::action('CollectionsController@postConfig') }}',
+                method: 'post',
+                data: { name: "filter.hide_expired", value: $(this).attr('checked') == 'checked' ? 0 : 1 },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            }).done(function() {
+                location.reload();
+            });
+        });
+        $('input[name="collection_status"]').on('ifChecked', function(event){
+            $.ajax({
+                url: '{{ URL::action('CollectionsController@postConfig') }}',
+                method: 'post',
+                data: { name: "filter.collection_status", value: $(this).val() },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            }).done(function() {
+                location.reload();
+            });
+        });
     </script>
+
 @endsection

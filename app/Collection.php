@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Collection extends Model
@@ -58,5 +59,20 @@ class Collection extends Model
             $this->load('productsCount');
         $related = $this->getRelation('productsCount');
         return ($related) ? (int) $related->aggregate : 0;
+    }
+
+    public function scopeOnlyHidden($query)
+    {
+        $query->where('enabled', '=', true);
+    }
+
+    public function scopeOnlyShowing($query)
+    {
+        $query->where('enabled', '=', false);
+    }
+
+    public function  scopeNotExpired($query)
+    {
+        $query->where('expired_at', '<', Carbon::now('utc')->toDateTimeString())->orWhere('expired_at', '=', null);
     }
 }
