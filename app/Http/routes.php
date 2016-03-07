@@ -41,6 +41,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'accessAdminPanel'], function
 
     Route::group(['prefix' => 'collections'], function(){
         Route::get('/', 'CollectionsController@index');
+        Route::get('/create', 'CollectionsController@create');
         Route::post('/', 'CollectionsController@store');
         Route::post('delete', 'CollectionsController@destroy');
         Route::get('{id}/edit', 'CollectionsController@edit');

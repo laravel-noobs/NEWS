@@ -307,6 +307,10 @@ class PermissionTableSeeder extends Seeder
                     'label' => 'Xem danh sách nhóm sản phẩm'
                 ],
                 [
+                    'name' => 'storeCollection',
+                    'label' => 'Thêm nhóm sản phẩm'
+                ],
+                [
                     'name' => 'updateCollection',
                     'label' => 'Sửa danh sách sản phẩm'
                 ],
