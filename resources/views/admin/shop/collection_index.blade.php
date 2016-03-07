@@ -41,9 +41,12 @@ app('navigator')
                                         <div>
                                             <strong>{{ $collection->label }}</strong>
                                         </div>
+                                        <div>
+                                            {{ $collection->expired_at }}
+                                        </div>
                                     </td>
                                     <td>
-                                        {{ $collection->description ?: '-' }}
+                                        <div>{{ $collection->description ?: '-' }}</div>
 
                                         <div><strong>{{ $collection->name }}</strong></div>
                                         <div>

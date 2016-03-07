@@ -86,6 +86,7 @@ class RolePermissionTableSeeder extends Seeder
                 'indexCollection',
                 'updateCollection',
                 'destroyCollection',
+                'storeCollection',
 
                 'grantPermission'
             ]));

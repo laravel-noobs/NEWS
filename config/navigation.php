@@ -7,7 +7,7 @@ return [
             'text' => 'Bảng điều khiển',
             'action' => 'AdminController@index',
             'active' => false,
-            'icon_class' => 'fa fa-th-large',
+            'icon_class' => 'fa fa-tachometer',
             'order' => 1
         ],
         'products' => [
@@ -26,15 +26,6 @@ return [
                     'order' => 1,
                     'hidden' => function(){
                         return Gate::denies('indexProduct');
-                    }
-                ],
-                'collections' => [
-                    'text' => 'Nhóm',
-                    'action' => 'CollectionsController@index',
-                    'active' => false,
-                    'order' => 1,
-                    'hidden' => function(){
-                        return Gate::denies('indexCollection');
                     }
                 ],
                 'reviews' => [
@@ -66,6 +57,36 @@ return [
                 ]
             ],
             'order' => 2
+        ],
+        'collections' => [
+            'text' => 'Nhóm',
+            'action' => 'CollectionsController@index',
+            'icon_class' => 'fa fa-th-large',
+            'active' => false,
+            'order' => 1,
+            'hidden' => function(){
+                return Gate::denies('indexCollection');
+            },
+            'items' => [
+                'index' => [
+                    'text' => 'Tất cả',
+                    'action' => 'CollectionsController@index',
+                    'active' => false,
+                    'order' => 1,
+                    'hidden' => function(){
+                        return Gate::denies('indexCollection');
+                    }
+                ],
+                'create' => [
+                    'text' => 'Thêm mới',
+                    'action'=>'CollectionsController@create',
+                    'active' => false,
+                    'order' => 2,
+                    'hidden' => function(){
+                        return Gate::denies('storeCollection');
+                    }
+                ]
+            ]
         ],
         'users' => [
             'text' => 'Người dùng',
@@ -209,7 +230,7 @@ return [
     'crumbs' => [
         'admin' => [
             'text' => 'Bảng điều khiển',
-            'icon_class' => 'fa fa-th-large',
+            'icon_class' => 'fa fa-tachometer',
             'action' => 'AdminController@index'
         ],
         'users' => [
@@ -294,6 +315,11 @@ return [
             'text' => 'Nhóm sản phẩm',
             'icon_class' => 'fa fa-th-large',
             'action' => 'CollectionsController@index'
+        ],
+        'collection_create' => [
+            'text' => 'Thêm nhóm sản phẩm',
+            'icon_class' => 'fa fa-th-large',
+            'action' => 'CollectionsController@create'
         ],
         'categories' => [
             'text' => 'Chuyên mục',
