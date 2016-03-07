@@ -99,13 +99,23 @@ app('navigator')
                                         <div><strong>{{ $collection->name }}</strong></div>
                                         <div>
                                             <ul class="list-inline action" style="padding-top: 5px; margin-bottom: 0px;">
+
                                                 @can('updateCollection')
-                                                <li><a href="{{ URL::action('CollectionsController@edit', ['id' => $collection->id]) }}">Sửa</a></li>
+
+                                                    @if(!$collection->enabled)
+                                                        <li><a href="{{ URL::action('CollectionsController@unhide', ['id' => $collection->id]) }}">Hiển thị</a></li>
+                                                    @else
+                                                        <li><a href="{{ URL::action('CollectionsController@hide', ['id' => $collection->id]) }}">Ẩn</a></li>
+                                                    @endif
+
+                                                    <li><a href="{{ URL::action('CollectionsController@edit', ['id' => $collection->id]) }}">Sửa</a></li>
+
                                                 @endcan
 
                                                 @can('destroyCollection')
-                                                <li><a data-toggle="modal" href="#modal-product-delete-prompt" data-product_label="{{ $collection->label }}" data-collection_id="{{ $collection->id }}" class="text-danger">Xóa</a></li>
+                                                    <li><a data-toggle="modal" href="#modal-collection-delete-prompt" data-collection_label="{{ $collection->label }}" data-collection_id="{{ $collection->id }}" class="text-danger">Xóa</a></li>
                                                 @endcan
+
                                             </ul>
                                         </div>
                                     </td>
@@ -127,6 +137,18 @@ app('navigator')
             </div>
         </div>
     </div>
+    @can('destroyCollection')
+    @section('collection-delete_inputs')
+        <input name="collection_id" type="hidden"/>
+    @endsection
+    @include('admin.partials._prompt',[
+        'id' => 'collection-delete',
+        'method' => 'post',
+        'action' => URL::action('CollectionsController@destroy'),
+        'title' => 'Xác nhận',
+        'message' => 'Bạn có chắc chắn muốn xóa nhãn hiệu "<span class="collection_label">này</span>" hay không?',
+    ])
+    @endcan
 @endsection
 
 @section('footer-script')
@@ -163,6 +185,11 @@ app('navigator')
             }).done(function() {
                 location.reload();
             });
+        });
+
+        $('#modal-collection-delete-prompt').on('show.bs.modal', function(e) {
+            $(e.currentTarget).find('input[name="collection_id"]').val($(e.relatedTarget).data('collection_id'));
+            $(e.currentTarget).find('span.collection_label').text($(e.relatedTarget).data('collection_label'));
         });
     </script>
 
