@@ -11,22 +11,73 @@ use KouTsuneka\FlashMessage\Flash;
 
 class CollectionsController extends Controller
 {
+    /**
+     * @var string
+     */
+    protected $config_key = '_post';
+
+    /**
+     * @var array
+     */
+    protected $configs = [
+        'filter' => [
+            'hide_expired' => true,
+            'collection_status' => 'all',
+        ]
+    ];
+
+    /**
+     * @var array
+     */
+    protected $configs_validate = [
+        'filter.hide_expired' => 'boolean',
+        'filter.collection_status' => 'in:showing,hidden,all'
+    ];
+
+    /**
+     * CollectionsController constructor.
+     */
+    public function __construct()
+    {
+        $this->load_config('filter');
+    }
+
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function index()
     {
         $this->authorize('indexCollection');
 
-        $collections = Collection::with(['products', 'productsCount']);
+        $configs = $this->read_configs(['filter.hide_expired', 'filter.collection_status']);
 
-        $collections = $collections->latest()->paginate(10);
+        $query = Collection::with(['products', 'productsCount']);
 
-        return view('admin.shop.collection_index', compact('collections'));
+        if($configs['filter_collection_status'] == 'showing')
+            $query->onlyShowing();
+        else if($configs['filter_collection_status'] == 'hidden')
+            $query->onlyHidden();
+
+        if($configs['filter_hide_expired'])
+            $query->notExpired();
+
+        $collections = $query->latest()->paginate(10);
+
+        return view('admin.shop.collection_index', array_merge(compact('collections')), $configs);
     }
 
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function create()
     {
         return view('admin.shop.collection_create');
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function store(Request $request)
     {
         $this->authorize('storeCollection');
