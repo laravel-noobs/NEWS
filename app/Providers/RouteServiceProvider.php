@@ -44,6 +44,10 @@ class RouteServiceProvider extends ServiceProvider
         Route::bind('product_review_id', function($post_id){
             return \App\ProductReview::findOrFail($post_id, ['id']);
         });
+
+        Route::bind('collection_id', function($collection_id){
+            return \App\Collection::findOrFail($collection_id, ['id', 'label']);
+        });
     }
 
     /**

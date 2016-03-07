@@ -63,16 +63,28 @@ class Collection extends Model
 
     public function scopeOnlyHidden($query)
     {
-        $query->where('enabled', '=', true);
+        $query->where('enabled', '=', false);
     }
 
     public function scopeOnlyShowing($query)
     {
-        $query->where('enabled', '=', false);
+        $query->where('enabled', '=', true);
     }
 
     public function  scopeNotExpired($query)
     {
         $query->where('expired_at', '<', Carbon::now('utc')->toDateTimeString())->orWhere('expired_at', '=', null);
+    }
+
+    public function enable()
+    {
+        $this->enabled = true;
+        return $this->save();
+    }
+
+    public function disable()
+    {
+        $this->enabled = false;
+        return $this->save();
     }
 }

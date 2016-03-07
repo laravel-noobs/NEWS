@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Gate;
 use KouTsuneka\FlashMessage\Flash;
 
 class CollectionsController extends Controller
@@ -113,5 +114,50 @@ class CollectionsController extends Controller
             Flash::push("Thêm nhóm sản phẩm \\\"$collection->label\\\" thất bại", 'Hệ thống', "error");
 
         return redirect()->action('CollectionsController@index');
+    }
+
+    public function unhide($collection_id)
+    {
+        $this->authorize('updateCollection');
+
+        if($collection_id->enable())
+            Flash::push("Hiển thị nhóm sản phẩm \\\"$collection_id->label\\\" thành công", 'Hệ thống');
+        else
+            Flash::push("Hiển thị nhóm sản phẩm \\\"$collection_id->label\\\" thất bại", 'Hệ thống');
+
+        return redirect()->back();
+    }
+
+    public function hide($collection_id)
+    {
+        $this->authorize('updateCollection');
+
+        if($collection_id->disable())
+            Flash::push("Ẩn nhóm sản phẩm \\\"$collection_id->label\\\" thành công", 'Hệ thống');
+        else
+            Flash::push("Ẩn nhóm sản phẩm \\\"$collection_id->label\\\" thất bại", 'Hệ thống');
+
+        return redirect()->back();
+    }
+
+    public function destroy(Request $request)
+    {
+        $this->authorize('destroyCollection');
+
+        $collection = Collection::findOrFail($request->request->get('collection_id'));
+
+        try
+        {
+            if(Collection::destroy($collection->id))
+                Flash::push("Xóa nhóm sản phẩm \\\"$collection->label\\\"thành công", 'Hệ thống');
+            else
+                Flash::push("Xóa nhóm sản phẩm \\\"$collection->label\\\" thất bại", 'Hệ thống', 'error');
+        }
+        catch(QueryException $ex)
+        {
+            Flash::push("Xóa nhóm sản phẩm thất bại", 'Hệ thống', 'error');
+        }
+
+        return redirect(action('CollectionsController@index'));
     }
 }
