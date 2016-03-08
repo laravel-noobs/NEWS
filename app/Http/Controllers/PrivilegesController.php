@@ -65,7 +65,10 @@ class PrivilegesController extends Controller
 
         $configs = $this->read_configs(['filter.role']);
 
-        $selected_role = Role::findOrFail($configs['filter_role']);
+        if($configs['filter_role'])
+            $selected_role = Role::findOrFail($configs['filter_role']);
+        else
+            $selected_role = Role::first();
 
         $permissions = Permission::with('roles')->get();
 
