@@ -317,6 +317,10 @@ class PermissionTableSeeder extends Seeder
                 [
                     'name' => 'destroyCollection',
                     'label' => 'Xóa danh sách sản phẩm'
+                ],
+                [
+                    'name' => 'syncProductsCollection',
+                    'label' => 'Bỏ vào / Lấy ra sản phẩm từ nhóm sản phẩm'
                 ]
             ];
         DB::table('permission')->insert($permissions);

@@ -48,6 +48,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'accessAdminPanel'], function
         Route::post('{id}/edit', 'CollectionsController@update');
         Route::get('{collection_id}/unhide', 'CollectionsController@unhide');
         Route::get('{collection_id}/hide', 'CollectionsController@hide');
+        Route::post('{collection_id}/syncProducts', 'CollectionsController@syncProducts');
         Route::post('config', 'CollectionsController@postConfig');
     });
 
