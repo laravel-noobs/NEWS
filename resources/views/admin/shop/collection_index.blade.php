@@ -1,6 +1,6 @@
 <?php
 app('navigator')
-        ->activate('products', 'collections')
+        ->activate('collections', 'index')
         ->set_page_heading('Danh sách nhóm sản phẩm')
         ->set_breadcrumb('admin', 'collections')
         ->set_page_title('Danh sách nhóm sản phẩm');

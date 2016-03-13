@@ -123,7 +123,7 @@ app('navigator')
         });
 
         $("#product_id").select2({
-            placeholder: "Chọn một bài viết",
+            placeholder: "Chọn một sản phẩm",
             ajax: {
                 url: '{{ URL::action('ProductsController@queryProducts') }}',
                 dataType: 'json',

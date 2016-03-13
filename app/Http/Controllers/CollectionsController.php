@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Collection;
+use App\Product;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Validator;
 use KouTsuneka\FlashMessage\Flash;
 
 class CollectionsController extends Controller
@@ -72,6 +74,8 @@ class CollectionsController extends Controller
      */
     public function create()
     {
+        $this->authorize('storeCollection');
+
         return view('admin.shop.collection_create');
     }
 
@@ -114,6 +118,26 @@ class CollectionsController extends Controller
             Flash::push("Thêm nhóm sản phẩm \\\"$collection->label\\\" thất bại", 'Hệ thống', "error");
 
         return redirect()->action('CollectionsController@index');
+    }
+
+    public function edit($id)
+    {
+        $this->authorize('updateCollection');
+
+        $collection = Collection::with([
+            'products' => function($query)
+            {
+                $query->addSelect(['id']);
+            },
+            'productsCount'
+        ])->findOrFail($id);
+
+        $products = Product::with([
+            'status',
+            'brand',
+            'brand',])->whereIn('id', $collection->products->pluck('id')->toArray())->paginate(15);
+
+        return view('admin.shop.collection_edit', compact('collection', 'products'));
     }
 
     public function unhide($collection_id)
@@ -159,5 +183,34 @@ class CollectionsController extends Controller
         }
 
         return redirect(action('CollectionsController@index'));
+    }
+
+    public function syncProducts($collection_id, Request $request)
+    {
+        $this->authorize('syncProductsCollection');
+
+        $validator = Validator::make($request->all(), [
+            'attach_product_id.*' => 'required|exists:product,id',
+            'detach_product_id.*' => 'required|exists:product,id'
+        ]);
+
+        if($validator->fails())
+        {
+            Flash::push("Lưu sản phẩm của nhóm \\\"$collection_id->label\\\" thất bại", 'Hệ thống', 'error');
+            return redirect(action('CollectionsController@edit', ['id' => $collection_id->id]));
+        }
+
+        $attach_product_id = $request->get('attach_product_id');
+        $detach_product_id = $request->get('detach_product_id');
+
+        if(!empty($attach_product_id))
+            $collection_id->products()->attach($attach_product_id);
+
+        if(!empty($detach_product_id))
+            $collection_id->products()->detach($detach_product_id);
+
+        Flash::push("Lưu sản phẩm của nhóm \\\"$collection_id->label\\\" thành công", 'Hệ thống');
+
+        return redirect(action('CollectionsController@edit', ['id' => $collection_id->id]));
     }
 }

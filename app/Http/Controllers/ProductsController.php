@@ -92,7 +92,7 @@ class ProductsController extends Controller
         if(strlen($term) < 3)
             return null;
 
-        $products = Product::searchInName($term)->get(['id', 'name', 'slug']);
+        $products = Product::searchInName($term)->get(['id', 'name', 'slug', 'image']);
 
         foreach($products as $product)
             $product->url = URL::action('ProductsController@show', ['slug' => $product->slug]);
