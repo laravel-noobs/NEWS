@@ -321,6 +321,10 @@ return [
             'icon_class' => 'fa fa-th-large',
             'action' => 'CollectionsController@create'
         ],
+        'collection_edit' => [
+            'text' => 'Sửa',
+            'icon_class' => 'fa fa-wrench'
+        ],
         'categories' => [
             'text' => 'Chuyên mục',
             'icon_class' => 'fa fa-archive',

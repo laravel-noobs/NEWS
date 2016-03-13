@@ -2,7 +2,7 @@
 app('navigator')
         ->activate('collections')
         ->set_page_heading('Sửa thông tin nhóm sản phẩm')
-        ->set_breadcrumb('collections', 'collection_edit')
+        ->set_breadcrumb('admin', 'collections', 'collection_edit')
         ->set_page_title('Sửa thông tin nhóm sản phẩm');
 ?>
 
@@ -14,7 +14,7 @@ app('navigator')
         <div class="col-sm-4">
             <div class="ibox ">
                 <div class="ibox-content">
-                    <h3>Thêm mới nhóm sản phẩm</h3>
+                    <h3>Sửa thông tin nhóm sản phẩm</h3>
                     <form method="POST" action="{{ URL::action('CollectionsController@update', ['id' => $collection->id]) }}">
                         {{ csrf_field() }}
                         <div class="form-group {{ count($errors->get('name')) > 0 ? 'has-error' : '' }}">
