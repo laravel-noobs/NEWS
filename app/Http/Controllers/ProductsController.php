@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\ProductBrand;
+use App\ProductCollection;
 use App\ProductStatus;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -69,6 +71,19 @@ class ProductsController extends Controller
         $products = $products->latest()->paginate(20);
 
         return view('admin.shop.product_index', array_merge(compact('products', 'categories'), $configs));
+    }
+
+    public function create()
+    {
+        $this->authorize('storeProduct');
+
+        $product_status = ProductStatus::all();
+        $categories = ProductCategory::all();
+        $brands = ProductBrand::all();
+
+        $post_status_default_id = 2;
+
+        return view('admin.shop.product_create', compact('product_status', 'post_status_default_id', 'categories', 'brands'));
     }
 
     /**

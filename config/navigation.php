@@ -28,6 +28,15 @@ return [
                         return Gate::denies('indexProduct');
                     }
                 ],
+                'create' => [
+                    'text' => 'Thêm mới',
+                    'action' => 'ProductsController@create',
+                    'active' => false,
+                    'order' => 1,
+                    'hidden' => function(){
+                        return Gate::denies('storeProduct');
+                    }
+                ],
                 'reviews' => [
                     'text' => 'Đánh giá',
                     'action' => 'ProductReviewsController@index',
@@ -283,6 +292,10 @@ return [
             'text' => 'Sản phẩm',
             'icon_class' => 'fa fa-shopping-bag',
             'action' => 'ProductsController@index'
+        ],
+        'product_create' => [
+            'text' => 'Tạo mới',
+            'icon_class' => 'fa fa-shopping-bag'
         ],
         'product_reviews' => [
             'text' => 'Đánh giá sản phẩm',

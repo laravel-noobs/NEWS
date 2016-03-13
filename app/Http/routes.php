@@ -29,6 +29,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'accessAdminPanel'], function
 
     Route::group(['prefix' => 'products'], function(){
         Route::get('/', 'ProductsController@index');
+        Route::get('/create', 'ProductsController@create');
+        Route::post('/', 'ProductsController@store');
         Route::get('search', 'ProductsController@queryProducts');
         Route::post('delete', 'ProductsController@destroy');
         Route::post('enable', 'ProductsController@enable');

@@ -78,6 +78,7 @@ class RolePermissionTableSeeder extends Seeder
                 'destroyProductReview',
 
                 'indexProduct',
+                'storeProduct',
                 'updateProduct',
                 'disableProduct',
                 'enableProduct',
