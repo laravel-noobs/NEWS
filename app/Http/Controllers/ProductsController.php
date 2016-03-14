@@ -86,6 +86,43 @@ class ProductsController extends Controller
         return view('admin.shop.product_create', compact('product_status', 'post_status_default_id', 'categories', 'brands'));
     }
 
+    public function store(Request $request)
+    {
+        $this->authorize('storeProduct');
+
+        $slug = $request->request->get('slug');
+        $name = $request->request->get('name');
+        if(empty($slug) && !empty($name))
+        {
+            $slug = str_slug($request->request->get('name'));
+            if(strlen($slug) >= 4)
+                $request->request->set('slug', $slug);
+        }
+
+        $this->validate($request, [
+            'name' => 'required|min:4|max:255',
+            'slug' => 'required|min:4|max:255|unique:product,slug',
+            'description' => 'min:6|max:1000',
+            'image' => 'url',
+            'featured_image' => 'url',
+            'package' => 'max:255',
+            'price' => 'required|min:0|max:99999999',
+            'brand_id' => 'required|exists:product_brand,id',
+            'status_id' => 'required|exists:product_status,id',
+            'category_id' => 'required|exists:product_category,id'
+        ]);
+
+        $input = $request->input();
+        $product = new Product($input);
+        $product->status_id = $input['status_id'];
+
+        if($product->save())
+            Flash::push("Thêm sản phẩm \\\"$product->name\\\" thành công", 'Hệ thống');
+        else
+            Flash::push("Thêm sản phẩm thất bại", 'Hệ thống', "error");
+
+        return redirect()->action('ProductsController@index');
+    }
     /**
      * @param $slug
      */

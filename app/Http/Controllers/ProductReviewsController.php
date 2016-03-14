@@ -35,7 +35,8 @@ class ProductReviewsController extends Controller
     protected $configs_validate = [
         'filter.show_checked' => 'boolean',
         'filter.search_term' => 'min:4,max:255',
-        'filter.status_type' => 'in:all,notchecked,checked'
+        'filter.status_type' => 'in:all,notchecked,checked',
+        'filter.product' => 'exists:product,id'
     ];
 
     public function __construct()
@@ -50,22 +51,34 @@ class ProductReviewsController extends Controller
 
         $configs = $this->read_configs(['filter.status_type', 'filter.search_term', 'filter.product']);
 
-        $configs['filter_product'] = Product::find($configs['filter_product']);
+        $product_id = $configs['filter_product'];
+
+        $configs['filter_product'] = Product::find($configs['filter_product']) ?: null;
+
+
 
         $reviews = ProductReview::with([
             'user' => function($query) {
                 $query->addSelect(['id', 'name']);
             },
-            'product' => function($query)
+            'product' => function($query) use($product_id)
             {
                 $query->addSelect(['id', 'name', 'slug']);
+                if($product_id)
+                    $query->where('id', '=', $product_id);
             }]);
 
+        if($product_id)
+            $reviews->whereHas('product', function($query) use($product_id) {
+                $query->where('id', '=', $product_id);
+            });
 
         if($configs['filter_status_type'] == 'checked')
             $reviews->hasChecked();
         else if($configs['filter_status_type'] == 'notchecked')
             $reviews->hasNotChecked();
+
+
 
         if($configs['filter_search_term'])
             $reviews->searchByTerm($configs['filter_search_term']);

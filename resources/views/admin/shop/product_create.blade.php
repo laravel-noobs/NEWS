@@ -26,6 +26,15 @@ app('navigator')
                             @endforeach
                         </div>
 
+                        <div class="form-group {{ count($errors->get('slug')) > 0 ? 'has-error' : '' }}">
+                            <label>Slug</label>
+                            <input type="text" id="slug" name="slug" placeholder="" value="{{ old('slug', '') }}" class="form-control">
+                            <span class="help-block m-b-none">Chuỗi ký tự dùng để tạo đường dẫn thân thiện, chỉ bao gồm các ký tự từ aphabet không dấu, chữ số và dấu gạch ngang.</span>
+                            @foreach($errors->get('slug') as $err)
+                                <label class="error" for="slug">{{ $err }}</label>
+                            @endforeach
+                        </div>
+
                         <div class="form-group {{ count($errors->get('image')) > 0 ? 'has-error' : '' }}">
                             <label>Hình</label>
                             <input type="text" id="image" name="image" placeholder="" value="{{ old('image', '') }}" class="form-control">
@@ -35,12 +44,12 @@ app('navigator')
                             @endforeach
                         </div>
 
-                        <div class="form-group {{ count($errors->get('slug')) > 0 ? 'has-error' : '' }}">
-                            <label>Slug</label>
-                            <input type="text" id="slug" name="slug" placeholder="" value="{{ old('slug', '') }}" class="form-control">
-                            <span class="help-block m-b-none">Chuỗi ký tự dùng để tạo đường dẫn thân thiện, chỉ bao gồm các ký tự từ aphabet không dấu, chữ số và dấu gạch ngang.</span>
-                            @foreach($errors->get('slug') as $err)
-                                <label class="error" for="slug">{{ $err }}</label>
+                        <div class="form-group {{ count($errors->get('featured_image')) > 0 ? 'has-error' : '' }}">
+                            <label>Hình nổi bật</label>
+                            <input type="text" id="featured_image" name="featured_image" placeholder="" value="{{ old('featured_image', '') }}" class="form-control">
+                            <span class="help-block m-b-none">Hình có thể được hiển thị trên silde ngang.</span>
+                            @foreach($errors->get('featured_image') as $err)
+                                <label class="error" for="featured_image">{{ $err }}</label>
                             @endforeach
                         </div>
 
@@ -95,7 +104,7 @@ app('navigator')
 
                         <div class="form-group {{ count($errors->get('category_id')) > 0 ? 'has-error' : '' }}">
                             <label class="">Danh mục</label>
-                            <select id="category_id" name="category_id" class="form-control">
+                            <select id="category_id" name="category_id" class="category form-control">
                                 @foreach($categories as $category)
                                     @if(old('category_id') == $category->id && old('category_id') == null))
                                         <option selected="selected" value="{{ $category->id }}">{{ $category->name }}</option>
@@ -110,8 +119,8 @@ app('navigator')
                         </div>
 
                         <div class="form-group {{ count($errors->get('brand_id')) > 0 ? 'has-error' : '' }}">
-                            <label class="">Danh mục</label>
-                            <select id="brand_id" name="brand_id" class="form-control">
+                            <label class="">Nhãn hiệu</label>
+                            <select id="brand_id" name="brand_id" class="brand form-control">
                                 @foreach($brands as $brand)
                                     @if(old('brand_id') == $brand->id && old('brand_id') == null))
                                     <option selected="selected" value="{{ $brand->id }}">{{ $brand->name }}</option>
@@ -144,6 +153,12 @@ app('navigator')
     <script>
         $(document).ready(function(){
             $('.footable').footable();
+        });
+        $(".category").select2({
+            placeholder: "Chọn một danh mục",
+        });
+        $(".brand").select2({
+            placeholder: "Chọn một nhãn hiệu",
         });
         $('#datetimepicker_expired_at').datetimepicker({
             format: 'Do MMMM YYYY HH:mm:ss'
