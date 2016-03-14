@@ -22,7 +22,7 @@ app('navigator')
                         <thead>
                         <tr>
                             <th data-sort-ignore="true" width="40%">Nội dung</th>
-                            <th width="30%" data-sort-ignore="true">Bài viết</th>
+                            <th width="30%" data-sort-ignore="true">Đối tượng</th>
                             <th data-sort-ignore="true">Ngày nhận</th>
                             <th data-sort-ignore="true">
                                 <div class="i-checks pull-right">
@@ -37,7 +37,13 @@ app('navigator')
                         @foreach($user->feedbacks as $feedback)
                             <tr>
                                 <td>{{ $feedback->content }}</td>
-                                <td><a href="{{ URL::action('FeedbacksController@listByPost', ['id' => $feedback->post->id]) }}">{{$feedback->post->title}}</a></td>
+                                <td>
+                                    @if(get_class($feedback->feedbackable) == 'App\\Post')
+                                        <strong>Bài viết: </strong><a href="{{ URL::action('FeedbacksController@listByPost', ['id' => $feedback->feedbackable->id]) }}">{{$feedback->feedbackable->title}}</a>
+                                    @elseif(get_class($feedback->feedbackable) == 'App\\Product')
+                                        <strong>Sản phẩm: </strong><a>{{$feedback->feedbackable->name}}</a>
+                                    @endif
+                                </td>
                                 <td>{{ $feedback->created_at }}</td>
                                 <td>
                                     <div class="pull-right">

@@ -9,6 +9,7 @@ use App\User;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 
@@ -24,14 +25,18 @@ class FeedbacksController extends Controller
      */
     protected $configs = [
         'filter' => [
-            'show_checked' => false
+            'search_term' => null,
+            'show_checked' => false,
+            'feedbackable_type' => 'post'
         ]
     ];
     /**
      * @var array
      */
     protected $configs_validate = [
-        'filter.show_checked' => 'boolean'
+        'filter.search_term' => 'min:4|max:255',
+        'filter.show_checked' => 'boolean',
+        'filter.feedbackable_type' => 'in:post,product'
     ];
 
     /**
@@ -50,57 +55,35 @@ class FeedbacksController extends Controller
     {
         $this->authorize('indexFeedback');
 
-        $filter_show_checked = $this->read_config('filter.show_checked');
+        $configs = $this->read_configs(['filter.show_checked', 'filter.feedbackable_type', 'filter.search_term']);
+
         $query = Feedback::with([
-            'post' => function($query) {
-                $query->addSelect(['id', 'title', 'slug']);
-            },
-            'user'
+            'user' => function($query) {
+                $query->addSelect(['id', 'name', 'email']);
+            }
         ]);
 
-        if(!$filter_show_checked)
+        if(!$configs['filter_show_checked'])
             $query->notChecked();
 
+        switch($configs['filter_feedbackable_type'])
+        {
+            case 'post':
+                $query = $query->belongToPost();
+                break;
+            case 'product':
+                $query = $query->belongToProduct();
+                break;
+        }
+
         $feedbacks = $query->paginate(8);
+
+        $feedbacks->load('feedbackable');
 
         if($feedbacks->currentPage() != 1 && $feedbacks->count() == 0)
             return Redirect::action('FeedbacksController@index');
 
-        return view('admin.feedback_index', compact(['feedbacks', 'filter_show_checked']));
-    }
-
-    public function listByPostAuthenticatedUser()
-    {
-        $this->authorize('listOwnedPostFeedback');
-
-        $user_id = Auth::user()->id;
-        return $this->listByPostUser(Auth::user());
-    }
-
-    protected function listByPostUser(User $user)
-    {
-        $user_id = $user->id;
-
-        $filter_show_checked = $this->read_config('filter.show_checked');
-        $query = Feedback::with([
-            'post' => function($p) use ($user_id) {
-                $p->addSelect(['id', 'title', 'user_id']);
-                $p->where('user_id', '=', $user_id);
-            },
-            'user'
-        ])->whereHas('post', function ($q) use ($user_id) {
-            $q->where('user_id','=', $user_id);
-        });
-
-        if(!$filter_show_checked)
-            $query->notChecked();
-
-        $feedbacks = $query->paginate(8);
-
-        if($feedbacks->currentPage() != 1 && $feedbacks->count() == 0)
-            return Redirect::action('FeedbacksController@index');
-
-        return view('admin.feedback_index', array_merge(compact(['feedbacks', 'filter_show_checked'])), ['owned_post_user' => $user]);
+        return view('admin.feedback_index', array_merge(compact(['feedbacks']), $configs));
     }
 
     /**
@@ -150,10 +133,7 @@ class FeedbacksController extends Controller
                     $query->notChecked();
                 $query->orderBy('created_at', 'desc');
             },
-            'feedbacks.post' => function($query)
-            {
-                $query->addSelect(['id', 'title', 'user_id']);
-            },
+            'feedbacks.feedbackable',
         ])->findOrFail($id, ['id', 'name', 'email']);
 
         return view('admin.feedback_list_byuser', compact('user', 'filter_show_checked'));
@@ -174,7 +154,7 @@ class FeedbacksController extends Controller
             'user'
         ])->findOrFail($input['feedback_id']);
 
-        if(Gate::denies('checkFeedback') && Gate::denies('checkOwnedPostFeedback', $feedback))
+        if(Gate::denies('checkFeedback'))
             abort(403);
 
         if(!$feedback->checked)

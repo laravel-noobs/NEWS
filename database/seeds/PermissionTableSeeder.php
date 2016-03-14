@@ -15,6 +15,10 @@ class PermissionTableSeeder extends Seeder
         $permissions =
             [
                 [
+                    'name' => 'grantPermission',
+                    'label'=> 'Cấp phép'
+                ],
+                [
                     'name' => 'accessAdminPanel',
                     'label'=> 'Truy cập trang admin'
                 ],
@@ -163,16 +167,8 @@ class PermissionTableSeeder extends Seeder
                     'label'=> 'Xem danh sách phản hồi'
                 ],
                 [
-                    'name' => 'listOwnedPostFeedback',
-                    'label'=> 'Xem danh sách phản hồi của bài viết của tôi'
-                ],
-                [
                     'name' => 'checkFeedback',
                     'label'=> 'Duyệt phản hồi'
-                ],
-                [
-                    'name' => 'checkOwnedPostFeedback',
-                    'label'=> 'Duyệt phản hồi của bài viết của tôi'
                 ],
                 [
                     'name' => 'indexTag',
@@ -291,6 +287,10 @@ class PermissionTableSeeder extends Seeder
                     'label' => 'Xem danh sách sản phẩm'
                 ],
                 [
+                    'name' => 'storeProduct',
+                    'label' => 'Thêm sản phẩm'
+                ],
+                [
                     'name' => 'updateProduct',
                     'label' => 'Sửa sản phẩm'
                 ],
@@ -305,6 +305,26 @@ class PermissionTableSeeder extends Seeder
                 [
                     'name' => 'destroyProduct',
                     'label' => 'Xóa sản phẩm'
+                ],
+                [
+                    'name' => 'indexCollection',
+                    'label' => 'Xem danh sách nhóm sản phẩm'
+                ],
+                [
+                    'name' => 'storeCollection',
+                    'label' => 'Thêm nhóm sản phẩm'
+                ],
+                [
+                    'name' => 'updateCollection',
+                    'label' => 'Sửa danh sách sản phẩm'
+                ],
+                [
+                    'name' => 'destroyCollection',
+                    'label' => 'Xóa danh sách sản phẩm'
+                ],
+                [
+                    'name' => 'syncProductsCollection',
+                    'label' => 'Bỏ vào / Lấy ra sản phẩm từ nhóm sản phẩm'
                 ]
             ];
         DB::table('permission')->insert($permissions);

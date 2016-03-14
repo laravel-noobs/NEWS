@@ -19,9 +19,4 @@ class FeedbackPolicy extends Policy
     {
         return parent::before($user, $ability);
     }
-
-    public function checkOwnedPostFeedback(User $user, Feedback $feedback)
-    {
-        return $feedback->post->user_id == $user->id;
-    }
 }

@@ -19,7 +19,7 @@ class Product extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'slug', 'description', 'category_id', 'price', 'image'];
+    protected $fillable = ['name', 'slug', 'description', 'category_id', 'price', 'image', 'featured_image', 'package', 'brand_id'];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -85,6 +85,35 @@ class Product extends Model
     public function orders()
     {
         return $this->belongsToMany('App\Order', 'order_product', 'product_id', 'order_id')->withPivot(['price', 'quantity']);
+    }
+
+    public function collections()
+    {
+        return $this->belongsToMany('App\Collection', 'product_collection');
+    }
+
+    /**
+     * Count number of collections this product belongs to
+     *
+     * @return mixed
+     */
+    public function collectionsCount()
+    {
+        return $this->hasOne('App\ProductCollection')
+            ->selectRaw('collection_id, count(*) as aggregate')
+            ->groupBy('collection_id');
+    }
+    /**
+     * Count number of collections this product belongs to
+     *
+     * @return int
+     */
+    public function getCollectionsCountAttribute()
+    {
+        if (!$this->relationLoaded('productsCount'))
+            $this->load('productsCount');
+        $related = $this->getRelation('productsCount');
+        return ($related) ? (int) $related->aggregate : 0;
     }
 
     /**

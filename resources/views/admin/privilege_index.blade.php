@@ -1,9 +1,9 @@
 <?php
 app('navigator')
         ->activate('privileges')
-        ->set_page_heading('Quyền hạn của bạn')
+        ->set_page_heading('Quyền hạn của tôi')
         ->set_breadcrumb('admin', 'privileges')
-        ->set_page_title('Quyền hạn của bạn');
+        ->set_page_title('Quyền hạn của tôi');
 ?>
 
 @extends('partials.admin._layout')

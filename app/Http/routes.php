@@ -27,11 +27,12 @@ Route::group(['prefix' => 'admin', 'middleware' => 'accessAdminPanel'], function
         Route::post('delete', 'CategoriesController@destroy');
         Route::get('{id}/edit', 'CategoriesController@edit');
         Route::post('{id}/edit', 'CategoriesController@update');
-
     });
 
     Route::group(['prefix' => 'products'], function(){
         Route::get('/', 'ProductsController@index');
+        Route::get('/create', 'ProductsController@create');
+        Route::post('/', 'ProductsController@store');
         Route::get('search', 'ProductsController@queryProducts');
         Route::post('delete', 'ProductsController@destroy');
         Route::post('enable', 'ProductsController@enable');
@@ -40,6 +41,19 @@ Route::group(['prefix' => 'admin', 'middleware' => 'accessAdminPanel'], function
         Route::get('{id}/edit', 'ProductsController@edit');
         Route::post('{id}/edit', 'ProductsController@update');
         Route::get('/{slug}', 'ProductsController@show');
+    });
+
+    Route::group(['prefix' => 'collections'], function(){
+        Route::get('/', 'CollectionsController@index');
+        Route::get('/create', 'CollectionsController@create');
+        Route::post('/', 'CollectionsController@store');
+        Route::post('delete', 'CollectionsController@destroy');
+        Route::get('{id}/edit', 'CollectionsController@edit');
+        Route::post('{id}/edit', 'CollectionsController@update');
+        Route::get('{collection_id}/unhide', 'CollectionsController@unhide');
+        Route::get('{collection_id}/hide', 'CollectionsController@hide');
+        Route::post('{collection_id}/syncProducts', 'CollectionsController@syncProducts');
+        Route::post('config', 'CollectionsController@postConfig');
     });
 
     Route::group(['prefix' => 'product/categories'], function(){
@@ -109,7 +123,6 @@ Route::group(['prefix' => 'admin', 'middleware' => 'accessAdminPanel'], function
     Route::group(['prefix' => 'feedbacks'], function() {
         Route::get('/', 'FeedbacksController@index');
         Route::post('/', 'FeedbacksController@check');
-        Route::get('owned','FeedbacksController@listByPostAuthenticatedUser');
         Route::post('config', 'FeedbacksController@postConfig');
     });
     Route::get('posts/{id}/feedbacks', 'FeedbacksController@listByPost');
@@ -131,6 +144,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'accessAdminPanel'], function
 
     Route::group(['prefix' => 'privileges'], function() {
         Route::get('/', 'PrivilegesController@index');
+        Route::get('/grant', 'PrivilegesController@grant');
+        Route::post('/grant', 'PrivilegesController@grantToRole');
+        Route::post('config', 'PrivilegesController@postConfig');
     });
 });
 

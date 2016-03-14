@@ -50,9 +50,9 @@ class RolePermissionTableSeeder extends Seeder
                 'storePostWithNewCategory',
                 'updatePostWithNewCategory',
                 'indexFeedback',
-                'listOwnedPostFeedback',
                 'checkFeedback',
                 'indexComment',
+                'updateComment',
                 'approveComment',
                 'unapproveComment',
                 'spamComment',
@@ -78,10 +78,19 @@ class RolePermissionTableSeeder extends Seeder
                 'destroyProductReview',
 
                 'indexProduct',
+                'storeProduct',
                 'updateProduct',
                 'disableProduct',
                 'enableProduct',
-                'destroyProduct'
+                'destroyProduct',
+
+                'indexCollection',
+                'updateCollection',
+                'destroyCollection',
+                'storeCollection',
+                'syncProductsCollection',
+
+                'grantPermission'
             ]));
         }
 
@@ -95,8 +104,6 @@ class RolePermissionTableSeeder extends Seeder
                 'trashOwnedPost',
                 'updateOwnedPost',
                 'indexCategory',
-                'listOwnedPostFeedback',
-                'checkOwnedPostFeedback',
                 'indexTag',
                 'storeTag',
                 'queryTag',
