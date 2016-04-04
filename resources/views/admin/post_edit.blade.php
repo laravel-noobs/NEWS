@@ -213,7 +213,7 @@ app('navigator')
             if(flag){
                 $.ajax({
                     dataType: "json",
-                    url: '/admin/posts/getpermalink/' + title,
+                    url: '{{ URL::action('AdminController@permalink') }}/' + title,
                     success: function (data) {
                         $('#permalink').text(data.permalink);
                         $('#slug').val(data.permalink);
@@ -233,7 +233,7 @@ app('navigator')
         function okpermalink() {
             var newlink = $('#tmplink').val();
             $('#permalink').text(newlink);
-            $('#btn-okslug').hide()
+            $('#btn-okslug').hide();
             $('#btn-editslug').show();
             $('#slug').val(newlink);
         }

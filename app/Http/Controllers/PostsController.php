@@ -382,19 +382,6 @@ class PostsController extends Controller
     }
 
     /**
-     * @param $name
-     * @return array
-     */
-    public function permalink($name)
-    {
-        // @TODO
-
-        $slug = str_slug($name);
-        $link = array('permalink'=> $slug);
-        return $link;
-    }
-
-    /**
      * @param Request $request
      * @return null
      */

@@ -230,7 +230,6 @@ return [
                 ]
             ]
         ],
-
     ],
 
     /*
@@ -292,6 +291,10 @@ return [
             'text' => 'Sản phẩm',
             'icon_class' => 'fa fa-shopping-bag',
             'action' => 'ProductsController@index'
+        ],
+        'product_edit'=> [
+            'text' => 'Sửa',
+            'icon_class' => 'fa fa-wrench'
         ],
         'product_create' => [
             'text' => 'Tạo mới',
