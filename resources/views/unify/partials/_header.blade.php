@@ -49,7 +49,7 @@
                         <ul class="topbar-list topbar-log_reg pull-right visible-sm-block visible-md-block visible-lg-block">
                             @if(Auth::user()!= null)
                                 <li class="home"><a> {{ Auth::user()->first_name }} {{ Auth::user()->last_name }} </a></li>
-                                <li><a href="{{ URL::action('Auth\AuthController@getLogout', ['redirect' => 'https://google.com.vn']) }}"><i class="fa fa-sign-out"></i> Log out</a></li>
+                                <li><a href="{{ URL::action('Auth\AuthController@getLogout') }}"><i class="fa fa-sign-out"></i> Log out</a></li>
                             @else
                                 <li class="cd-log_reg home"><a class="cd-signin" href="javascript:void(0);">Login</a></li>
                                 <li class="cd-log_reg"><a class="cd-signup" href="javascript:void(0);">Register</a></li>

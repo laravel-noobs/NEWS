@@ -92,8 +92,8 @@ app('navigator')
 
                         <div class="form-group">
                             <div>
-                                <a href="{{ URL::action('CollectionsController@index') }}" class="btn btn-white"> Quay lại</a>
-                                <button class="btn btn-primary pull-right" type="submit">Lưu thay đổi</button>
+                                <a href="{{ URL::action('CollectionsController@index') }}" class="btn btn-default">Danh sách</a>
+                                <button class="btn btn-primary pull-right" type="submit">Lưu</button>
                             </div>
                         </div>
 
