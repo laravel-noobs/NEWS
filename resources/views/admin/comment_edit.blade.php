@@ -62,15 +62,27 @@ app('navigator')
                             </div>
                             <div class="hr-line-dashed"></div>
                             <div class="form-group {{ count($errors->get('post_id')) > 0 ? 'has-error' : '' }}">
-                                <label class="col-sm-2 control-label">Bài viết</label>
+                                <label class="col-sm-2 control-label">Đối tượng</label>
                                 <div class="col-sm-10">
-                                    <div class="input-group">
-                                        <select id="post_id" name="post_id" class="form-control">
-                                            <option  value="{{ $comment->post->id }}" selected="selected">{{ $comment->post->title }}</option>
-                                        </select>
-                                        <div class="input-group-btn">
-                                            <a href="{{ URL::action('PostsController@show', ['id' => $comment->post->id]) }}" id="post_show" style="height: 28px" type="button" class="btn btn-default btn-sm">Xem</a>
+                                        <div class="input-group input-group-sm">
+                                        <div style="display: table-cell; width: 1%; white-space: nowrap; vertical-align: middle; padding: 0 5px 0">
+                                        <span class="i-checks">
+                                            <label>
+                                                <input type="radio" name="commentable_type" {{ $comment->commentable_type == 'App\Post' ? 'checked' : '' }} value="App\Post"> Bài viết
+                                            </label>
+                                        </span>
+                                        <span class="i-checks">
+                                            <label>
+                                                <input type="radio" name="commentable_type" {{  $comment->commentable_type == 'App\Product' ? 'checked' : '' }} value="App\Product"> Sản phẩm
+                                            </label>
+                                        </span>
                                         </div>
+                                        <select id="post_id" name="commentable_id" class="form-control">
+                                            <option  value="{{ $comment->commentable->id }}" selected="selected">{{ $comment->commentable->title }}</option>
+                                        </select>
+                                        <select id="product_id" name="commentable_id" class="form-control">
+                                            <option  value="{{ $comment->commentable->id }}" selected="selected">{{ $comment->commentable->name }}</option>
+                                        </select>
                                     </div>
                                     @foreach($errors->get('post_id') as $err)
                                         <label class="error" for="post_id">{{ $err }}</label>
@@ -135,7 +147,7 @@ app('navigator')
                             <div class="hr-line-dashed"></div>
                             <div class="form-group">
                                 <div class="col-md-6">
-                                    <a class="btn btn-default" href="{{ URL::previous() }}" value="save">Quay lại</a>
+                                    <a class="btn btn-default" href="{{ URL::action('CommentsController@index') }}" value="save">Quay lại</a>
                                 </div>
                                 <div class="col-md-6">
                                     <button class="btn btn-primary pull-right" type="submit" value="save">Lưu thay đổi</button>
@@ -172,6 +184,28 @@ app('navigator')
             radioClass: 'iradio_square-green'
         });
 
+        $('input[name="commentable_type"]').on('ifChecked', function(event){
+            input = $(event.target);
+            post_id = $('#post_id');
+            product_id = $('#product_id');
+            if(input.val() == 'App\\Post') {
+                post_id.removeAttr('disabled');
+                post_id.next('.select2').show();
+                product_id.attr('disabled', 'disabled');
+                product_id.next('.select2').hide();
+            } else if(input.val() == 'App\\Product') {
+                product_id.removeAttr('disabled');
+                product_id.next('.select2').show();
+                post_id.attr('disabled', 'disabled');
+                post_id.next('.select2').hide();
+
+            }
+        });
+
+        $(document).ready(function(){
+            $('input[name="commentable_type"][checked]').trigger('ifChecked');
+        });
+
         $("#post_id").select2({
             placeholder: "Chọn một bài viết",
             ajax: {
@@ -206,9 +240,41 @@ app('navigator')
                 return '<option data-url="' + item.url + '" style="display: inline" value="' + item.id + '" selected="selected">' + item.text + '</option>';
             }
         });
-        $("#post_id").on("select2:select", function (e) {
-            $('#post_show').attr('href', e.params.data.url);
+        $("#product_id").select2({
+            placeholder: "Chọn một sản phẩm",
+            ajax: {
+                url: '{{ URL::action('ProductsController@queryProducts') }}',
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        query: params.term
+                    };
+                },
+                processResults: function (data, params) {
+                    $.map(data, function (data) {
+                        data.id = data.id;
+                        data.text = data.name;
+                        data.url = data.url
+                    });
+                    return {
+                        results: data
+                    }
+                },
+                cache: true
+            },
+            escapeMarkup: function (markup) { return markup; },
+            minimumInputLength: 3,
+            templateResult: function (item) {
+                if (item.loading) return item.text;
+                markup = '<div><span>' + item.text + '</span></div>';
+                return markup;
+            },
+            templateSelection: function (item) {
+                return '<option data-url="' + item.url + '" style="display: inline" value="' + item.id + '" selected="selected">' + item.text + '</option>';
+            }
         });
+
 
         $("#user_id").select2({
             placeholder: "Chọn một người dùng",
@@ -250,5 +316,7 @@ app('navigator')
         $("#user_id").on("select2:unselect", function (e) {
             $('#name, #email').attr('disabled', false)
         });
+
+
     </script>
 @endsection

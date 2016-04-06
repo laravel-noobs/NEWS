@@ -34,6 +34,8 @@ class RolePermissionTableSeeder extends Seeder
         {
             DB::table('role_permission')->insert($this->getArrayPermissionsToRole($editor,[
                 'accessAdminPanel',
+                'queryUser',
+
                 'indexPost',
                 'storePendingPost',
                 'storeDraftPost',
@@ -48,9 +50,9 @@ class RolePermissionTableSeeder extends Seeder
                 'storePostWithNewCategory',
                 'updatePostWithNewCategory',
                 'indexFeedback',
-                'listOwnedPostFeedback',
                 'checkFeedback',
                 'indexComment',
+                'updateComment',
                 'approveComment',
                 'unapproveComment',
                 'spamComment',
@@ -58,7 +60,37 @@ class RolePermissionTableSeeder extends Seeder
                 'storeTag',
                 'storePostWithNewTag',
                 'updatePostWithNewTag',
-                'queryTag'
+                'queryTag',
+
+                'indexProductCategory',
+                'storeProductCategory',
+                'updateProductCategory',
+                'destroyProductCategory',
+
+                'indexProductBrand',
+                'storeProductBrand',
+                'updateProductBrand',
+                'destroyProductBrand',
+
+                'indexProductReview',
+                'updateProductReview',
+                'checkProductReview',
+                'destroyProductReview',
+
+                'indexProduct',
+                'storeProduct',
+                'updateProduct',
+                'disableProduct',
+                'enableProduct',
+                'destroyProduct',
+
+                'indexCollection',
+                'updateCollection',
+                'destroyCollection',
+                'storeCollection',
+                'syncProductsCollection',
+
+                'grantPermission'
             ]));
         }
 
@@ -72,8 +104,6 @@ class RolePermissionTableSeeder extends Seeder
                 'trashOwnedPost',
                 'updateOwnedPost',
                 'indexCategory',
-                'listOwnedPostFeedback',
-                'checkOwnedPostFeedback',
                 'indexTag',
                 'storeTag',
                 'queryTag',

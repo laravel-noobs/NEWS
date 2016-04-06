@@ -18,4 +18,19 @@ class AdminController extends Controller
     {
         return view('admin');
     }
+
+    /**
+     * @param $name
+     * @return array
+     */
+    public function permalink($name = null)
+    {
+        // @TODO
+        if(!$name)
+            abort(400);
+
+        $slug = str_slug($name);
+        $link = array('permalink'=> $slug);
+        return $link;
+    }
 }
