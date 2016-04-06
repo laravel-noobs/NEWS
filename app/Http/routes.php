@@ -125,6 +125,16 @@ Route::group(['prefix' => 'admin', 'middleware' => 'accessAdminPanel'], function
         Route::post('/', 'FeedbacksController@check');
         Route::post('config', 'FeedbacksController@postConfig');
     });
+
+    Route::group(['prefix' => 'orders'], function(){
+        Route::get('/', 'OrdersController@index');
+        Route::post('/', 'OrdersController@store');
+        Route::post('delete', 'OrdersController@destroy');
+        Route::get('{id}/edit', 'OrdersController@edit');
+        Route::post('{id}/edit', 'OrdersController@update');
+        Route::post('config', 'OrdersController@postConfigs');
+    });
+
     Route::get('posts/{id}/feedbacks', 'FeedbacksController@listByPost');
     Route::get('users/{id}/feedbacks', 'FeedbacksController@listByUser');
 

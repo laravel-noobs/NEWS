@@ -10,10 +10,32 @@ return [
             'icon_class' => 'fa fa-tachometer',
             'order' => 1
         ],
+        'orders' => [
+            'text' => 'Đơn đặt hàng',
+            'active' => false,
+            'icon_class' => 'fa fa-shopping-cart',
+            'order' => 1,
+            'hidden' => function()
+            {
+                return false;
+            },
+            'items' => [
+                'index' => [
+                    'text' => 'Tất cả',
+                    'action' => 'OrdersController@index',
+                    'active' => false,
+                    'order' => 1,
+                    'hidden' => function(){
+                        return false;
+                    }
+                ]
+            ]
+        ],
         'products' => [
             'text' => 'Sản phẩm',
             'active' => false,
             'icon_class' => 'fa fa-shopping-bag',
+            'order' => 1,
             'hidden' => function()
             {
                 return Gate::denies('indexProductCategory') && Gate::denies('indexProductBrand');
@@ -64,15 +86,14 @@ return [
                         return Gate::denies('indexProductBrand');
                     }
                 ]
-            ],
-            'order' => 2
+            ]
         ],
         'collections' => [
             'text' => 'Nhóm',
             'action' => 'CollectionsController@index',
             'icon_class' => 'fa fa-th-large',
             'active' => false,
-            'order' => 1,
+            'order' => 2,
             'hidden' => function(){
                 return Gate::denies('indexCollection');
             },
@@ -286,6 +307,11 @@ return [
         'tag_edit' => [
             'text' => 'Sửa',
             'icon_class' => 'fa fa-wrench'
+        ],
+        'orders'=> [
+            'text' => 'Đơn đặt hàng',
+            'icon_class' => 'fa fa-shopping-cart',
+            'action' => 'OrdersController@index'
         ],
         'products' => [
             'text' => 'Sản phẩm',

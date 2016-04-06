@@ -129,8 +129,8 @@ $factory->define(App\ProductReview::class, function (Faker\Generator $faker) {
 
 $factory->define(App\OrderProduct::class, function (Faker\Generator $faker) {
     return [
-        'price' => $faker->randomFloat('10', 1000000, 90000000),
-        'quantity' => $faker->randomNumber(3)
+        'price' => $faker->randomFloat('10', 10000, 90000),
+        'quantity' => $faker->randomNumber(2)
     ];
 });
 
