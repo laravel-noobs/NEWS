@@ -19,7 +19,7 @@ class ProductCollectionExampleTableSeeder extends Seeder
         $max = $products->count() * $collections->count();
         $total = random_int($max * 0.1, $max * 0.5);
 
-        echo "We have {$products->count()} products and {$collections->count()} tags.\nTry to generate {$total} product collection records\n\n";
+        echo "We have {$products->count()} products and {$collections->count()} collections.\nTry to generate {$total} product collection records\n\n";
 
         DB::table('product_collection')->delete();
 
