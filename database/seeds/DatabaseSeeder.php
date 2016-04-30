@@ -13,6 +13,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        $this->call(ProvinceTypeTableSeeder::class);
+        $this->call(DistrictTypeTableSeeder::class);
+        $this->call(WardTypeTableSeeder::class);
+        $this->call(ProvinceTableSeeder::class);
+        $this->call(DistrictTableSeeder::class);
+        $this->call(WardTableSeeder::class);
+
         Model::unguard();
 
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
