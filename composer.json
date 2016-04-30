@@ -23,13 +23,15 @@
   ],
   "require": {
     "php": ">=5.5.9",
+    "ext-curl": "*",
     "laravel/framework": "5.2.*",
     "doctrine/dbal": "^2.5",
     "barryvdh/laravel-ide-helper": "2.1.2",
     "laravelcollective/html": "^5.2",
     "koutsuneka/flashmessage": "dev-master@dev",
     "koutsuneka/navigation": "dev-master@dev",
-    "koutsuneka/userconfig": "dev-master@dev"
+    "koutsuneka/userconfig": "dev-master@dev",
+    "paypal/rest-api-sdk-php": "*"
   },
   "require-dev": {
     "fzaninotto/faker": "~1.4",

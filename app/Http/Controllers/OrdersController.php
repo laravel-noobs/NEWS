@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\OrderProduct;
 use App\OrderStatus;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -26,6 +28,9 @@ class OrdersController extends Controller
             'order_id' => null,
             'created_at_start' => null,
             'created_at_end' => null
+        ],
+        'order' => [
+
         ]
     ];
 
@@ -37,7 +42,9 @@ class OrdersController extends Controller
         'filter.order_id' => 'exists:order,id',
         'filter.status_id' => 'exists:order_status,id',
         'filter.created_at_start' => 'date_format:Y-m-d H:i:s',
-        'filter.created_at_end' => 'date_format:Y-m-d H:i:s'
+        'filter.created_at_end' => 'date_format:Y-m-d H:i:s',
+        'order.*.product_id' => 'required|exists:product,id',
+        'order.*.quantity' => 'required|min:1|max:10000',
     ];
 
     /**
@@ -45,7 +52,7 @@ class OrdersController extends Controller
      */
     public function __construct()
     {
-        $this->load_config('filter');
+        $this->load_configs();
     }
 
     public function index()
@@ -63,5 +70,40 @@ class OrdersController extends Controller
             ->latest()
             ->paginate(50);
         return view('admin.shop.order_index', array_merge(compact('order_status', 'filter_status', 'orders'), $configs));
+    }
+
+    public function create()
+    {
+        $order_product = $this->getOrderDetail();
+
+        return view('admin.shop.order_create', compact('order_product'));
+    }
+
+    public function detail()
+    {
+        return $this->getOrderDetail();
+    }
+
+    private function getOrderDetail()
+    {
+        $config = $this->read_config('order');
+
+        $list = [];
+        foreach($config as $order)
+            $list[$order['product_id']] = isset($list[$order['product_id']]) ? $list[$order['product_id']] + $order['quantity'] : $order['quantity'];
+
+        $order_product = [];
+
+        foreach($list as $k => $v)
+        {
+            $op = new OrderProduct();
+            $op->product_id = $k;
+            $op->quantity = $v;
+            array_push($order_product, $op);
+        }
+        $order_product = new Collection($order_product);
+        $order_product->load(['product', 'product.brand', 'product.status', 'product.brand', 'product.category']);
+
+        return $order_product;
     }
 }

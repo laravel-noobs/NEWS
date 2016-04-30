@@ -32,6 +32,9 @@ class ProductsController extends Controller
             'status_type' => 'all',
             'category' => null,
             'search_term' => null
+        ],
+        'index' => [
+            'mode' => 'list'
         ]
     ];
 
@@ -41,7 +44,8 @@ class ProductsController extends Controller
     protected $configs_validate = [
         'filter.search_term' => 'min:4,max:255',
         'filter.category' => 'exists:category,id',
-        'filter.status_type' => 'in:all,outofstock,available,disabled'
+        'filter.status_type' => 'in:all,outofstock,available,disabled',
+        'index.mode' => 'required|in:list,grid'
     ];
 
     /**
@@ -49,7 +53,7 @@ class ProductsController extends Controller
      */
     public function __construct()
     {
-        $this->load_config('filter');
+        $this->load_configs();
     }
 
     /**
@@ -57,7 +61,7 @@ class ProductsController extends Controller
      */
     public function index()
     {
-        $configs = $this->read_configs(['filter.status_type', 'filter.category', 'filter.search_term']);
+        $configs = $this->read_configs(['filter.status_type', 'filter.category', 'filter.search_term', 'index.mode']);
 
         $products  = Product::with([
             'category',
@@ -81,7 +85,9 @@ class ProductsController extends Controller
 
         $products = $products->latest()->paginate(20);
 
-        return view('admin.shop.product_index', array_merge(compact('products', 'categories'), $configs));
+        $view_data = array_merge(compact('products', 'categories'), $configs);
+
+        return view( $configs['index_mode'] != 'grid' ? 'admin.shop.product_index' : 'admin.shop.product_index_grid', $view_data);
     }
 
     public function create()
