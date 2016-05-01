@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\District;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -15,6 +16,7 @@ use PayPal\Api\Payer;
 use PayPal\Api\Payment;
 use PayPal\Api\RedirectUrls;
 use PayPal\Api\Transaction;
+use App\Province;
 
 
 class AdminController extends Controller
@@ -192,6 +194,17 @@ class AdminController extends Controller
         // NOTE: PLEASE DO NOT USE RESULTPRINTER CLASS IN YOUR ORIGINAL CODE. FOR SAMPLE ONLY
         //ResultPrinter::printResult("<b>SUCCESS</b>: Your server supports TLS protocols required for secure connection to PayPal Servers. <br /> - Current Curl Version: " . $curl_info['version'] . "<br /> - Current OpenSSL Version:" . $curl_info['ssl_version'], null, null, null, "SUCCESS. Your system supports TLSv1.2");
         return $payment;
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function debug()
+    {
+        // please dont delete this for god sake :))
+        return;
     }
 
     /**
