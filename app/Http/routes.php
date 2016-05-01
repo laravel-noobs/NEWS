@@ -18,6 +18,11 @@ Route::get('/', function () {
 Route::group(['prefix' => 'admin', 'middleware' => 'accessAdminPanel'], function(){
 
     Route::get('/', 'AdminController@index');
+    Route::get('/debug', 'AdminController@debug');
+
+    Route::get('/division/provinces', 'AdministrativeDivisionController@getProvinces');
+    Route::get('/division/{province_id}/districts', 'AdministrativeDivisionController@getDistricts');
+    Route::get('/division/{district_id}/wards', 'AdministrativeDivisionController@getWards');
 
     Route::get('utils/permalink/{name?}','AdminController@permalink');
 
