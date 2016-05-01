@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\District;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\Province;
 
 class AdminController extends Controller
 {
@@ -17,6 +19,17 @@ class AdminController extends Controller
     public function index()
     {
         return view('admin');
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function debug()
+    {
+        // please dont delete this for god sake :))
+        return;
     }
 
     /**
