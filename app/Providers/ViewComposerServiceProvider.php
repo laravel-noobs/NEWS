@@ -17,6 +17,7 @@ class ViewComposerServiceProvider extends ServiceProvider
         $this->composeBreadcrumb();
         $this->composePageMeta();
         $this->composeTopNav();
+        $this->composeAdministrativeDivision();
     }
 
     /**
@@ -57,5 +58,10 @@ class ViewComposerServiceProvider extends ServiceProvider
     public function composeTopNav()
     {
         view()->composer('partials.admin._topnav', 'App\Http\Composers\TopNavComposer@compose');
+    }
+
+    public function composeAdministrativeDivision()
+    {
+        view()->composer('admin.shop.order_create', 'App\Http\Composers\AdministrativeDivisionComposer@compose');
     }
 }

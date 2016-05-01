@@ -82,6 +82,11 @@ class User extends Model implements AuthenticatableContract,
         return $this->belongsToMany('App\Post', 'user_rate', 'user_id', 'post_id')->withPivot(['rate']);
     }
 
+    public function deliveryWard()
+    {
+        return $this->belongsTo('App\Ward', 'delivery_ward_id', 'id');
+    }
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */

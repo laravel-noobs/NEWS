@@ -15,6 +15,10 @@ Route::get('/', function () {
     return view('unify.index');
 });
 
+Route::get('/division/provinces', 'AdministrativeDivisionController@getProvinces');
+Route::get('/division/{province_id}/districts', 'AdministrativeDivisionController@getDistricts');
+Route::get('/division/{district_id}/wards', 'AdministrativeDivisionController@getWards');
+
 Route::group(['prefix' => 'admin', 'middleware' => 'accessAdminPanel'], function(){
 
     Route::get('/', 'AdminController@index');
@@ -25,9 +29,6 @@ Route::group(['prefix' => 'admin', 'middleware' => 'accessAdminPanel'], function
 
     Route::get('/debug', 'AdminController@debug');
 
-    Route::get('/division/provinces', 'AdministrativeDivisionController@getProvinces');
-    Route::get('/division/{province_id}/districts', 'AdministrativeDivisionController@getDistricts');
-    Route::get('/division/{district_id}/wards', 'AdministrativeDivisionController@getWards');
 
     Route::get('utils/permalink/{name?}','AdminController@permalink');
 
@@ -102,6 +103,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'accessAdminPanel'], function
         Route::post('{id}/show', 'UsersController@show');
         Route::post('ban', 'UsersController@ban');
         Route::get('search', 'UsersController@queryUsers');
+        Route::get('info', 'UsersController@getUserInfomation');
         Route::post('config', 'UsersController@postConfig');
     });
 

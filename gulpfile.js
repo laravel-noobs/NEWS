@@ -53,7 +53,7 @@ elixir(function(mix) {
             bower + 'slimscroll/jquery.slimscroll.js',
             bower + 'footable/dist/footable.all.min.js',
             bower + 'toastr/toastr.js',
-            bower + 'select2/dist/js/select2.full.min.js',
+            bower + 'select2/dist/js/select2.full.js',
             bower + 'eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
             bower + 'jqcloud2/dist/jqcloud.js',
             bower + 'icheck/icheck.js',

@@ -63,9 +63,9 @@ app('navigator')
 
                                 <div class="form-group">
                                     <label for="user_id">Người dùng</label>
-                                    <div>
-                                        <select id="user_id" class="form-control">
-                                            <option>dummy</option>
+                                    <div style="width:100%">
+                                        <select id="user_id" name="user_id" class="form-control">
+
                                         </select>
                                     </div>
                                 </div>
@@ -81,7 +81,9 @@ app('navigator')
                                     <label for="province">Tỉnh/Thành phố</label>
                                     <div>
                                         <select id="province" class="form-control">
-                                            <option>dummy</option>
+                                            @foreach($provinces as $province)
+                                                <option value="{{ $province->id }}">{{ $province->name }}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
@@ -89,7 +91,7 @@ app('navigator')
                                 <div class="form-group">
                                     <label for="district">Huyện/Quận/Thị xã</label>
                                     <div>
-                                        <select class="form-control">
+                                        <select id="district" class="form-control">
                                             <option>dummy</option>
                                         </select>
                                     </div>
@@ -98,7 +100,7 @@ app('navigator')
                                 <div class="form-group">
                                     <label for="ward">Xã/Phường/Thị trấn</label>
                                     <div>
-                                        <select id="ward" class="form-control">
+                                        <select id="ward" id="ward" class="form-control">
                                             <option>dummy</option>
                                         </select>
                                     </div>
@@ -107,6 +109,11 @@ app('navigator')
                                 <div class="form-group">
                                     <label for="delivery_address">Địa chỉ</label>
                                     <div><input id="delivery_address" type="text" class="form-control"></div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="phone">Điện thoại</label>
+                                    <div><input id="phone" type="text" class="form-control"></div>
                                 </div>
 
                                 <div class="form-group">
@@ -286,13 +293,102 @@ app('navigator')
 @endsection
 
 @section('footer-script')
-    <script>
 
+    <script>
         var detail_template = '<tr> <td style="width:1%; white-space:nowrap"> <img src="" style="width:80px; height: 120px; background: grey" /> </td> <td> <div class="product_name"></div> <div><strong class="status_label"></strong></div> </td> <td width="20%"> <div class="input-group input-group-xs text-righ"> <input style="width:60px" type="number" name="quantity" class="form-control input-xs" value="" /> <span class="input-group-btn"> <button class="order btn btn-xs btn-outline btn-primary"> <i class="fa fa-refresh"></i> Cập nhật </button> </span> </div> <div><strong>Đơn giá</strong>: <span class="product_price price"></span></div> </td> <td width="20%"> <div class="category_name"></div> <div class="brand_name"></div> </td> </tr>';
         var detail_text_template = '<li><div class="product_name"></div><div><span class="quantity"></span> x <span class="product_price price"></span> = <strong class="price"></strong></div> </li>';
         $(document).ready(function(){
             $("#wizard").steps();
             $('.footable').footable();
+
+            $("#user_id").select2({
+                allowClear: true,
+                placeholder: "Chọn một người dùng",
+                ajax: {
+                    url: '/admin/users/search?query=' + $(this).val(),
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            query: params.term
+                        };
+                    },
+                    processResults: function (data, params) {
+                        $.map(data, function (data) {
+                            data.id = data.id;
+                            data.text = data.name;
+                        });
+                        return {
+                            results: data
+                        }
+                    },
+                    cache: true
+                },
+                width: '100%',
+                escapeMarkup: function (markup) { return markup; },
+                minimumInputLength: 3,
+                templateResult: function (item) {
+                    if (item.loading) return item.text;
+                    markup = '<div><span>' + item.text + '</span></div>';
+                    return markup;
+                },
+                templateSelection: function (item) {
+                    return '<option style="display: inline" value="' + item.id + '" selected="selected">' + item.text + '</option>';
+                }
+            }).change(function(){
+                $.ajax({
+                    url: '/admin/users/info?user_id=' + $(this).val(),
+                    method: 'get'
+                }).done(function(data) {
+                    console.log(data);
+                    $('#delivery_address').val(data.delivery_address);
+                    $('#email').val(data.email);
+                    $('#phone').val(data.phone);
+                    if(data.delivery_ward != null)
+                    {
+                        $('#province').val(data.delivery_ward.district.province.id).trigger('change');
+                        $('#district').data('prefer', data.delivery_ward.district.id);
+                        $('#ward').data('prefer', data.delivery_ward.id);
+                    }
+                });
+            });
+
+            $('#district').change(function() {
+                $.ajax({
+                    url: '/division/' + $(this).val() + '/wards',
+                    method: 'get'
+                }).done(function(data) {
+                    ward = $('#ward').html('');
+                    for(i = 0; i < data.length; i++)
+                    {
+                        if(ward.data('prefer') ==  data[i].id)
+                            ward.append('<option selected="selected" value="' + data[i].id + '">' + data[i].name + ' (' + data[i].type.name + ')' + '</option>')
+                        else
+                            ward.append('<option value="' + data[i].id + '">' + data[i].name + ' (' + data[i].type.name + ')' + '</option>')
+                    }
+
+                });
+            });
+
+            $('#province').change(function() {
+                $.ajax({
+                    url: '/division/' + $(this).val() + '/districts',
+                    method: 'get'
+                }).done(function(data) {
+                    district = $('#district').html('');
+                    for(i = 0; i < data.length; i++)
+                    {
+                        if(district.data('prefer') ==  data[i].id)
+                            district.append('<option selected="selected" value="' + data[i].id + '">' + data[i].name + ' (' + data[i].type.name + ')' + '</option>')
+                        else
+                            district.append('<option value="' + data[i].id + '">' + data[i].name + ' (' + data[i].type.name + ')' + '</option>')
+                    }
+
+                    district.trigger('change');
+                });
+            }).trigger('change');
+
+
         });
 
         $('#refresh-detail').on('click', function() {

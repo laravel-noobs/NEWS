@@ -24,7 +24,7 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
         'expired_at' => $faker->dateTimeBetween('+2 days', '+2 years'),
         'password' => bcrypt('password'),
         'remember_token' => str_random(10),
-        'delivery_address' => $faker->address,
+        'delivery_address' => $faker->streetAddress,
         'phone' => $faker->phoneNumber
     ];
 });

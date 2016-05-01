@@ -43,4 +43,9 @@ class Ward extends Model
     {
         return $this->belongsTo('App\WardType', 'type_id', 'id');
     }
+
+    public function district()
+    {
+        return $this->belongsTo('App\District', 'district_id', 'id');
+    }
 }

@@ -288,7 +288,23 @@ class UsersController extends Controller
         $term = $request->request->get('query');
         if(strlen($term) < 3)
             return null;
-        $users = User::searchByTerm($term)->get(['id', 'name']);
+        $users = User::searchByTerm($term)->get(['id', 'name', 'email']);
         return $users;
+    }
+
+    public function getUserInfomation(Request $request)
+    {
+        $this->authorize('queryUser');
+
+        $user_id = $request->request->get('user_id');
+
+        $user = User::findOrFail($user_id, ['id', 'name', 'email','delivery_address', 'delivery_ward_id', 'phone']);
+        $user->load([
+                'deliveryWard',
+                'deliveryWard.district',
+                'deliveryWard.district.province'
+        ]);
+
+        return $user;
     }
 }
