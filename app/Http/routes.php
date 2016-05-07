@@ -145,7 +145,13 @@ Route::group(['prefix' => 'admin', 'middleware' => 'accessAdminPanel'], function
         Route::post('delete', 'OrdersController@destroy');
         Route::get('{id}/edit', 'OrdersController@edit');
         Route::post('{id}/edit', 'OrdersController@update');
+
         Route::get('detail', 'OrdersController@detail');
+        Route::get('detail/clear', 'OrdersController@clearDetails');
+        Route::post('detail/updateDetails', 'OrdersController@updateDetails');
+        Route::post('detail/remove', 'OrdersController@removeDetail');
+        Route::post('detail/update', 'OrdersController@updateDetail');
+
         Route::post('config', 'OrdersController@postConfig');
         Route::post('configs', 'OrdersController@postConfigs');
     });

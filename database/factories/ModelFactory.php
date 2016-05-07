@@ -96,13 +96,15 @@ $factory->define(App\Order::class, function (Faker\Generator $faker) {
     $updated_at = $faker->dateTimeBetween($created_at);
     $canceled_at = $faker->dateTimeBetween($updated_at);
 
+
     return [
         'delivery_address' => $faker->address,
         'phone' => $faker->phoneNumber,
         'customer_name' => $faker->firstName . ' ' . $faker->lastName,
         'created_at' => $created_at,
         'updated_at' => $updated_at,
-        'canceled_at' => $canceled_at
+        'canceled_at' => $canceled_at,
+        'delivery_note' => $faker->paragraph
     ];
 });
 

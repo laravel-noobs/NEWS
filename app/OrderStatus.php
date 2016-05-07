@@ -52,8 +52,12 @@ class OrderStatus extends Model
     {
         switch($name)
         {
-            case 'UNKNOWN':
+            case 'pending':
                 return 1;
+            case 'approved':
+                return 2;
+            case 'delivering':
+                return 3;
             default:
                 return null;
         }

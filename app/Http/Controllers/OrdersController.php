@@ -4,12 +4,17 @@ namespace App\Http\Controllers;
 
 use App\OrderProduct;
 use App\OrderStatus;
+use App\Product;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+
 use App\Http\Controllers\Controller;
 use App\Order;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
+use KouTsuneka\FlashMessage\Flash;
 
 class OrdersController extends Controller
 {
@@ -44,7 +49,7 @@ class OrdersController extends Controller
         'filter.created_at_start' => 'date_format:Y-m-d H:i:s',
         'filter.created_at_end' => 'date_format:Y-m-d H:i:s',
         'order.*.product_id' => 'required|exists:product,id',
-        'order.*.quantity' => 'required|min:1|max:10000',
+        'order.*.quantity' => 'required|numeric|min:1|max:1000',
     ];
 
     /**
@@ -72,6 +77,85 @@ class OrdersController extends Controller
         return view('admin.shop.order_index', array_merge(compact('order_status', 'filter_status', 'orders'), $configs));
     }
 
+    public function store(Request $request)
+    {
+        $this->validate($request, [
+            'items.*.product_id' => 'required|exists:product,id',
+            'items.*.quantity' => 'required|numeric|min:1|max:1000',
+            'user_id' => 'exists:user,id',
+            'customer_name' => 'required',
+            'email' => 'required|email',
+            'delivery_ward_id' => 'required|exists:ward,id',
+            'delivery_address' => 'required',
+            'phone' => 'required',
+            'paymentMethod' => 'required|in:direct_method,card_method',
+            'card_name' => 'required_if:paymentMethod,card_method',
+            'card_number' => 'required_if:paymentMethod,card_method',
+            'card_expiry' => 'required_if:paymentMethod,card_method|regex:/\d\d\/\d\d/',
+            'card_cvc' => 'required_if:paymentMethod,card_method',
+            'items' => 'required|array'
+        ]);
+
+        $input = $request->input();
+
+        list($result, $order) = $this->storeTransaction($input);
+
+        if($result)
+        {
+            $this->clearDetails();
+            Flash::push("Thêm đơn đặt hàng \\\"$order->id\\\" thành công", 'Hệ thống');
+        }
+
+        else
+            Flash::push("Thêm đơn đặt hàng thất bại", 'Hệ thống', "error");
+
+        return redirect(action('OrdersController@index'));
+    }
+
+    private function storeTransaction($input)
+    {
+        DB::beginTransaction();
+        try {
+
+            $order = new Order($input);
+
+            $order->status_id = OrderStatus::where('name', '=', 'pending')->firstOrFail()->id;
+
+            if ($order->save()) {
+
+                $details = [];
+
+                foreach($input['items'] as $detail)
+                {
+                    $op = new OrderProduct();
+                    $op->product_id = $detail['product_id'];
+                    $op->quantity = $detail['quantity'];
+                    array_push($details, $op);
+                }
+
+                $details = Collection::make($details);
+                $details->load('product');
+
+                $sync = [];
+                foreach($details as $op)
+                    $sync[$op->product_id] = ['quantity' => $op->quantity, 'price' => $op->product->price];
+
+                $order->products()->sync($sync);
+
+                DB::commit();
+                return array(true, $order);
+            }
+            else
+            {
+                DB::rollBack();
+                return array(false, $order);
+            }
+
+        } catch (Exception $e) {
+            DB::rollBack();
+            return array(false, null);
+        }
+    }
     public function create()
     {
         $order_product = $this->getOrderDetail();
@@ -86,7 +170,7 @@ class OrdersController extends Controller
 
     private function getOrderDetail()
     {
-        $config = $this->read_config('order');
+        $config = $this->read_config('order', true);
 
         $list = [];
         foreach($config as $order)
@@ -105,5 +189,110 @@ class OrdersController extends Controller
         $order_product->load(['product', 'product.brand', 'product.status', 'product.brand', 'product.category']);
 
         return $order_product;
+    }
+
+    public function clearDetails()
+    {
+        $this->write_config('order', [], false, true);
+        return $this->detail();
+    }
+
+    public function removeDetail(Request $request)
+    {
+        $input = $request->input();
+
+        $validator = Validator::make($input,[
+            'product_id' => 'required|exists:product,id'
+        ]);
+
+        if($validator->fails())
+            return response()->json($validator->errors()->all(), 400);
+
+        $this->read_config('order', true);
+
+        for($i = 0; $i < count($this->configs['order']); $i++)
+        {
+            if($this->configs['order'][$i]['product_id'] == $input['product_id'])
+            {
+                array_splice($this->configs['order'], $i, 1);
+                $i--;
+            }
+        }
+
+        $this->write_config('order', $this->configs['order'], false, true);
+
+        return ['return' => true];
+    }
+    public function updateDetails(Request $request)
+    {
+        $input = $request->input();
+
+        $validator = Validator::make($input,[
+            'details.*.product_id' => 'required|exists:product,id',
+            'details.*.quantity' => 'required|numeric|min:1|max:1000'
+        ]);
+
+        if($validator->fails())
+            return response()->json($validator->errors()->all(), 400);
+
+        $this->read_config('order', true);
+
+        foreach($input['details'] as $detail)
+        {
+            for($i = 0; $i < count($this->configs['order']); $i++)
+            {
+                if($this->configs['order'][$i]['product_id'] == $detail['product_id'])
+                {
+                    array_splice($this->configs['order'], $i, 1);
+                    $i--;
+                }
+            }
+        }
+        foreach($input['details'] as $detail)
+        {
+            $op = new OrderProduct();
+            $op->product_id = $detail['product_id'];
+            $op->quantity = $detail['quantity'];
+            $op->load(['product', 'product.brand', 'product.status', 'product.brand', 'product.category']);
+            array_push($this->configs['order'], $op);
+        }
+
+        $this->write_config('order', $this->configs['order'], false, true);
+
+        return $this->configs['order'];
+    }
+    public function updateDetail(Request $request)
+    {
+        $input = $request->input();
+
+        $validator = Validator::make($input,[
+            'product_id' => 'required|exists:product,id',
+            'quantity' => 'required|numeric|min:1|max:1000'
+        ]);
+
+        if($validator->fails())
+            return response()->json($validator->errors()->all(), 400);
+
+        $this->read_config('order', true);
+
+        for($i = 0; $i < count($this->configs['order']); $i++)
+        {
+            if($this->configs['order'][$i]['product_id'] == $input['product_id'])
+            {
+                array_splice($this->configs['order'], $i, 1);
+                $i--;
+            }
+        }
+
+        $op = new OrderProduct();
+        $op->product_id = $input['product_id'];
+        $op->quantity = $input['quantity'];
+        $op->load(['product', 'product.brand', 'product.status', 'product.brand', 'product.category']);
+
+        array_push($this->configs['order'], $op);
+
+        $this->write_config('order', $this->configs['order'], false, true);
+
+        return ['return' => true];
     }
 }

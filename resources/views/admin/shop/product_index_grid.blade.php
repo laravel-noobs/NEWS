@@ -223,6 +223,11 @@ app('navigator')
                 data: { 'merge': '1', name: "order", value: [{'product_id' : data[0].value, 'quantity': data[2].value }] },
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                statusCode: {
+                    400: function(jqXHR, textStatus, errorThrown){
+                        toastr.error(jqXHR.responseJSON.join('<br/>'));
+                    }
                 }
             }).success(function() {
                 toastr['success']('Thành công thêm sản phẩm "' + data[1].value + '" vào đơn đặt hàng mới.', "Đơn đặt hàng mới");

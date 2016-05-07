@@ -298,7 +298,7 @@ class UsersController extends Controller
 
         $user_id = $request->request->get('user_id');
 
-        $user = User::findOrFail($user_id, ['id', 'name', 'email','delivery_address', 'delivery_ward_id', 'phone']);
+        $user = User::findOrFail($user_id, ['id', 'name','first_name', 'last_name', 'email','delivery_address', 'delivery_ward_id', 'phone']);
         $user->load([
                 'deliveryWard',
                 'deliveryWard.district',

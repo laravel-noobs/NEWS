@@ -18,7 +18,7 @@ class Order extends Model
      *
      * @var array
      */
-    protected $fillable = ['phone', 'customer_name', 'delivery_address', 'delivery_ward_id'];
+    protected $fillable = ['user_id', 'phone', 'customer_name', 'delivery_address', 'delivery_ward_id', 'delivery_note'];
 
     /**
      * The attributes excluded from the model's JSON form.
