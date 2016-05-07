@@ -52,4 +52,9 @@ class District extends Model
     {
         return $this->hasMany('App\Ward','district_id', 'id');
     }
+
+    public function province()
+    {
+        return $this->belongsTo('App\Province', 'province_id', 'id');
+    }
 }

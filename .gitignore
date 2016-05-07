@@ -18,3 +18,4 @@ composer.lock
 access.log
 error.log
 npm-debug.log
+phpinfo.php

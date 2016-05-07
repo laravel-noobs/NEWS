@@ -124,9 +124,8 @@ app('navigator')
                         </td>
                         <td class="text-right">
                             <div class="btn-group">
-                                <button class="btn-white btn btn-xs">Xem</button>
+                                <button class="btn-white btn btn-xs">Chi tiết</button>
                                 <button class="btn-white btn btn-xs">Sửa</button>
-                                <button class="btn-white btn btn-xs">Xóa</button>
                             </div>
                         </td>
                     </tr>

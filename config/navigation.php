@@ -1,7 +1,7 @@
 <?php
 return [
-    'acronym' => 'NEWS',
-    'page_title' => 'NEWS',
+    'acronym' => 'SHOP',
+    'page_title' => 'SHOP',
     'navigation' => [
         'admin' => [
             'text' => 'Bảng điều khiển',
@@ -28,7 +28,16 @@ return [
                     'hidden' => function(){
                         return false;
                     }
-                ]
+                ],
+                'create' => [
+                    'text' => 'Lập mới',
+                    'action' => 'OrdersController@create',
+                    'active' => false,
+                    'order' => 2,
+                    'hidden' => function(){
+                        return false;
+                    }
+                ],
             ]
         ],
         'products' => [
@@ -312,6 +321,11 @@ return [
             'text' => 'Đơn đặt hàng',
             'icon_class' => 'fa fa-shopping-cart',
             'action' => 'OrdersController@index'
+        ],
+        'order_create'=> [
+            'text' => 'Lập mới',
+            'icon_class' => 'fa fa-shopping-cart',
+            'action' => 'OrdersController@create'
         ],
         'products' => [
             'text' => 'Sản phẩm',

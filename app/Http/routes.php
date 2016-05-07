@@ -15,14 +15,20 @@ Route::get('/', function () {
     return view('unify.index');
 });
 
+Route::get('/division/provinces', 'AdministrativeDivisionController@getProvinces');
+Route::get('/division/{province_id}/districts', 'AdministrativeDivisionController@getDistricts');
+Route::get('/division/{district_id}/wards', 'AdministrativeDivisionController@getWards');
+
 Route::group(['prefix' => 'admin', 'middleware' => 'accessAdminPanel'], function(){
 
     Route::get('/', 'AdminController@index');
+
+    Route::get('/dev', 'AdminController@dev');
+    Route::get('/approved', 'AdminController@approved');
+    Route::get('/testTLS', 'AdminController@testTLS');
+
     Route::get('/debug', 'AdminController@debug');
 
-    Route::get('/division/provinces', 'AdministrativeDivisionController@getProvinces');
-    Route::get('/division/{province_id}/districts', 'AdministrativeDivisionController@getDistricts');
-    Route::get('/division/{district_id}/wards', 'AdministrativeDivisionController@getWards');
 
     Route::get('utils/permalink/{name?}','AdminController@permalink');
 
@@ -97,6 +103,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'accessAdminPanel'], function
         Route::post('{id}/show', 'UsersController@show');
         Route::post('ban', 'UsersController@ban');
         Route::get('search', 'UsersController@queryUsers');
+        Route::get('info', 'UsersController@getUserInfomation');
         Route::post('config', 'UsersController@postConfig');
     });
 
@@ -133,11 +140,20 @@ Route::group(['prefix' => 'admin', 'middleware' => 'accessAdminPanel'], function
 
     Route::group(['prefix' => 'orders'], function(){
         Route::get('/', 'OrdersController@index');
+        Route::get('create', 'OrdersController@create');
         Route::post('/', 'OrdersController@store');
         Route::post('delete', 'OrdersController@destroy');
         Route::get('{id}/edit', 'OrdersController@edit');
         Route::post('{id}/edit', 'OrdersController@update');
-        Route::post('config', 'OrdersController@postConfigs');
+
+        Route::get('detail', 'OrdersController@detail');
+        Route::get('detail/clear', 'OrdersController@clearDetails');
+        Route::post('detail/updateDetails', 'OrdersController@updateDetails');
+        Route::post('detail/remove', 'OrdersController@removeDetail');
+        Route::post('detail/update', 'OrdersController@updateDetail');
+
+        Route::post('config', 'OrdersController@postConfig');
+        Route::post('configs', 'OrdersController@postConfigs');
     });
 
     Route::get('posts/{id}/feedbacks', 'FeedbacksController@listByPost');

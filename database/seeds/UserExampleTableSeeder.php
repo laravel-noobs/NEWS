@@ -3,6 +3,7 @@
 use Illuminate\Database\Seeder;
 use Carbon\Carbon;
 use App\Role;
+use App\Ward;
 
 class UserExampleTableSeeder extends Seeder
 {
@@ -14,6 +15,7 @@ class UserExampleTableSeeder extends Seeder
     public function run()
     {
         $roles = Role::all();
+        $wards = Ward::all(['id']);
 
         DB::table('user')->delete();
         $users = [
@@ -23,7 +25,7 @@ class UserExampleTableSeeder extends Seeder
                 'email' => 'yahishima@gmail.com',
                 'first_name' => 'Kou',
                 'last_name' => 'Tsuneka',
-                'role_id' => 2,
+                'role_id' => 1,
                 'verified' => true,
                 'created_at' => Carbon::now()->timestamp,
                 'updated_at' => Carbon::now()->timestamp
@@ -43,8 +45,10 @@ class UserExampleTableSeeder extends Seeder
         DB::table('user')->insert($users);
         foreach($roles as $role)
         {
+            $ward = $wards->random(); // kinda stupid but not really need to
             factory('App\User', 15)->create([
-                'role_id' => $role->id
+                'role_id' => $role->id,
+                'delivery_ward_id' => $ward->id
             ]);
         }
     }

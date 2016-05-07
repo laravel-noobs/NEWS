@@ -33,4 +33,12 @@ class OrderProduct extends Model
      * @var array
      */
     protected $hidden = [];
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function product()
+    {
+        return $this->belongsTo('App\Product', 'product_id', 'id');
+    }
 }
