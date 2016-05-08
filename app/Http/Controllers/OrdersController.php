@@ -300,6 +300,9 @@ class OrdersController extends Controller
     {
         $order = Order::findOrFail($request->request->get('order_id'));
 
+        if($order->status_id != OrderStatus::getStatusIdByName('pending'))
+            abort(400);
+
         if($order->approve())
             Flash::push("Duyệt sản phẩm \\\"$order->id\\\" thành công", 'Hệ thống');
         else
@@ -312,10 +315,13 @@ class OrdersController extends Controller
     {
         $order = Order::findOrFail($request->request->get('order_id'));
 
+        if($order->status_id != OrderStatus::getStatusIdByName('approved'))
+            abort(400);
+
         if($order->deliver())
-            Flash::push("Duyệt sản phẩm \\\"$order->id\\\" thành công", 'Hệ thống');
+            Flash::push("Chuyển trạng thái giao hàng \\\"$order->id\\\" thành công", 'Hệ thống');
         else
-            Flash::push("Duyệt sản phẩm \\\"$order->id\\\" thất bại", 'Hệ thống');
+            Flash::push("Chuyển trạng thái giao hàng \\\"$order->id\\\" thất bại", 'Hệ thống');
 
         return redirect()->back();
     }
@@ -324,10 +330,14 @@ class OrdersController extends Controller
     {
         $order = Order::findOrFail($request->request->get('order_id'));
 
+        if($order->status_id == OrderStatus::getStatusIdByName('completed') ||
+            $order->status_id == OrderStatus::getStatusIdByName('canceled'))
+            abort(400);
+
         if($order->cancel())
-            Flash::push("Duyệt sản phẩm \\\"$order->id\\\" thành công", 'Hệ thống');
+            Flash::push("Hủy đơn đặt hàng \\\"$order->id\\\" thành công", 'Hệ thống');
         else
-            Flash::push("Duyệt sản phẩm \\\"$order->id\\\" thất bại", 'Hệ thống');
+            Flash::push("Hủy đơn đặt hàng \\\"$order->id\\\" thất bại", 'Hệ thống');
 
         return redirect()->back();
     }
@@ -336,10 +346,13 @@ class OrdersController extends Controller
     {
         $order = Order::findOrFail($request->request->get('order_id'));
 
+        if($order->status_id != OrderStatus::getStatusIdByName('delivering'))
+            abort(400);
+
         if($order->complete())
-            Flash::push("Duyệt sản phẩm \\\"$order->id\\\" thành công", 'Hệ thống');
+            Flash::push("Hoàn tất đơn đặt hàng \\\"$order->id\\\" thành công", 'Hệ thống');
         else
-            Flash::push("Duyệt sản phẩm \\\"$order->id\\\" thất bại", 'Hệ thống');
+            Flash::push("Hoàn tất đơn đặt hàng \\\"$order->id\\\" thất bại", 'Hệ thống');
 
         return redirect()->back();
     }

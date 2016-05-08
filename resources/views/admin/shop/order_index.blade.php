@@ -59,7 +59,7 @@ app('navigator')
                 <div style="clear:both"></div>
                 <div class="btn-group pull-right" id="action">
                     <button type="button" class="cancel btn btn-white">Hủy</button>
-                    <button type="submit" class="btn btn-primary">Lọc</button>
+                    <button type="submit" class="filter btn btn-primary">Lọc</button>
                 </div>
             </div>
         </div>
@@ -125,14 +125,22 @@ app('navigator')
                         <td class="text-right">
                             <div class="btn-group">
                                 @if($order->status_id == 1)
-                                    <button data-order_id="{{ $order->id }}" class="order-approve btn-white btn btn-xs">Duyệt</button>
+                                    <a href="#modal-order-approve-prompt" data-order_id="{{ $order->id }}" class="btn-white btn btn-xs" data-toggle="modal">
+                                        <span> Duyệt</span>
+                                    </a>
                                 @elseif($order->status_id == 2)
-                                    <button data-order_id="{{ $order->id }}" class="order-deliver btn-white btn btn-xs">Giao hàng</button>
+                                    <a href="#modal-order-deliver-prompt" data-order_id="{{ $order->id }}" class="btn-white btn btn-xs" data-toggle="modal">
+                                        <span> Giao hàng</span>
+                                    </a>
                                 @elseif($order->status_id == 3)
-                                    <button data-order_id="{{ $order->id }}" class="order-complete btn-white btn btn-xs">Hoàn tất</button>
+                                    <a href="#modal-order-complete-prompt" data-order_id="{{ $order->id }}" class="btn-white btn btn-xs" data-toggle="modal">
+                                        <span> Hoàn tất</span>
+                                    </a>
                                 @endif
                                 @if($order->status_id != 5 && $order->status_id != 4)
-                                    <button data-order_id="{{ $order->id }}" class="order-cancel btn-white btn btn-xs">Hủy</button>
+                                    <a href="#modal-order-cancel-prompt" data-order_id="{{ $order->id }}" class="btn-white btn btn-xs" data-toggle="modal">
+                                        <span> Hủy</span>
+                                    </a>
                                     <button class="btn-white btn btn-xs">Sửa</button>
                                 @endif
                                 <button class="btn-white btn btn-xs">Chi tiết</button>
@@ -154,6 +162,10 @@ app('navigator')
         </div>
     </div>
 </div>
+@include('admin.partials._prompt_order_approve')
+@include('admin.partials._prompt_order_deliver')
+@include('admin.partials._prompt_order_complete')
+@include('admin.partials._prompt_order_cancel')
 @endsection
 
 @section('footer-script')
@@ -205,111 +217,11 @@ app('navigator')
             });
         };
 
-        $('.order-approve').click(function() {
-            token = $('meta[name="csrf-token"]').attr('content');
-            var order_id = $(this).data('order_id');
-            $.ajax({
-                url: '{{ URL::action('OrdersController@approve') }}',
-                method: 'post',
-                data: {
-                    'order_id' : order_id
-                },
-                headers: {
-                    'X-CSRF-TOKEN': token
-                },
-                statusCode: {
-                    400: function(jqXHR, textStatus, errorThrown){
-                        toastr.error(jqXHR.responseJSON.join('<br/>'));
-                    },
-                    404: function(jqXHR, textStatus, errorThrown){
-                        toastr.error('Không tìm thấy sản phẩm này.<br>Vui lòng thử lại.');
-                    }
-                }
-            }).done(function() {
-                location.reload();
-            });
-        });
-
-        $('.order-deliver').click(function() {
-            token = $('meta[name="csrf-token"]').attr('content');
-            var order_id = $(this).data('order_id');
-            $.ajax({
-                url: '{{ URL::action('OrdersController@deliver') }}',
-                method: 'post',
-                data: {
-                    'order_id' : order_id
-                },
-                headers: {
-                    'X-CSRF-TOKEN': token
-                },
-                statusCode: {
-                    400: function(jqXHR, textStatus, errorThrown){
-                        toastr.error(jqXHR.responseJSON.join('<br/>'));
-                    },
-                    404: function(jqXHR, textStatus, errorThrown){
-                        toastr.error('Không tìm thấy sản phẩm này.<br>Vui lòng thử lại.');
-                    }
-                }
-            }).done(function() {
-                location.reload();
-            });
-        });
-
-        $('.order-complete').click(function() {
-            token = $('meta[name="csrf-token"]').attr('content');
-            var order_id = $(this).data('order_id');
-            $.ajax({
-                url: '{{ URL::action('OrdersController@complete') }}',
-                method: 'post',
-                data: {
-                    'order_id' : order_id
-                },
-                headers: {
-                    'X-CSRF-TOKEN': token
-                },
-                statusCode: {
-                    400: function(jqXHR, textStatus, errorThrown){
-                        toastr.error(jqXHR.responseJSON.join('<br/>'));
-                    },
-                    404: function(jqXHR, textStatus, errorThrown){
-                        toastr.error('Không tìm thấy sản phẩm này.<br>Vui lòng thử lại.');
-                    }
-                }
-            }).done(function() {
-                location.reload();
-            });
-        });
-
-        $('.order-cancel').click(function() {
-            token = $('meta[name="csrf-token"]').attr('content');
-            var order_id = $(this).data('order_id');
-            $.ajax({
-                url: '{{ URL::action('OrdersController@cancel') }}',
-                method: 'post',
-                data: {
-                    'order_id' : order_id
-                },
-                headers: {
-                    'X-CSRF-TOKEN': token
-                },
-                statusCode: {
-                    400: function(jqXHR, textStatus, errorThrown){
-                        toastr.error(jqXHR.responseJSON.join('<br/>'));
-                    },
-                    404: function(jqXHR, textStatus, errorThrown){
-                        toastr.error('Không tìm thấy sản phẩm này.<br>Vui lòng thử lại.');
-                    }
-                }
-            }).done(function() {
-                location.reload();
-            });
-        });
-
         $('button.cancel').on('click', function() {
             filter ('NULL', 'NULL', 'NULL', 'NULL', 'NULL')
         });
 
-        $('button[type="submit"]').on('click', function(){
+        $('button.filter[type="submit"]').on('click', function(){
             // get datetime from datetimepicker plugin
             time = $('#datetimepicker_created_at_start').data("DateTimePicker").date();
             if(time == null)
