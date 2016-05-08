@@ -295,4 +295,52 @@ class OrdersController extends Controller
 
         return ['return' => true];
     }
+
+    public function approve(Request $request)
+    {
+        $order = Order::findOrFail($request->request->get('order_id'));
+
+        if($order->approve())
+            Flash::push("Duyệt sản phẩm \\\"$order->id\\\" thành công", 'Hệ thống');
+        else
+            Flash::push("Duyệt sản phẩm \\\"$order->id\\\" thất bại", 'Hệ thống');
+
+        return redirect()->back();
+    }
+
+    public function deliver(Request $request)
+    {
+        $order = Order::findOrFail($request->request->get('order_id'));
+
+        if($order->deliver())
+            Flash::push("Duyệt sản phẩm \\\"$order->id\\\" thành công", 'Hệ thống');
+        else
+            Flash::push("Duyệt sản phẩm \\\"$order->id\\\" thất bại", 'Hệ thống');
+
+        return redirect()->back();
+    }
+
+    public function cancel(Request $request)
+    {
+        $order = Order::findOrFail($request->request->get('order_id'));
+
+        if($order->cancel())
+            Flash::push("Duyệt sản phẩm \\\"$order->id\\\" thành công", 'Hệ thống');
+        else
+            Flash::push("Duyệt sản phẩm \\\"$order->id\\\" thất bại", 'Hệ thống');
+
+        return redirect()->back();
+    }
+
+    public function complete(Request $request)
+    {
+        $order = Order::findOrFail($request->request->get('order_id'));
+
+        if($order->complete())
+            Flash::push("Duyệt sản phẩm \\\"$order->id\\\" thành công", 'Hệ thống');
+        else
+            Flash::push("Duyệt sản phẩm \\\"$order->id\\\" thất bại", 'Hệ thống');
+
+        return redirect()->back();
+    }
 }
