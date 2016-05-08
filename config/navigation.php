@@ -99,7 +99,6 @@ return [
         ],
         'collections' => [
             'text' => 'Nhóm',
-            'action' => 'CollectionsController@index',
             'icon_class' => 'fa fa-th-large',
             'active' => false,
             'order' => 2,
