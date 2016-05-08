@@ -23,7 +23,7 @@ class CreateOrderTable extends Migration
             $table->unsignedInteger('user_id')->nullable();
 
             $table->foreign('status_id')
-                ->references('id')->on('product_status')
+                ->references('id')->on('order_status')
                 ->onDelete('restrict')
                 ->onUpdate('cascade');
 

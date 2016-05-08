@@ -30,8 +30,8 @@ class AlterOrderAddColumnDeliveryWardIdAndDeliveryNote extends Migration
      */
     public function down()
     {
-        Schema::table('user', function (Blueprint $table) {
-            $table->dropForeign('user_delivery_ward_id_foreign');
+        Schema::table('order', function (Blueprint $table) {
+            $table->dropForeign('order_delivery_ward_id_foreign');
             $table->dropColumn('delivery_ward_id');
             $table->dropColumn('delivery_note');
         });
