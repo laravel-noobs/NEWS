@@ -54,41 +54,90 @@ class Order extends Model
     {
         return $this->belongsTo('App\User', 'user_id', 'id');
     }
+
     public function scopeHasStatus($query, $status_id)
     {
         if(!$status_id)
             return;
         $query->where('status_id', '=', $status_id);
     }
+
     public function scopeHasId($query, $id)
     {
         if(!$id)
             return;
         $query->where('id', '=', $id);
     }
+
     public function scopeHasCustomer($query, $customer_name)
     {
         if(!$customer_name)
             return;
         $query->where('customer_name', 'like', $customer_name);
     }
+
     public function scopeCreatedFrom($query, $date)
     {
         if(!$date)
             return;
         $query->where('created_at', '>=', $date);
     }
+
     public function scopeCreatedTo($query, $date)
     {
         if(!$date)
             return;
         $query->where('created_at', '<=', $date);
     }
+
     public function getAmountAttribute()
     {
         $total = 0;
         foreach($this->products as $product)
             $total += $product->pivot->price * $product->pivot->quantity;
         return $total;
+    }
+
+    public function getStatusIdByName($name)
+    {
+        switch($name)
+        {
+            case 'pending':
+                return 1;
+            case 'approved':
+                return 2;
+            case 'delivering':
+                return 3;
+            case 'canceled':
+                return 4;
+            case 'completed':
+                return 5;
+            default:
+                return null;
+        }
+    }
+
+    public function approve()
+    {
+        $this->status_id = Order::getStatusIdByName('approved');
+        return $this->save();
+    }
+
+    public function deliver()
+    {
+        $this->status_id = Order::getStatusIdByName('delivering');
+        return $this->save();
+    }
+
+    public function complete()
+    {
+        $this->status_id = Order::getStatusIdByName('completed');
+        return $this->save();
+    }
+
+    public function cancel()
+    {
+        $this->status_id = Order::getStatusIdByName('canceled');
+        return $this->save();
     }
 }

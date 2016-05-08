@@ -152,6 +152,11 @@ Route::group(['prefix' => 'admin', 'middleware' => 'accessAdminPanel'], function
         Route::post('detail/remove', 'OrdersController@removeDetail');
         Route::post('detail/update', 'OrdersController@updateDetail');
 
+        Route::post('approve', 'OrdersController@approve');
+        Route::post('deliver', 'OrdersController@deliver');
+        Route::post('cancel', 'OrdersController@cancel');
+        Route::post('complete', 'OrdersController@complete');
+
         Route::post('config', 'OrdersController@postConfig');
         Route::post('configs', 'OrdersController@postConfigs');
     });
