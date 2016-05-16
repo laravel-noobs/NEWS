@@ -156,6 +156,7 @@ class OrdersController extends Controller
             return array(false, null);
         }
     }
+
     public function create()
     {
         $order_product = $this->getOrderDetail();
@@ -163,6 +164,74 @@ class OrdersController extends Controller
         return view('admin.shop.order_create', compact('order_product'));
     }
 
+
+
+    public function edit(Order $id)
+    {
+        $id->load(['products', 'delivery_ward.district.province']);
+        return view('admin.shop.order_edit', ['order' => $id, 'products' => $id->products]);
+    }
+
+    public function update(Order $id)
+    {
+
+    }
+
+    public function updateOrderProducts(Order $id, Request $request)
+    {
+        $input = $request->input();
+        if(array_key_exists('detach_product_id', $input))
+        {
+            if(array_key_exists('update_product', $input))
+                for($i = 0; $i < count($input['update_product']);)
+                    if(in_array($input['update_product'][$i]['id'], $input['detach_product_id']))
+                        array_splice($input['update_product'], $i, 1);
+                    else
+                        $i++;
+
+            if(array_key_exists('attach_product_id', $input))
+                for($i = 0; $i < count($input['attach_product_id']);)
+                    if(in_array($input['attach_product_id'][$i], $input['detach_product_id']))
+                        array_splice($input['attach_product_id'], $i, 1);
+                    else
+                        $i++;
+        }
+
+        $validator = Validator::make($input, [
+            'attach_product_id.*' => 'required|exists:product,id',
+            'detach_product_id.*' => 'required|exists:product,id',
+            'update_product.*.id'
+        ]);
+
+        if($validator->fails())
+        {
+            Flash::push("Lưu sản phẩm của đơn đặt hàng \\\"$id->id\\\" thất bại", 'Hệ thống', 'error');
+            return redirect(action('OrdersController@edit', ['id' => $id->id]));
+        }
+
+        if(!empty($input['attach_product_id']))
+        {
+            $products = Product::find($input['attach_product_id'], ['id', 'price']);
+            foreach($input['attach_product_id'] as $product_id)
+            {
+                $id->products()->attach($product_id, [
+                    'quantity' => 1 ,
+                    'price' => $products->find($product_id)->price
+                ]);
+            }
+        }
+
+        if(!empty($input['detach_product_id']))
+            $id->products()->detach($input['detach_product_id']);
+
+        $id->load('products');
+
+        return $id;
+
+        Flash::push("Lưu sản phẩm của nhóm \\\"$id->id\\\" thành công", 'Hệ thống');
+
+        return redirect(action('CollectionsController@edit', ['id' => $id->id]));
+    }
     public function detail()
     {
         return $this->getOrderDetail();
@@ -300,7 +369,7 @@ class OrdersController extends Controller
     {
         $order = Order::findOrFail($request->request->get('order_id'));
 
-        if($order->status_id != OrderStatus::getStatusIdByName('pending'))
+        if(!$order->isPending())
             abort(400);
 
         if($order->approve())
@@ -315,7 +384,7 @@ class OrdersController extends Controller
     {
         $order = Order::findOrFail($request->request->get('order_id'));
 
-        if($order->status_id != OrderStatus::getStatusIdByName('approved'))
+        if($order->isApproved())
             abort(400);
 
         if($order->deliver())
@@ -330,8 +399,8 @@ class OrdersController extends Controller
     {
         $order = Order::findOrFail($request->request->get('order_id'));
 
-        if($order->status_id == OrderStatus::getStatusIdByName('completed') ||
-            $order->status_id == OrderStatus::getStatusIdByName('canceled'))
+        if($order->isCompleted() ||
+            $order->isCanceled())
             abort(400);
 
         if($order->cancel())
@@ -346,7 +415,7 @@ class OrdersController extends Controller
     {
         $order = Order::findOrFail($request->request->get('order_id'));
 
-        if($order->status_id != OrderStatus::getStatusIdByName('delivering'))
+        if(!$order->isDelivering())
             abort(400);
 
         if($order->complete())

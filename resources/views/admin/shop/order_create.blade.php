@@ -334,7 +334,7 @@ app('navigator')
                                     <div><strong class="status_label">{{ $op->product->status->label }}</strong></div>
                                 </td>
                                 <td width="20%">
-                                    <div class="input-group input-group-xs text-righ">
+                                    <div class="input-group input-group-xs text-right">
                                         <input style="width:60px" type="number" name="quantity" class="form-control input-xs" value="{{ $op->quantity }}" />
                                         <span class="input-group-btn">
                                             <button data-product_id="{{ $op->product->id }}" class="control-detail update btn btn-xs btn-outline btn-primary">

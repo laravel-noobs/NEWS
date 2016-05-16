@@ -326,6 +326,10 @@ return [
             'icon_class' => 'fa fa-shopping-cart',
             'action' => 'OrdersController@create'
         ],
+        'order_edit'=> [
+            'text' => 'Sửa',
+            'icon_class' => 'fa fa-wrench'
+        ],
         'products' => [
             'text' => 'Sản phẩm',
             'icon_class' => 'fa fa-shopping-bag',

@@ -62,6 +62,6 @@ class ViewComposerServiceProvider extends ServiceProvider
 
     public function composeAdministrativeDivision()
     {
-        view()->composer('admin.shop.order_create', 'App\Http\Composers\AdministrativeDivisionComposer@compose');
+        view()->composer(['admin.shop.order_create', 'admin.shop.order_edit'], 'App\Http\Composers\AdministrativeDivisionComposer@compose');
     }
 }

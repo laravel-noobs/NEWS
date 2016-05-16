@@ -18,7 +18,7 @@ class Order extends Model
      *
      * @var array
      */
-    protected $fillable = ['user_id', 'phone', 'customer_name', 'delivery_address', 'delivery_ward_id', 'delivery_note'];
+    protected $fillable = ['user_id', 'phone', 'customer_name', 'delivery_address', 'delivery_ward_id', 'delivery_note', 'email'];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -48,6 +48,11 @@ class Order extends Model
     public function products()
     {
         return $this->belongsToMany('App\Product', 'order_product', 'order_id', 'product_id')->withPivot(['price', 'quantity']);
+    }
+
+    public function delivery_ward()
+    {
+        return $this->belongsTo('App\Ward', 'delivery_ward_id', 'id');
     }
 
     public function user()
@@ -98,6 +103,36 @@ class Order extends Model
         return $total;
     }
 
+    public function isDeliveryInfomationChangable()
+    {
+        return ($this->status_id == $this->getStatusIdByName('pending') ||
+            $this->status_id == $this->getStatusIdByName('approved'));
+    }
+
+    public function isPending()
+    {
+        return $this->status_id == 1;
+    }
+
+    public function isApproved()
+    {
+        return $this->status_id == 2;
+    }
+
+    public function isDelivering()
+    {
+        return $this->status_id == 3;
+    }
+
+    public function isCanceled()
+    {
+        return $this->status_id == 4;
+    }
+
+    public function isCompleted()
+    {
+        return $this->status_id == 5;
+    }
     public function getStatusIdByName($name)
     {
         switch($name)

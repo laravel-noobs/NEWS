@@ -124,24 +124,24 @@ app('navigator')
                         </td>
                         <td class="text-right">
                             <div class="btn-group">
-                                @if($order->status_id == 1)
+                                @if($order->isPending())
                                     <a href="#modal-order-approve-prompt" data-order_id="{{ $order->id }}" class="btn-white btn btn-xs" data-toggle="modal">
                                         <span> Duyệt</span>
                                     </a>
-                                @elseif($order->status_id == 2)
+                                @elseif($order->isApproved())
                                     <a href="#modal-order-deliver-prompt" data-order_id="{{ $order->id }}" class="btn-white btn btn-xs" data-toggle="modal">
                                         <span> Giao hàng</span>
                                     </a>
-                                @elseif($order->status_id == 3)
+                                @elseif($order->isDelivering())
                                     <a href="#modal-order-complete-prompt" data-order_id="{{ $order->id }}" class="btn-white btn btn-xs" data-toggle="modal">
                                         <span> Hoàn tất</span>
                                     </a>
                                 @endif
-                                @if($order->status_id != 5 && $order->status_id != 4)
+                                @if(!$order->isCompleted() && !$order->isCanceled())
                                     <a href="#modal-order-cancel-prompt" data-order_id="{{ $order->id }}" class="btn-white btn btn-xs" data-toggle="modal">
                                         <span> Hủy</span>
                                     </a>
-                                    <button class="btn-white btn btn-xs">Sửa</button>
+                                    <a href="{{ URL::action('OrdersController@edit', ['id' => $order->id]) }}" class="btn-white btn btn-xs">Sửa</a>
                                 @endif
                                 <button class="btn-white btn btn-xs">Chi tiết</button>
                             </div>
