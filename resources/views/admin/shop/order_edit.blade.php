@@ -84,7 +84,7 @@ app('navigator')
                             <div class="form-group">
                                 <label for="delivery_address required">Địa chỉ</label>
                                 <div>
-                                    <input id="delivery_address" name="delivery_address" type="text" class="form-control required" aria-required="true">
+                                    <input id="delivery_address" name="delivery_address" type="text" class="form-control required" aria-required="true" value="{{ old('delivery_address', $order->delivery_address) }}">
                                 </div>
                                 @foreach($errors->get('delivery_address') as $err)
                                     <label class="error" for="delivery_address">{{ $err }}</label>
@@ -109,7 +109,7 @@ app('navigator')
                         <div class="form-group">
                             <div>
                                 <input class="btn btn-primary" type="submit" value="Sửa">
-                                <a href="{{ URL::previous() }}" class="btn btn-white"> Quay lại</a>
+                                <a href="{{ URL::action('OrdersController@index') }}" class="btn btn-white"> Quay lại</a>
                             </div>
                         </div>
                     </form>
@@ -126,7 +126,7 @@ app('navigator')
                                 <div class="input-group date">
                                     <select name="attach_product_id[]" id="product_id" class="form-control" multiple="multiple"></select>
                                     <span class="input-group-btn">
-                                        <button type="submit"class="btn btn-danger btn-sm">Lưu</button>
+                                        <button type="submit" class="btn btn-danger btn-sm">Lưu</button>
                                     </span>
                                 </div>
                                 <table class="footable table table-stripped toggle-arrow-tiny">
@@ -168,8 +168,8 @@ app('navigator')
                                                             <div class="form-inline">
                                                                 <?php $index = 0 ?>
                                                                 <input type="hidden" name="update_product[{{ $i }}][id]" value="{{ $products[$i]->id }}">
-                                                                <input style="width:60px" type="number" name="update_product[{{ $i }}][quantity]" class="form-control input-xs" value="{{ $products[$i]->pivot->quantity }}" />
-                                                                <input style="width:100px" type="number" name=update_product[{{ $i }}][price]" class="form-control input-xs" value="{{ $products[$i]->pivot->price }}" />
+                                                                <input style="width:60px" type="number" step="0.01" name="update_product[{{ $i }}][quantity]" class="form-control input-xs" value="{{ $products[$i]->pivot->quantity }}" />
+                                                                <input style="width:100px" type="number" step="0.01" name=update_product[{{ $i }}][price]" class="form-control input-xs" value="{{ $products[$i]->pivot->price }}" />
                                                                 <button data-product_id="{{ $products[$i]->id }}" class="control-detail update btn btn-xs btn-outline btn-primary">
                                                                     <i class="fa fa-refresh"></i> Cập nhật
                                                                 </button>
@@ -252,7 +252,7 @@ app('navigator')
             $('input[name="detach_product_id[]"').iCheck('toggle');
         });
         $("#product_id").select2({
-            placeholder: "Thêm sản phẩm vào nhóm",
+            placeholder: "Thêm sản phẩm vào đơn đặt hàng",
             ajax: {
                 url: '{{ URL::action('ProductsController@queryProducts') }}',
                 dataType: 'json',

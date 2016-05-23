@@ -180,7 +180,6 @@ app('navigator')
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                         <div class="pull-right">
-                                            <i class="fa fa-cc-paypal text-success"></i>
                                         </div>
                                         <h5 class="panel-title">
                                             <a data-toggle="collapse" data-parent="#accordion" href="#direct_method">
@@ -188,7 +187,7 @@ app('navigator')
                                             </a>
                                         </h5>
                                     </div>
-                                    <div id="direct_method" class="panel-collapse collapse">
+                                    <div id="direct_method" class="panel-collapse collapse in">
                                         <div class="panel-body">
                                             <div class="row">
                                                 <div class="col-md-10">
@@ -201,92 +200,92 @@ app('navigator')
                                     </div>
                                 </div>
 
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        <div class="pull-right">
-                                            <i class="fa fa-cc-paypal text-success"></i>
-                                        </div>
-                                        <h5 class="panel-title">
-                                            <a data-toggle="collapse" data-parent="#accordion" href="#paypal_method">Paypal</a>
-                                        </h5>
-                                    </div>
-                                    <div id="paypal_method" class="panel-collapse collapse">
-                                        <div class="panel-body">
+                                {{--<div class="panel panel-default">--}}
+                                    {{--<div class="panel-heading">--}}
+                                        {{--<div class="pull-right">--}}
+                                            {{--<i class="fa fa-cc-paypal text-success"></i>--}}
+                                        {{--</div>--}}
+                                        {{--<h5 class="panel-title">--}}
+                                            {{--<a data-toggle="collapse" data-parent="#accordion" href="#paypal_method">Paypal</a>--}}
+                                        {{--</h5>--}}
+                                    {{--</div>--}}
+                                    {{--<div id="paypal_method" class="panel-collapse collapse">--}}
+                                        {{--<div class="panel-body">--}}
 
-                                            <div class="row">
-                                                <div class="col-md-10">
-                                                    <p class="m-t">
-                                                        Hình thức thanh toán này chưa hỗ trợ.
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                            {{--<div class="row">--}}
+                                                {{--<div class="col-md-10">--}}
+                                                    {{--<p class="m-t">--}}
+                                                        {{--Hình thức thanh toán này chưa hỗ trợ.--}}
+                                                    {{--</p>--}}
+                                                {{--</div>--}}
+                                            {{--</div>--}}
+                                        {{--</div>--}}
+                                    {{--</div>--}}
+                                {{--</div>--}}
 
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        <div class="pull-right">
-                                            <i class="fa fa-cc-visa text-info"></i>
-                                            <i class="fa fa-cc-amex text-success"></i>
-                                            <i class="fa fa-cc-mastercard text-warning"></i>
-                                            <i class="fa fa-cc-discover text-danger"></i>
-                                        </div>
-                                        <h5 class="panel-title">
-                                            <a data-toggle="collapse" data-parent="#accordion" href="#card_method">Thẻ</a>
-                                        </h5>
-                                    </div>
-                                    <div id="card_method" class="panel-collapse collapse in">
-                                        <div class="panel-body">
-                                            <div class="row">
-                                                <div class="col-xs-12">
-                                                    <div class="form-group">
-                                                        <label>MÃ THẺ</label>
-                                                        <div class="input-group">
-                                                            <input type="text" class="form-control" name="card_number" placeholder="Valid Card Number" required />
-                                                            <span class="input-group-addon"><i class="fa fa-credit-card"></i></span>
-                                                        </div>
-                                                        @foreach($errors->get('card_number') as $err)
-                                                            <label class="error" for="card_number">{{ $err }}</label>
-                                                        @endforeach
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-xs-7 col-md-7">
-                                                    <div class="form-group">
-                                                        <label>NGÀY HẾT HẠN</label>
-                                                        <input type="text" class="form-control required" name="card_expiry" placeholder="MM / YY" />
-                                                        @foreach($errors->get('card_expiry') as $err)
-                                                            <label class="error" for="card_expiry">{{ $err }}</label>
-                                                        @endforeach
-                                                    </div>
-                                                </div>
-                                                <div class="col-xs-5 col-md-5 pull-right">
-                                                    <div class="form-group">
-                                                        <label>MÃ CV</label>
-                                                        <input type="text" class="form-control required" name="card_cvc" placeholder="CVC" />
-                                                        @foreach($errors->get('card_cvc') as $err)
-                                                            <label class="error" for="card_cvc">{{ $err }}</label>
-                                                        @endforeach
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-xs-12">
-                                                    <div class="form-group">
-                                                        <label>TÊN CHỦ THẺ</label>
-                                                        <input type="text" class="form-control required" name="card_name" placeholder="NAME AND SURNAME"/>
-                                                        @foreach($errors->get('card_name') as $err)
-                                                            <label class="error" for="card_name">{{ $err }}</label>
-                                                        @endforeach
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <h1 class="text-danger"><strong>DO NOT MAKE PAYMENT VIA NON-SECURE CONNECTION</strong></h1>
-                                        </div>
-                                    </div>
-                                </div>
+                                {{--<div class="panel panel-default">--}}
+                                    {{--<div class="panel-heading">--}}
+                                        {{--<div class="pull-right">--}}
+                                            {{--<i class="fa fa-cc-visa text-info"></i>--}}
+                                            {{--<i class="fa fa-cc-amex text-success"></i>--}}
+                                            {{--<i class="fa fa-cc-mastercard text-warning"></i>--}}
+                                            {{--<i class="fa fa-cc-discover text-danger"></i>--}}
+                                        {{--</div>--}}
+                                        {{--<h5 class="panel-title">--}}
+                                            {{--<a data-toggle="collapse" data-parent="#accordion" href="#card_method">Thẻ</a>--}}
+                                        {{--</h5>--}}
+                                    {{--</div>--}}
+                                    {{--<div id="card_method" class="panel-collapse collapse in">--}}
+                                        {{--<div class="panel-body">--}}
+                                            {{--<div class="row">--}}
+                                                {{--<div class="col-xs-12">--}}
+                                                    {{--<div class="form-group">--}}
+                                                        {{--<label>MÃ THẺ</label>--}}
+                                                        {{--<div class="input-group">--}}
+                                                            {{--<input type="text" class="form-control" name="card_number" placeholder="Valid Card Number" required />--}}
+                                                            {{--<span class="input-group-addon"><i class="fa fa-credit-card"></i></span>--}}
+                                                        {{--</div>--}}
+                                                        {{--@foreach($errors->get('card_number') as $err)--}}
+                                                            {{--<label class="error" for="card_number">{{ $err }}</label>--}}
+                                                        {{--@endforeach--}}
+                                                    {{--</div>--}}
+                                                {{--</div>--}}
+                                            {{--</div>--}}
+                                            {{--<div class="row">--}}
+                                                {{--<div class="col-xs-7 col-md-7">--}}
+                                                    {{--<div class="form-group">--}}
+                                                        {{--<label>NGÀY HẾT HẠN</label>--}}
+                                                        {{--<input type="text" class="form-control required" name="card_expiry" placeholder="MM / YY" />--}}
+                                                        {{--@foreach($errors->get('card_expiry') as $err)--}}
+                                                            {{--<label class="error" for="card_expiry">{{ $err }}</label>--}}
+                                                        {{--@endforeach--}}
+                                                    {{--</div>--}}
+                                                {{--</div>--}}
+                                                {{--<div class="col-xs-5 col-md-5 pull-right">--}}
+                                                    {{--<div class="form-group">--}}
+                                                        {{--<label>MÃ CV</label>--}}
+                                                        {{--<input type="text" class="form-control required" name="card_cvc" placeholder="CVC" />--}}
+                                                        {{--@foreach($errors->get('card_cvc') as $err)--}}
+                                                            {{--<label class="error" for="card_cvc">{{ $err }}</label>--}}
+                                                        {{--@endforeach--}}
+                                                    {{--</div>--}}
+                                                {{--</div>--}}
+                                            {{--</div>--}}
+                                            {{--<div class="row">--}}
+                                                {{--<div class="col-xs-12">--}}
+                                                    {{--<div class="form-group">--}}
+                                                        {{--<label>TÊN CHỦ THẺ</label>--}}
+                                                        {{--<input type="text" class="form-control required" name="card_name" placeholder="NAME AND SURNAME"/>--}}
+                                                        {{--@foreach($errors->get('card_name') as $err)--}}
+                                                            {{--<label class="error" for="card_name">{{ $err }}</label>--}}
+                                                        {{--@endforeach--}}
+                                                    {{--</div>--}}
+                                                {{--</div>--}}
+                                            {{--</div>--}}
+                                            {{--<h1 class="text-danger"><strong>DO NOT MAKE PAYMENT VIA NON-SECURE CONNECTION</strong></h1>--}}
+                                        {{--</div>--}}
+                                    {{--</div>--}}
+                                {{--</div>--}}
                             </div>
                         </fieldset>
                     </form>

@@ -10,7 +10,6 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 
-use App\Http\Controllers\Controller;
 use App\Order;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
@@ -88,11 +87,12 @@ class OrdersController extends Controller
             'delivery_ward_id' => 'required|exists:ward,id',
             'delivery_address' => 'required',
             'phone' => 'required',
-            'paymentMethod' => 'required|in:direct_method,card_method',
-            'card_name' => 'required_if:paymentMethod,card_method',
-            'card_number' => 'required_if:paymentMethod,card_method',
-            'card_expiry' => 'required_if:paymentMethod,card_method|regex:/\d\d\/\d\d/',
-            'card_cvc' => 'required_if:paymentMethod,card_method',
+            'paymentMethod' => 'required|in:direct_method',
+//            'paymentMethod' => 'required|in:direct_method,card_method',
+//            'card_name' => 'required_if:paymentMethod,card_method',
+//            'card_number' => 'required_if:paymentMethod,card_method',
+//            'card_expiry' => 'required_if:paymentMethod,card_method|regex:/\d\d\/\d\d/',
+//            'card_cvc' => 'required_if:paymentMethod,card_method',
             'items' => 'required|array'
         ]);
 
@@ -172,9 +172,36 @@ class OrdersController extends Controller
         return view('admin.shop.order_edit', ['order' => $id, 'products' => $id->products]);
     }
 
-    public function update(Order $id)
+    public function update(Request $request, $id)
     {
+        $this->validate($request, [
+            'user_id' => 'exists:user,id',
+            'customer_name' => 'required',
+            'email' => 'required|email',
+            'delivery_ward_id' => 'required|exists:ward,id',
+            'delivery_address' => 'required',
+            'phone' => 'required',
+            'paymentMethod' => 'required|in:direct_method',
+//            'paymentMethod' => 'required|in:direct_method,card_method',
+//            'card_name' => 'required_if:paymentMethod,card_method',
+//            'card_number' => 'required_if:paymentMethod,card_method',
+//            'card_expiry' => 'required_if:paymentMethod,card_method|regex:/\d\d\/\d\d/',
+//            'card_cvc' => 'required_if:paymentMethod,card_method',
+            'items' => 'required|array'
+        ]);
 
+        $input = $request->input();
+
+        $order = Order::findOrFail($id);
+
+        $order->fill($input);
+
+        if($order->save())
+            Flash::push("Thêm đơn đặt hàng \\\"$order->id\\\" thành công", 'Hệ thống');
+        else
+            Flash::push("Thêm đơn đặt hàng thất bại", 'Hệ thống', "error");
+
+        return redirect(action('OrdersController@update', ['id' => $id]));
     }
 
     public function updateOrderProducts(Order $id, Request $request)
@@ -200,7 +227,9 @@ class OrdersController extends Controller
         $validator = Validator::make($input, [
             'attach_product_id.*' => 'required|exists:product,id',
             'detach_product_id.*' => 'required|exists:product,id',
-            'update_product.*.id'
+            'update_product.*.id' => 'required|exists:product,id',
+            'update_product.*.quantity' => 'required|numeric|min:1|max:1000',
+            'update_product.*.price' => 'required|not_in:0,0.,0.0,0.00,.0,.00|regex:/\d+\.?\d{0,2}/',
         ]);
 
         if($validator->fails())
@@ -224,13 +253,16 @@ class OrdersController extends Controller
         if(!empty($input['detach_product_id']))
             $id->products()->detach($input['detach_product_id']);
 
-        $id->load('products');
+        if(!empty($input['update_product']))
+            foreach($input['update_product'] as $product)
+                $id->products()->updateExistingPivot($product['id'], [
+                    'quantity' => $product['quantity'],
+                    'price' => $product['price']
+                ] );
 
-        return $id;
+        Flash::push("Lưu chi tiết sản phẩm của đơn đặt hàng \\\"$id->id\\\" thành công", 'Hệ thống');
 
-        Flash::push("Lưu sản phẩm của nhóm \\\"$id->id\\\" thành công", 'Hệ thống');
-
-        return redirect(action('CollectionsController@edit', ['id' => $id->id]));
+        return redirect(action('OrdersController@edit', ['id' => $id->id]));
     }
     public function detail()
     {
