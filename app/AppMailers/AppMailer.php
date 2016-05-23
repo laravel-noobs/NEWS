@@ -83,7 +83,11 @@ class AppMailer
             'feedback' => $feedback
         ];
 
-        $this->subject = "Phản hồi của bạn ở bài viết \"{$feedback->post->title}\" đã được xem.";
+        if(get_class($feedback->feedbackable) == \App\Post::class)
+            $this->subject = "Phản hồi của bạn ở bài viết \"{$feedback->feedbackable->title}\" đã được quan tâm.";
+        else if(get_class($feedback->feedbackable) == \App\Product::class)
+            $this->subject = "Phản hồi của bạn về sản phẩm \"{$feedback->feedbackable->name}\" đã được quan tâm.";
+
         $this->deliver();
     }
 

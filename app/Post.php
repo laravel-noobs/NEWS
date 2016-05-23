@@ -45,7 +45,7 @@ class Post extends Model
      */
     public function feedbacks()
     {
-        return $this->hasMany('App\Feedback');
+        return $this->morphMany('App\Feedback', 'feedbackable');
     }
 
     /**
@@ -53,7 +53,15 @@ class Post extends Model
      */
     public function tags()
     {
-        return $this->belongsToMany('App\Tag');
+        return $this->morphToMany('App\Tag', 'taggable', 'taggable');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function rates()
+    {
+        return $this->belongsToMany('App\User', 'user_rate', 'post_id', 'user_id')->withPivot(['rate']);
     }
 
     /**
@@ -69,7 +77,7 @@ class Post extends Model
      */
     public function comments()
     {
-        return $this->hasMany('App\Comment');
+        return $this->morphMany('App\Comment', 'commentable');
     }
 
     /**
@@ -90,15 +98,16 @@ class Post extends Model
 
     /**
      *
-     * Count number of posts belongs to this user
+     * Count number of posts belongs to this post
      *
      * @return mixed
      */
     public function commentsCount()
     {
-        return $this->hasOne('App\Comment')
-            ->selectRaw('post_id, count(*) as aggregate')
-            ->groupBy('post_id');
+        return $this->hasOne('App\Comment', 'commentable_id')
+            ->selectRaw('commentable_id, count(*) as aggregate')
+            ->whereRaw("commentable_type = '" . str_replace('\\', '\\\\', static::class) . "'")
+            ->groupBy('commentable_id');
     }
 
     /**
@@ -123,9 +132,10 @@ class Post extends Model
      */
     public function feedbacksCount()
     {
-        return $this->hasOne('App\Feedback')
-            ->selectRaw('post_id, count(*) as aggregate')
-            ->groupBy('post_id');
+        return $this->hasOne('App\Feedback', 'feedbackable_id')
+            ->selectRaw('feedbackable_id, count(*) as aggregate')
+            ->whereRaw("feedbackable_type = '" . str_replace('\\', '\\\\', static::class) . "'")
+            ->groupBy('feedbackable_id');
     }
 
     /**

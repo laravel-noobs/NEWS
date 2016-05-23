@@ -84,9 +84,8 @@
                         <tr>
                             <th>Tên</th>
                             <th data-hide="all">Slug</th>
-                            <th data-hide="phone, tablet">Mô tả</th>
+                            <th>Mô tả</th>
                             <th data-hide="phone">Bài viết</th>
-                            <th data-sort-ignore="true"><span class="pull-right">Hành động</span></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -94,25 +93,28 @@
                             <tr>
                                 <td>{{ $cat->name }}</td>
                                 <td>{{ $cat->slug }}</td>
-                                <td>{{ $cat->description }}</td>
-                                <td>{{ $cat->postsCount }}</td>
                                 <td>
-                                    <div class="btn-group pull-right">
+                                    {{ $cat->description }}
+                                    <ul class="list-inline action" style="padding-top: 5px; margin-bottom: 0px;">
                                         @can('updateCategory')
-                                            <a href="{{ action('CategoriesController@edit', ['id' => $cat->id]) }}"  class="btn-white btn btn-xs">Sửa</a>
+                                        <li class="">
+                                            <a class="text-success" href="{{ action('CategoriesController@edit', ['id' => $cat->id]) }}">Sửa</a>
+                                        </li>
                                         @endcan
-                                        <a href="#" target="_blank" class="btn-white btn btn-xs">Xem</a>
                                         @can('destroyCategory')
-                                            <a data-toggle="modal" href="#modal-category-delete-prompt" data-cat_name="{{ $cat->name }}" data-cat_id="{{ $cat->id }}" class="btn-white btn btn-xs">Xóa</a>
+                                        <li class="">
+                                            <a data-toggle="modal" class="text-danger" href="#modal-category-delete-prompt" data-cat_name="{{ $cat->name }}" data-cat_id="{{ $cat->id }}">Xóa</a>
+                                        </li>
                                         @endcan
-                                    </div>
+                                    </ul>
                                 </td>
+                                <td>{{ $cat->postsCount }}</td>
                             </tr>
                         @endforeach
                         </tbody>
                         <tfoot>
                         <tr>
-                            <td colspan="5">
+                            <td colspan="4">
                                 <ul class="pagination pull-right"></ul>
                             </td>
                         </tr>

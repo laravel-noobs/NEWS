@@ -38,12 +38,21 @@ class Tag extends Model
      */
     protected $hidden = [];
 
+
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
      */
     public function posts()
     {
-        return $this->belongsToMany('App\Post');
+        return $this->morphedByMany('App\Post', 'taggable', 'taggable', 'taggable_id', 'tag_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function products()
+    {
+        return $this->morphedByMany('App\Product', 'taggable', 'taggable', 'taggable_id', 'tag_id');
     }
 
     /**
@@ -53,7 +62,10 @@ class Tag extends Model
      */
     public function postsCount()
     {
-        return $this->belongsToMany('App\Post')->selectRaw('count(post.id) as aggregate')->groupBy('tag_id');
+        return $this->hasMany('App\Taggable', 'tag_id')
+            ->selectRaw('tag_id, count(*) as aggregate')
+            ->whereRaw("taggable_type = '" . str_replace('\\', '\\\\', \App\Post::class) . "'")
+            ->groupBy('tag_id');
     }
 
     /**

@@ -14,7 +14,11 @@ class AuthServiceProvider extends ServiceProvider
      *
      * @var array
      */
-    protected $policies = [];
+    protected $policies = [
+        'App\Post' => 'App\Policies\PostPolicy',
+        'App\Feedback' => 'App\Policies\FeedbackPolicy',
+        'App\Comment' => 'App\Policies\CommentPolicy',
+    ];
 
     /**
      * Register any application authentication / authorization services.
@@ -24,17 +28,16 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(GateContract $gate)
     {
+        $this->registerPolicies($gate);
+
         if(Schema::hasTable('role') && Schema::hasTable('permission') && Schema::hasTable('role_permission'))
         {
 
             foreach($this->getPermissions() as $permission)
             {
-                if($permission->model && $permission->policy && !isset($this->policies[$permission->model]))
-                    $this->policies[$permission->model] = $permission->policy;
-                else
-                    $gate->define($permission->name, function($user) use ($permission) {
-                        return $user->hasRole($permission->roles);
-                    });
+                $gate->define($permission->name, function($user) use ($permission) {
+                    return $user->hasRole($permission->roles);
+                });
             }
 
             $gate->before(function ($user, $ability) {
@@ -42,8 +45,6 @@ class AuthServiceProvider extends ServiceProvider
                     return true;
                 }
             });
-
-            $this->registerPolicies($gate);
         }
     }
 

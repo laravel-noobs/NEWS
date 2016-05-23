@@ -39,4 +39,12 @@ class Permission extends Model
     {
         return $this->belongsToMany('App\Role', 'role_permission', 'permission_id', 'role_id');
     }
+
+    public function isGrantedTo(Role $role)
+    {
+        foreach($this->roles as $r)
+            if($r->name == $role->name)
+                return true;
+        return false;
+    }
 }

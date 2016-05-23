@@ -14,7 +14,7 @@ app('navigator')
             <div class="ibox" style="margin-bottom: 5px">
                 <div class="ibox-content" style="padding: 10px 15px 5px 15px">
                     <div class="row">
-                        <div class="col-md-8">
+                        <div class="col-md-4 b-r">
                             <div class="input-group search-box">
                                 <input placeholder="Tìm bình luận" id="search-input" type="text" class="form-control input-sm" value="{{ $filter_search_term }}">
                                 <span class="input-group-btn">
@@ -22,7 +22,25 @@ app('navigator')
                                 </span>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3 b-r">
+                            <div class="form-inline" style="padding-top: 3px">
+                                <div class="form-group" style="margin-right:5px">
+                                    <div class="i-checks">
+                                        <label>
+                                            <input type="radio" name="commentable_type" {{ $filter_commentable_type == 'post' ? 'checked' : '' }} value="post"> Bài viết
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group" style="margin-right:5px">
+                                    <div class="i-checks">
+                                        <label>
+                                            <input type="radio" name="commentable_type" {{  $filter_commentable_type == 'product' ? 'checked' : '' }} value="product"> Sản phẩm
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
                             <div class="form-inline" style="padding-top: 3px">
                                 <div class="form-group" style="margin-right:4px">
                                     <div class="i-checks">
@@ -38,7 +56,7 @@ app('navigator')
                                         </label>
                                     </div>
                                 </div>
-                                <div class="form-group" style="margin-right:4px">
+                                <div class="form-group b-r" style="margin-right:12px; padding-right: 12px">
                                     <div class="i-checks">
                                         <label>
                                             <input type="radio" name="status_type" {{  $filter_status_type == 'trash' ? 'checked' : '' }} value="trash"> Rác
@@ -72,7 +90,14 @@ app('navigator')
                         <tr>
                             <th data-sort-ignore="true" data-hide="phone">Người dùng</th>
                             <th data-sort-ignore="true" width="40%">Nội dung</th>
-                            <th data-sort-ignore="true" data-hide="phone" width="20%">Bài viết</th>
+                            <th data-sort-ignore="true" data-hide="phone" width="20%">
+                                @if($filter_commentable_type == 'post')
+                                    Bài viết
+                                @elseif($filter_commentable_type == 'product')
+                                    Sản phẩm
+                                @endif
+
+                            </th>
                             <th data-sort-ignore="true" data-hide="phone">Ngày nhận</th>
                         </tr>
                         </thead>
@@ -130,7 +155,13 @@ app('navigator')
                                         @endcan
                                     </ul>
                                 </td>
-                                <td><a href="{{ URL::action('PostsController@show', ['id' => $comment->post->id]) }}">{{$comment->post->title}}</a></td>
+                                <td>
+                                    @if($filter_commentable_type == 'post')
+                                        <a href="{{ URL::action('PostsController@show', ['id' => $comment->commentable->id]) }}">{{$comment->commentable->title}}</a>
+                                    @elseif($filter_commentable_type == 'product')
+                                        <a href="{{ URL::action('ProductsController@show', ['slug' => $comment->commentable->slug]) }}">{{ $comment->commentable->name }}</a>
+                                    @endif
+                                </td>
                                 <td>{{ $comment->created_at }}</td>
                             </tr>
                         @endforeach
@@ -217,6 +248,19 @@ app('navigator')
                     400: function(jqXHR, textStatus, errorThrown){
                         toastr.error(jqXHR.responseJSON.join('<br/>'));
                     }
+                }
+            }).done(function() {
+                location.reload();
+            });
+        });
+
+        $('input[name="commentable_type"]').on('ifChecked', function(event){
+            $.ajax({
+                url: '{{ URL::action('CommentsController@postConfig') }}',
+                method: 'post',
+                data: { name: "filter.commentable_type", value: $(this).val() },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             }).done(function() {
                 location.reload();

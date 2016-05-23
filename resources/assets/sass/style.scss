@@ -48,3 +48,84 @@ td ul.action {
 .select2-container--default .select2-selection--single .select2-selection__rendered {
   line-height: 25px;
 }
+
+/* badge role */
+.badge.editor {
+  background-color: #9CDEFB;
+}
+.badge.collaborator {
+  background-color: #F9FF95;
+}
+
+/* product grid */
+.product-thumbnail {
+  text-align: center;
+  position: relative;
+}
+
+.product-thumbnail img {
+  display: inline-block;
+}
+
+.product-imitation .product-overlay {
+  position: absolute;
+  top: 45%;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  padding: 0 0;
+  background-color: #f8f8f9;
+  color: #bebec3;
+  font-weight: 600;
+  opacity: 0.7;
+}
+.product-overlay > span.inline {
+  line-height: 30px;
+  opacity: 1;
+  color: #808080;
+}
+.product-imitation {
+  text-align: center;
+  padding: 0 0;
+  background-color: #f8f8f9;
+  color: #bebec3;
+  font-weight: 600;
+}
+
+.product-imitation.xl {
+  padding: 5px 5px;
+}
+
+/* bootstrap input-xs */
+.input-xs {
+  height: 22px;
+  padding: 2px 5px;
+  font-size: 12px;
+  line-height: 1.5; //If Placeholder of the input is moved up, rem/modify this.
+  border-radius: 3px;
+}
+
+.input-group-xs>.form-control,
+.input-group-xs>.input-group-addon,
+.input-group-xs>.input-group-btn>.btn {
+  height: 22px;
+  padding: 1px 5px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+/* triangle */
+.triangle {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 15px 0 15px 15px;
+  border-color: transparent transparent transparent #919191;
+}
+
+.wizard > .steps > ul > li {
+  width: initial;
+}
+
+.wizard > .content > .body {
+  width: 100%;
+}

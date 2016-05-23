@@ -1,14 +1,130 @@
 <?php
 return [
-    'acronym' => 'NEWS',
-    'page_title' => 'NEWS',
+    'acronym' => 'SHOP',
+    'page_title' => 'SHOP',
     'navigation' => [
         'admin' => [
             'text' => 'Bảng điều khiển',
             'action' => 'AdminController@index',
             'active' => false,
-            'icon_class' => 'fa fa-th-large',
+            'icon_class' => 'fa fa-tachometer',
             'order' => 1
+        ],
+        'orders' => [
+            'text' => 'Đơn đặt hàng',
+            'active' => false,
+            'icon_class' => 'fa fa-shopping-cart',
+            'order' => 1,
+            'hidden' => function()
+            {
+                return false;
+            },
+            'items' => [
+                'index' => [
+                    'text' => 'Tất cả',
+                    'action' => 'OrdersController@index',
+                    'active' => false,
+                    'order' => 1,
+                    'hidden' => function(){
+                        return false;
+                    }
+                ],
+                'create' => [
+                    'text' => 'Lập mới',
+                    'action' => 'OrdersController@create',
+                    'active' => false,
+                    'order' => 2,
+                    'hidden' => function(){
+                        return false;
+                    }
+                ],
+            ]
+        ],
+        'products' => [
+            'text' => 'Sản phẩm',
+            'active' => false,
+            'icon_class' => 'fa fa-shopping-bag',
+            'order' => 1,
+            'hidden' => function()
+            {
+                return Gate::denies('indexProductCategory') && Gate::denies('indexProductBrand');
+            },
+            'items' => [
+                'index' => [
+                    'text' => 'Tất cả',
+                    'action' => 'ProductsController@index',
+                    'active' => false,
+                    'order' => 1,
+                    'hidden' => function(){
+                        return Gate::denies('indexProduct');
+                    }
+                ],
+                'create' => [
+                    'text' => 'Thêm mới',
+                    'action' => 'ProductsController@create',
+                    'active' => false,
+                    'order' => 1,
+                    'hidden' => function(){
+                        return Gate::denies('storeProduct');
+                    }
+                ],
+                'reviews' => [
+                    'text' => 'Đánh giá',
+                    'action' => 'ProductReviewsController@index',
+                    'active' => false,
+                    'order' => 2,
+                    'hidden' => function(){
+                        return Gate::denies('indexProductReview');
+                    }
+                ],
+                'categories' => [
+                    'text' => 'Danh mục',
+                    'action' => 'ProductCategoriesController@index',
+                    'active' => false,
+                    'order' => 3,
+                    'hidden' => function(){
+                        return Gate::denies('indexProductCategory');
+                    }
+                ],
+                'brands' => [
+                    'text' => 'Nhãn hiệu',
+                    'action' => 'ProductBrandsController@index',
+                    'active' => false,
+                    'order' => 3,
+                    'hidden' => function(){
+                        return Gate::denies('indexProductBrand');
+                    }
+                ]
+            ]
+        ],
+        'collections' => [
+            'text' => 'Nhóm',
+            'icon_class' => 'fa fa-th-large',
+            'active' => false,
+            'order' => 2,
+            'hidden' => function(){
+                return Gate::denies('indexCollection');
+            },
+            'items' => [
+                'index' => [
+                    'text' => 'Tất cả',
+                    'action' => 'CollectionsController@index',
+                    'active' => false,
+                    'order' => 1,
+                    'hidden' => function(){
+                        return Gate::denies('indexCollection');
+                    }
+                ],
+                'create' => [
+                    'text' => 'Thêm mới',
+                    'action'=>'CollectionsController@create',
+                    'active' => false,
+                    'order' => 2,
+                    'hidden' => function(){
+                        return Gate::denies('storeCollection');
+                    }
+                ]
+            ]
         ],
         'users' => [
             'text' => 'Người dùng',
@@ -100,28 +216,8 @@ return [
             'icon_class' => 'fa fa-send-o',
             'order' => 4,
             'hidden' => function(){
-                return Gate::denies('indexFeedback') && Gate::denies('listOwnedPostFeedback');
-            },
-            'items' => [
-                'index' => [
-                    'text' => 'Tất cả',
-                    'action' => 'FeedbacksController@index',
-                    'active' => false,
-                    'order' => 1,
-                    'hidden' => function(){
-                        return Gate::denies('indexFeedback');
-                    }
-                ],
-                'owned' => [
-                    'text' => 'Của bài viết của tôi',
-                    'action' => 'FeedbacksController@listByPostAuthenticatedUser',
-                    'active' => false,
-                    'order' => 2,
-                    'hidden' => function(){
-                        return Gate::denies('listOwnedPostFeedback');
-                    }
-                ],
-            ]
+                return Gate::denies('indexFeedback');
+            }
         ],
         'comments' => [
             'text' => 'Bình luận',
@@ -139,9 +235,29 @@ return [
             'active' => false,
             'icon_class' => 'fa fa-gavel',
             'order' => 6,
-            'hidden' => function(){
-                return false;
-            }
+            'hidden' => false,
+            'items' => [
+                'index' => [
+                    'text' => 'Của tôi',
+                    'action' => 'PrivilegesController@index',
+                    'active' => false,
+                    'icon_class' => 'fa fa-gavel',
+                    'order' => 6,
+                    'hidden' => function(){
+                        return Gate::denies('grantPermission');
+                    }
+                ],
+                'grant' => [
+                    'text' => 'Cấp quyền',
+                    'action' => 'PrivilegesController@grant',
+                    'active' => false,
+                    'icon_class' => 'fa fa-magic',
+                    'order' => 6,
+                    'hidden' => function(){
+                        return Gate::denies('grantPermission');
+                    }
+                ]
+            ]
         ],
     ],
 
@@ -151,7 +267,7 @@ return [
     'crumbs' => [
         'admin' => [
             'text' => 'Bảng điều khiển',
-            'icon_class' => 'fa fa-th-large',
+            'icon_class' => 'fa fa-tachometer',
             'action' => 'AdminController@index'
         ],
         'users' => [
@@ -200,6 +316,74 @@ return [
             'text' => 'Sửa',
             'icon_class' => 'fa fa-wrench'
         ],
+        'orders'=> [
+            'text' => 'Đơn đặt hàng',
+            'icon_class' => 'fa fa-shopping-cart',
+            'action' => 'OrdersController@index'
+        ],
+        'order_create'=> [
+            'text' => 'Lập mới',
+            'icon_class' => 'fa fa-shopping-cart',
+            'action' => 'OrdersController@create'
+        ],
+        'order_edit'=> [
+            'text' => 'Sửa',
+            'icon_class' => 'fa fa-wrench'
+        ],
+        'products' => [
+            'text' => 'Sản phẩm',
+            'icon_class' => 'fa fa-shopping-bag',
+            'action' => 'ProductsController@index'
+        ],
+        'product_edit'=> [
+            'text' => 'Sửa',
+            'icon_class' => 'fa fa-wrench'
+        ],
+        'product_create' => [
+            'text' => 'Tạo mới',
+            'icon_class' => 'fa fa-shopping-bag'
+        ],
+        'product_reviews' => [
+            'text' => 'Đánh giá sản phẩm',
+            'icon_class' => 'fa fa-star-o',
+            'action' => 'ProductReviewsController@index'
+        ],
+        'product_review_edit' => [
+            'text' => 'Sửa',
+            'icon_class' => 'fa fa-wrench'
+        ],
+        'product_brands' => [
+            'text' => 'Nhãn hiệu sản phẩm',
+            'icon_class' => 'fa fa-copyright',
+            'action' => 'ProductBrandsController@index'
+        ],
+        'product_brand_edit' => [
+            'text' => 'Sửa',
+            'icon_class' => 'fa fa-wrench'
+        ],
+        'product_categories' => [
+            'text' => 'Danh mục sản phẩm',
+            'icon_class' => 'fa fa-archive',
+            'action' => 'ProductCategoriesController@index'
+        ],
+        'product_category_edit' => [
+            'text' => 'Sửa',
+            'icon_class' => 'fa fa-wrench'
+        ],
+        'collections' => [
+            'text' => 'Nhóm sản phẩm',
+            'icon_class' => 'fa fa-th-large',
+            'action' => 'CollectionsController@index'
+        ],
+        'collection_create' => [
+            'text' => 'Thêm nhóm sản phẩm',
+            'icon_class' => 'fa fa-th-large',
+            'action' => 'CollectionsController@create'
+        ],
+        'collection_edit' => [
+            'text' => 'Sửa',
+            'icon_class' => 'fa fa-wrench'
+        ],
         'categories' => [
             'text' => 'Chuyên mục',
             'icon_class' => 'fa fa-archive',
@@ -224,7 +408,13 @@ return [
         ],
         'privileges' => [
             'text' => 'Quyền hạn',
+            'action' => 'PrivilegesController@index',
             'icon_class' => 'fa fa-gavel',
+        ],
+        'privilege_grant' => [
+            'text' => 'Cấp quyền',
+            'action' => 'PrivilegesController@index',
+            'icon_class' => 'fa fa-magic',
         ],
     ]
 ];

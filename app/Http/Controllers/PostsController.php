@@ -42,6 +42,7 @@ class PostsController extends Controller
      * @var array
      */
     protected $configs_validate = [
+        'filter.status_type' => 'in:pending,approved,draft,trash',
         'filter.search_term' => 'min:4,max:255',
         'filter.category' => 'exists:category,id'
     ];
@@ -378,19 +379,6 @@ class PostsController extends Controller
             Flash::push("Xóa bài viết thất bại", 'Hệ thống', 'error');
         }
         return redirect(action('PostsController@index'));
-    }
-
-    /**
-     * @param $name
-     * @return array
-     */
-    public function permalink($name)
-    {
-        // @TODO
-
-        $slug = str_slug($name);
-        $link = array('permalink'=> $slug);
-        return $link;
     }
 
     /**
